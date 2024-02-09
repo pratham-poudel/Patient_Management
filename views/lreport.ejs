@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Pathological Lab Report Form</title>
+  <link rel="stylesheet" href="/stylesheets/lab.css">
+</head>
+<body>
+ <div class="flash">
+  <% if (successMessage) { %>
+    <div class="alert alert-success">
+      <a href="/search"><%= successMessage %> </a>
+    </div>
+  <% } %>
+  
+  <% if (errorMessage) { %>
+    <div class="alert alert-danger">
+      <%= errorMessage %>
+    </div>
+  <% } %>
+ </div>
+  
+
+  <form action="/submitLabReport" method="post">
+    <h1>Pathological Lab Report Form</h1>
+
+    <!-- Patient Information -->
+    <label for="patientName">Patient Name:</label>
+    <input type="text" id="patientName" name="patientName" required>
+
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" required>
+
+    <label for="age">Age:</label>
+    <input type="text" id="age" name="age" required>
+
+    <label for="gender">Gender:</label>
+    <select id="gender" name="gender" required>
+      <option value="Male">Male</option>
+      <option value="Female">Female</option>
+      <option value="Other">Other</option>
+    </select>
+
+      <label for="glucose">Glucose:</label>
+      <input type="text" id="glucose" name="glucose" pattern="[0-9]+(\.[0-9]+)?">
+
+   
+      <label for="cholesterol">Cholesterol:</label>
+      <input type="text" id="cholesterol" name="cholesterol" pattern="[0-9]+(\.[0-9]+)?">
+   
+
+  
+      <label for="triglycerides">Triglycerides:</label>
+      <input type="text" id="triglycerides" name="triglycerides" pattern="[0-9]+(\.[0-9]+)?">
+    
+
+    
+    
+      <label for="creatinine">Creatinine:</label>
+      <input type="text" id="creatinine" name="creatinine" pattern="[0-9]+(\.[0-9]+)?">
+    
+
+
+   
+      <label for="urea">Urea:</label>
+      <input type="text" id="urea" name="urea" pattern="[0-9]+(\.[0-9]+)?">
+    
+
+    
+      
+        <label for="alt">ALT:</label>
+        <input type="text" id="alt" name="alt" pattern="[0-9]+(\.[0-9]+)?">
+     
+     
+      
+        <label for="ast">AST:</label>
+        <input type="text" id="ast" name="ast" pattern="[0-9]+(\.[0-9]+)?">
+     
+      
+        <label for="alkalinePhosphatase">Alkaline Phosphatase:</label>
+        <input type="text" id="alkalinePhosphatase" name="alkalinePhosphatase" pattern="[0-9]+(\.[0-9]+)?">
+      
+        <label for="totalBilirubin">Total Bilirubin:</label>
+        <input type="text" id="totalBilirubin" name="totalBilirubin" pattern="[0-9]+(\.[0-9]+)?">
+ 
+
+    <label for="sodium">Sodium:</label>
+    <input type="text" id="sodium" name="sodium" pattern="[0-9]+(\.[0-9]+)?">
+  
+  
+    <label for="potassium">Potassium:</label>
+    <input type="text" id="potassium" name="potassium" pattern="[0-9]+(\.[0-9]+)?">
+ 
+  
+
+    <label for="chloride">Chloride:</label>
+    <input type="text" id="chloride" name="chloride" pattern="[0-9]+(\.[0-9]+)?">
+
+   
+  
+
+    <label for="totalProtein">Total Protein:</label>
+    <input type="text" id="totalProtein" name="totalProtein" pattern="[0-9]+(\.[0-9]+)?">
+  
+    <label for="albumin">Albumin:</label>
+    <input type="text" id="albumin" name="albumin" pattern="[0-9]+(\.[0-9]+)?">
+ 
+    <label for="globulin">Globulin:</label>
+    <input type="text" id="globulin" name="globulin" pattern="[0-9]+(\.[0-9]+)?">
+ 
+
+
+
+    <label for="hdlCholesterol">HDL Cholesterol:</label>
+    <input type="text" id="hdlCholesterol" name="hdlCholesterol" pattern="[0-9]+(\.[0-9]+)?">
+  
+    <label for="ldlCholesterol">LDL Cholesterol:</label>
+    <input type="text" id="ldlCholesterol" name="ldlCholesterol" pattern="[0-9]+(\.[0-9]+)?">
+ 
+  
+    <label for="vldlCholesterol">VLDL Cholesterol:</label>
+    <input type="text" id="vldlCholesterol" name="vldlCholesterol" pattern="[0-9]+(\.[0-9]+)?">
+ 
+
+
+    <label for="hemoglobin">Hemoglobin:</label>
+    <input type="text" id="hemoglobin" name="hemoglobin" pattern="[0-9]+(\.[0-9]+)?">
+ 
+
+    <label for="whiteBloodCells">White Blood Cells:</label>
+    <input type="text" id="whiteBloodCells" name="whiteBloodCells" pattern="[0-9]+(\.[0-9]+)?">
+ 
+
+    <label for="plateletCount">Platelet Count:</label>
+    <input type="text" id="plateletCount" name="plateletCount" pattern="[0-9]+(\.[0-9]+)?">
+ 
+
+ 
+    <button type="submit">Submit</button>
+  </form>
+
+</body>
+</html>

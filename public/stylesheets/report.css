@@ -1,0 +1,163 @@
+
+    
+    
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f8f8f8;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .lab-report {
+      position: relative;
+      background-color: #fff;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      border-radius: 10px;
+      width: 80%;
+      max-width: 600px;
+      margin: 20px;
+      box-sizing: border-box;
+    }
+
+    h1, h2, h3 {
+      color: #333;
+    }
+
+    .medical-info {
+      margin-bottom: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 12px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+
+    .signature {
+      margin-top: 30px;
+      text-align: right;
+      font-style: italic;
+    }
+
+    /* Added styles for the logo placeholder */
+    .logo {
+      max-width: 100%;
+      max-height: 100%;
+      overflow: hidden;
+      width: 100px;
+      height: 130px;
+      background-color: transparent;
+      margin-bottom: 20px;
+      float: right; /* Align the logo to the right */
+      margin-left: 20px; /* Add some margin for better spacing */
+    }
+
+    /* Added styles to make the date visible */
+    #runningTime, #currentDate {
+      display: inline-block;
+      margin-right: 10px;
+      font-weight: bold;
+    }
+
+    /* Added styles for patient information */
+    .patient-info {
+      margin-bottom: 20px;
+    }
+
+    /* Added styles for gender and age */
+    #patientGender, #patientAge {
+      font-weight: bold;
+    }
+    body {
+  font-family: 'Roboto', sans-serif;
+  background: linear-gradient(to right, #a6c0fe, #f68084); /* Gradient background */
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.lab-report {
+  position: relative;
+  background-color: #fff;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  padding: 30px; /* Increased padding for more spacing */
+  border-radius: 15px;
+  width: 80%;
+  max-width: 800px; /* Increased max-width for a more spacious feel */
+  margin: 20px;
+  box-sizing: border-box;
+}
+
+h1, h2, h3 {
+  color: #2a2a2a; /* Dark text color for better readability */
+}
+
+.medical-info {
+  margin-bottom: 30px; /* More space below medical info */
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 30px; /* More space above the table */
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 15px; /* Increased padding for cells */
+  text-align: left;
+}
+
+th {
+  background-color: #f2f2f2;
+}
+
+/* Updated styles for the logo placeholder */
+.logo {
+  max-width: 100%;
+  max-height: 100%;
+  overflow: hidden;
+  width: 100px;
+  height: 130px;
+  margin-bottom: 30px; /* More space below the logo */
+  float: right;
+  margin-left: 20px;
+}
+
+/* Updated styles for patient information */
+.patient-info {
+  margin-bottom: 30px;
+}
+
+/* Updated styles for gender and age */
+#patientGender, #patientAge {
+  font-weight: bold;
+  color: #555; /* Slightly darker text color for patient info */
+}
+
+/* Updated styles for the signature */
+.signature {
+  margin-top: 40px; /* More space above the signature */
+  text-align: right;
+  font-style: italic;
+  color: #777; /* Lighter text color for the signature */
+}
+

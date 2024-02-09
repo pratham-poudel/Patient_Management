@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Medical Report</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f8f9fa;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .report-container {
+      background-color: #ffffff;
+      border-radius: 15px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      padding: 40px;
+      width: 80%;
+      max-width: 600px;
+      text-align: center;
+      transition: transform 0.3s ease-in-out;
+    }
+
+    h1 {
+      color: #2c3e50;
+      margin-bottom: 20px;
+      font-size: 28px;
+    }
+
+    .info-section {
+      margin-bottom: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .info-label {
+      font-weight: bold;
+      color: #3498db;
+      margin-bottom: 5px;
+    }
+
+    .info-value {
+      font-size: 18px;
+      color: #555;
+    }
+
+    .footer {
+      margin-top: 20px;
+      font-style: italic;
+      color: #7f8c8d;
+      font-size: 14px;
+    }
+
+    .report-container:hover {
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body>
+  <div class="report-container">
+    <h1>Medical Report</h1>
+
+    <div class="info-section">
+      <div class="info-label">Patient Name:</div>
+      <div class="info-value"><%=users.name%></div>
+    </div>
+
+    <div class="info-section">
+      <div class="info-label">Age:</div>
+      <div class="info-value"><%=users.age%></div>
+    </div>
+
+    <div class="info-section">
+      <div class="info-label">Gender:</div>
+      <div class="info-value"><%=users.gender%></div>
+    </div>
+
+    <div class="info-section">
+      <div class="info-label">Symptoms:</div>
+      <div class="info-value"><%=users.symptoms%></div>
+    </div>
+
+    <div class="info-section">
+      <div class="info-label">Prescribed Medications:</div>
+      <div class="info-value"><%=users.medicinesUsed%></div>
+    </div>
+
+    <div class="info-section">
+      <div class="info-label"><%=users.medicalname%></div>
+      <div class="info-value">Dr.<%=users.dname%></div>
+    </div>
+
+    <div class="footer">
+      <p>This is a sample medical report. Consult with your healthcare professional for accurate information.</p>
+    </div>
+  </div>
+
+</body>
+</html>

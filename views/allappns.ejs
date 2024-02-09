@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Booked Appointments</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            width: 80%;
+            margin: auto;
+            padding: 20px;
+        }
+
+        .appointment {
+            position: relative;
+            background-color: #fff;
+            margin-bottom: 20px;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+        }
+
+        .appointment h2,
+        .appointment p {
+            margin: 0;
+        }
+
+        .appointment h2 {
+            color: #333;
+        }
+
+        .appointment p {
+            color: #666;
+        }
+
+        .accepted-message {
+            color: #4CAF50;
+        }
+
+        .not-accepted-message {
+            color: #f30e0e;
+        }
+
+        .done-button,
+        .doned-button {
+            position: absolute;
+            top: 10px;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .done-button {
+            right: 10px;
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .doned-button {
+            right: 90px; /* Adjusted right value to avoid overlap */
+            background-color: #f30e0e;
+            color: white;
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fefefe;
+            padding: 20px;
+            border: 1px solid #888;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            z-index: 1;
+        }
+
+        /* Close button styles */
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <% if( doctor.appointment.length) { %>
+        <% doctor.appointment.forEach(function(elem){ %>
+        <div class="appointment">
+            <% if( elem.accepted===true) { %>
+                <p class="accepted-message">Accepted</p>
+            <% } else { %>
+                <p class="not-accepted-message">Not Accepted</p>
+            <% } %>
+            <h2>Name:<%= elem.patientName %></h2>
+            <p><h5>Appointment Date:</h5><%= elem.appointmentDate %></p>
+            <p><h5>Note:</h5><%= elem.notes %></p>
+            <p><h5>Patient Email:</h5><%= elem.email %></p>
+            <p><h5>Patient Contact:</h5><%= elem.connumber %></p>
+            <a href="#" data-id="<%= elem._id %>" class="acd"><button class="done-button">Accept</button></a>
+            <a href="#" data-id="<%= elem._id %>" class="acdd"><button class="doned-button">Decline</button></a>
+        </div>
+        <% }) %>
+        <% } else { %>
+        <p>No appointments found.</p>
+        <% } %>
+    </div>
+
+    <!-- Modal Popup -->
+    <div id="myModal" class="modal">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h2>Appointment Accepted!</h2>
+        <p>The appointment has been accepted successfully.</p>
+    </div>
+
+    <script>
+        function openModal() {
+            const modal = document.getElementById("myModal");
+            modal.style.display = "block";
+        }
+
+        function closeModal() {
+            const modal = document.getElementById("myModal");
+            modal.style.display = "none";
+        }
+
+        const patientLinks = document.querySelectorAll(".acd");
+        patientLinks.forEach(function (link) {
+            link.addEventListener("click", function (event) {
+                event.preventDefault();
+                const data = link.dataset.id;
+                console.log(data);
+                // Show modal when accepted
+                openModal();
+                // Redirect to a new page with patientId as a parameter
+                window.location.href = `/appnt/${data}`; // for accept
+            });
+        });
+
+        const patientLinkss = document.querySelectorAll(".acdd");
+        patientLinkss.forEach(function (link) {
+            link.addEventListener("click", function (event) {
+                event.preventDefault();
+                const datas = link.dataset.id;
+                console.log(datas);
+                // Redirect to a new page with patientId as a parameter
+                window.location.href = `/appnts/${datas}`; // for decline
+            });
+        });
+    </script>
+</body>
+
+</html>

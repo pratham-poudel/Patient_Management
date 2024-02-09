@@ -1,0 +1,104 @@
+<!-- search.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Medical Search</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f2f2f2;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    .search-container {
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      text-align: center;
+      width: 400px;
+    }
+
+    .search-input {
+      width: 80%;
+      padding: 10px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .search-button {
+      background-color: #4CAF50;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .search-button:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+  <a href="/profile"><button class="search-button">Main Menu</button></a>
+  <div class="search-container">
+    <h1>Search Patients In Medical</h1>
+    <form action="/search" method="post">
+      <input type="text" class="search-input" name="patientName" placeholder="Enter Patient Name" required>
+      <button type="submit" class="search-button">Search</button>
+    </form>
+  </div>
+  
+  <div class="search-results"></div>
+  <script>
+    const resultsDiv = document.querySelector(".search-results");
+
+   const inp= document.querySelector(".search-input");
+    let clutter="";
+    inp.addEventListener("input",function(){
+      axios.get(`/name/${inp.value}`).then(function(data){
+        data.data.forEach(function(elem){
+          // resultsDiv.innerHTML="";
+          clutter="";
+          clutter +=` <a href="#"  class="patient-link" data-id="${elem._id}" ><div class="patient-data">
+          <h3>${elem.name}</h3>
+          <p>Age: ${elem.age}</p>
+          <p>Gender: ${elem.gender}</p>
+        </div></a>`
+})
+resultsDiv.innerHTML=clutter;
+const patientLinks = document.querySelectorAll(".patient-link");
+    patientLinks.forEach(function (link) {
+      link.addEventListener("click", function (event) {
+        event.preventDefault();
+        const patientId = link.dataset.id;
+        // console.log(patientId);
+        // Redirect to a new page with patientId as a parameter
+        window.location.href = `/birami/${patientId}`;
+      });
+
+
+
+
+      });
+      
+    });
+  })
+
+
+
+
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.3/axios.min.js" integrity="sha512-JWQFV6OCC2o2x8x46YrEeFEQtzoNV++r9im8O8stv91YwHNykzIS2TbvAlFdeH0GVlpnyd79W0ZGmffcRi++Bw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</body>
+</html>

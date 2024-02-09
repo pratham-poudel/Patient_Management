@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User ID Submission</title>
+  <style>
+    body {
+      font-family: 'Times New Roman', serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    .container {
+      background-color: #fff;
+      border: 1px solid #ccc;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    h1 {
+      color: #333;
+    }
+
+    .notice {
+      background-color: #4CAF50;
+      color: #fff;
+      padding: 10px;
+      margin-bottom: 15px;
+      border-radius: 4px;
+      text-align: center;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    label {
+      margin-bottom: 10px;
+    }
+
+    input {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 15px;
+      box-sizing: border-box;
+    }
+
+    button {
+      background-color: #4CAF50;
+      color: #fff;
+      padding: 10px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <!-- Notice message -->
+  <div class="notice">
+    Patient and Lab User IDs have been mailed to respective email addresses.
+  </div>
+
+  <h1>User ID Submission</h1>
+
+  <!-- Form -->
+  <form action="/submitpatient" method="post">
+    <label for="userId">Patient User ID:</label>
+    <input type="text" id="userId" name="userId" required>
+
+    <button type="submit">Submit</button>
+  </form>
+</div>
+
+</body>
+</html>

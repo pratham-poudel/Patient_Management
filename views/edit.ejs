@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/stylesheets/edit.css">
+  <title>Document</title>
+</head>
+<body>
+  <div class="main">
+    <div class="middle">
+      <div class="left">
+        <div class="mathi">
+          <div class="gadesh">
+            <img src="/images/ganesha.png">
+          </div>
+          <div class="writing">
+            <h1>Ganapati Medico Pharma</h1>
+          </div>
+        </div>
+        <div class="tala">
+          <h3>"Healing lives through compassionate care and innovation."</h3>
+        </div>
+      </div>
+      <div class="right">
+        <div class="txtt"><h1>UPDATE INFORMATION</h1></div>
+        <button class="fuuu">Upload Profile Pic</button>
+        <form action="/edit" method="post"   enctype="multipart/form-data" >
+          <input type="file" name="file" class="detail" id="filaa" hidden /><br />
+          <input type="text" name="nickname" class="detail" placeholder="New Username"/><br />
+          <input type="text" name="bio" class="detail" placeholder="Enter your Bio" />
+          <button class="btn int" type="submit">Update</button>
+        
+        </form>
+        
+      </div>
+    </div>
+  </div>
+  <script>
+    document.querySelector(".fuuu").addEventListener("click",function(){
+      document.querySelector("#filaa").click();
+    })
+  </script>
+</body>
+</html>

@@ -1,0 +1,102 @@
+/* Webfont: Reborn */
+@font-face {
+  font-family: 'Reborn';
+  src: url('/fonts/Reborn.eot'); /* Adjust the path */
+  src: url('/fonts/Reborn.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('/fonts/Reborn.woff') format('woff'), /* Modern Browsers */
+       url('/fonts/Reborn.ttf') format('truetype'); /* Safari, Android, iOS */
+  font-style: normal;
+  font-weight: normal;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.main {
+  background-image: url('/images/bd.png'); /* Adjust the path */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 100vh; /* 100% of the viewport height */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+a {
+  color: #00B7FF;
+}
+
+.middle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 445px;
+  width: 90%; /* Adjust the width for smaller screens */
+  max-width: 768px; /* Set a maximum width for better responsiveness */
+  margin: 0 auto;
+}
+
+.left {
+  text-align: center;
+  height: 314px;
+  width: 100%;
+}
+
+.right {
+  background-color: #F1EBE5;
+  height: 280px;
+  width: 100%;
+  margin-top: 20px;
+}
+
+.right .txtt {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.right .txtt h1 {
+  font-family: 'Reborn', sans-serif;
+}
+
+.right form {
+  background-color: transparent;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.detail {
+  width: 100%;
+  margin: 10px 0;
+  padding: 10px;
+  box-sizing: border-box;
+  border: 1px solid black;
+  border-radius: 4px;
+}
+
+.btn {
+  width: 100%;
+  background-color: transparent;
+  color: black;
+  padding: 10px 20px;
+  border: 1px solid black;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background-color: rgb(187, 183, 183);
+}
+
+/* Larger width for input boxes on mobile screens */
+@media only screen and (max-width: 768px) {
+  .detail {
+    width: 80%; /* Adjust the width for mobile screens */
+    margin: 10px auto; /* Center the input box on mobile screens */
+  }
+}

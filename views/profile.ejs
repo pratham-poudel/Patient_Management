@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="/stylesheets/profile.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div class="nav">
+    <span id="runningTime"></span>
+    <span id="currentDay"></span>
+  </div>
+  <div class="main">
+  <div class="top">
+    <div class="medi"><%=user.medicalname%></div>
+    <div class="prff">
+      <img src="/images/uploads/<%= user.profilePic %>" >
+        <h1><%= user.nickname %></h1>
+    </div>
+    <div class="infos">
+      <div class="welcome"><h1>Welcome <%= user.fullName %> </h1></div>
+      <div class="bio">
+        <p>"<%= user.bio %> "</p>
+      </div>
+      <div class="buttons">
+        <a href="/edit"><button>Edit Profile
+        </button></a>
+        <a href="/logout"><button>Log Out
+        </button></a>
+        <a href="/daktar"><button>View All Doctors</button></a>
+      </div>
+    </div>
+  </div>
+  <div class="down">
+   <div class="rght">
+    <a href="/patient"><button>New Patient</button></a>
+    <a href="/lreport"><button>Create Lab Report</button></a>
+    <a href="/search"><button>Search Patients in Lab</button></a>
+    <a href="/searchmedical"><button>Search Patients In Medical</button></a>
+    <a href="/viewappoint"><button>View Your Appointments</button></a>
+   </div>
+  </div>
+  </div>
+  <div class="ptnt" style="    display: flex;
+  justify-content: space-between; margin: 50px 100px;">
+    <div class="lt">
+      <h2>Patients In Medical</h2>
+      <div class="dtls">
+        <% user.patient.forEach(function(elem){
+          %>
+          <h3><a href="#" data-id="<%= elem._id %>" class="jh"><%= elem.name %> </a><%= elem.formatime %>
+          </a> </h3>
+          <%
+  
+        })%>
+      </div>
+
+    </div>
+    <div class="rt">
+      <h2>Patients in Lab</h2>
+      <div class="dtls">
+        <% user.patientlab.forEach(function(elem){
+          %>
+          <h3><a href="#" data-id="<%= elem._id %>" class="hj"><%= elem.patientName %></a><%= elem.formatime %>
+          </a> </h3>
+          <%
+  
+        })%>
+      </div>
+    </div>
+  </div>
+  <script>
+    click = document.querySelectorAll('.jh')
+    click.forEach(function(event){
+      event.addEventListener("click",function(elem){
+        elem.preventDefault()
+        id = event.dataset.id
+        window.location.href = `/profile/${id}`;
+      })
+    })
+
+    click = document.querySelectorAll('.hj')
+    click.forEach(function(event){
+      event.addEventListener("click",function(elem){
+        elem.preventDefault()
+        id = event.dataset.id
+        window.location.href = `/profiles/${id}`;
+      })
+    })
+  </script>
+</body>
+</html>

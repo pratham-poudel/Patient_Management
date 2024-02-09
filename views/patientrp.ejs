@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lab Report</title>
+  <link rel="stylesheet" href="/stylesheets/report.css">
+</head>
+
+<body>
+  <div class="lab-report">
+    <div class="logo">
+      <img src="/images/ganesha.png" alt="Ganesha Logo">
+    </div> <!-- Placeholder for the logo -->
+
+    <h1>Lab Report</h1>
+
+    <div class="medical-info">
+      <h2><%=users.medicalname%></h2>
+      <p>Location:<%=users.address%> </p>
+      <p>Contact: <%=users.connumber%></p>
+      <p>Country: Nepal</p>
+    </div>
+
+    <div class="patient-info">
+      <h2>Patient: <%=users.patientName%></h2>
+      <p id="patientGender">Gender: <%=users.gender%></p>
+      <p id="patientAge">Age: <%=users.age%></p>
+    </div>
+
+    <p>
+      <%= users.formatime %>
+    </p>
+
+    <h3>Test Results</h3>
+    <table>
+      <tr>
+        <th>Test</th>
+        <th>Result</th>
+      </tr>
+      <% if (users.cholesterol) { %>
+      <tr>
+        <td>Cholesterol</td>
+        <td><%= users.cholesterol %></td>
+      </tr>
+      <% } %>
+      <% if (users.glucose) { %>
+      <tr>
+        <td>Glucose</td>
+        <td><%= users.glucose %></td>
+      </tr>
+      <% } %>
+      <% if (users.triglycerides) { %>
+      <tr>
+        <td>Triglycerides</td>
+        <td><%= users.triglycerides %></td>
+      </tr>
+      <% } %>
+      <% if (users.creatinine) { %>
+      <tr>
+        <td>Creatinine</td>
+        <td><%= users.creatinine %></td>
+      </tr>
+      <% } %>
+      <% if (users.urea) { %>
+      <tr>
+        <td>Urea</td>
+        <td><%= users.urea %></td>
+      </tr>
+      <% } %>
+      <% if (users.alt) { %>
+      <tr>
+        <td>ALT</td>
+        <td><%= users.alt %></td>
+      </tr>
+      <% } %>
+      <% if (users.ast) { %>
+      <tr>
+        <td>AST</td>
+        <td><%= users.ast %></td>
+      </tr>
+      <% } %>
+      <% if (users.alkalinePhosphatase) { %>
+      <tr>
+        <td>Alkaline Phosphatase</td>
+        <td><%= users.alkalinePhosphatase %></td>
+      </tr>
+      <% } %>
+      <% if (users.totalBilirubin) { %>
+      <tr>
+        <td>Total Bilirubin</td>
+        <td><%= users.totalBilirubin %></td>
+      </tr>
+      <% } %>
+      <% if (users.sodium) { %>
+      <tr>
+        <td>Sodium</td>
+        <td><%= users.sodium %></td>
+      </tr>
+      <% } %>
+      <% if (users.potassium) { %>
+      <tr>
+        <td>Potassium</td>
+        <td><%= users.potassium %></td>
+      </tr>
+      <% } %>
+      <% if (users.chloride) { %>
+      <tr>
+        <td>Chloride</td>
+        <td><%= users.chloride %></td>
+      </tr>
+      <% } %>
+      <% if (users.totalProtein) { %>
+      <tr>
+        <td>Total Protein</td>
+        <td><%= users.totalProtein %></td>
+      </tr>
+      <% } %>
+      <% if (users.albumin) { %>
+      <tr>
+        <td>Albumin</td>
+        <td><%= users.albumin %></td>
+      </tr>
+      <% } %>
+      <% if (users.globulin) { %>
+      <tr>
+        <td>Globulin</td>
+        <td><%= users.globulin %></td>
+      </tr>
+      <% } %>
+      <% if (users.hdlCholesterol) { %>
+      <tr>
+        <td>HDL Cholesterol</td>
+        <td><%= users.hdlCholesterol %></td>
+      </tr>
+      <% } %>
+      <% if (users.ldlCholesterol) { %>
+      <tr>
+        <td>LDL Cholesterol</td>
+        <td><%= users.ldlCholesterol %></td>
+      </tr>
+      <% } %>
+      <% if (users.vldlCholesterol) { %>
+      <tr>
+        <td>VLDL Cholesterol</td>
+        <td><%= users.vldlCholesterol %></td>
+      </tr>
+      <% } %>
+      <% if (users.hemoglobin) { %>
+      <tr>
+        <td>Hemoglobin</td>
+        <td><%= users.hemoglobin %></td>
+      </tr>
+      <% } %>
+      <% if (users.whiteBloodCells) { %>
+      <tr>
+        <td>White Blood Cells</td>
+        <td><%= users.whiteBloodCells %></td>
+      </tr>
+      <% } %>
+      <% if (users.plateletCount) { %>
+      <tr>
+        <td>Platelet Count</td>
+        <td><%= users.plateletCount %></td>
+      </tr>
+      <% } %>
+    </table>
+
+    <div class="signature">
+      <p>Lab Technician: <strong><%=users.dname%></strong></p>
+      <p>
+        <%=users.regtime%>
+      </p>
+    </div>
+  </div>
+  <script>
+    function updateRunningTimeAndDate() {
+      const currentTime = new Date();
+      const hours = currentTime.getHours();
+      const minutes = currentTime.getMinutes();
+      const seconds = currentTime.getSeconds();
+  
+      const formattedTime = `${hours}:${minutes}:${seconds}`;
+  
+      const formattedDate = `${(currentTime.getMonth() + 1).toString().padStart(2, '0')}/` +
+                            `${currentTime.getDate().toString().padStart(2, '0')}/` +
+                            `${currentTime.getFullYear()}`;
+  
+      document.getElementById('runningTime').innerText = `Time: ${formattedTime}`;
+      document.getElementById('currentDate').innerText = `Date: ${formattedDate}`;
+      document.getElementById('runtime').innerText = `Time: ${formattedTime}`;
+      document.getElementById('curdate').innerText = `Date: ${formattedDate}`;
+    }
+  
+    window.onload = updateRunningTimeAndDate;
+  </script>
+  
+</body>
+
+</html>

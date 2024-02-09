@@ -1,0 +1,95 @@
+/* Add your font definition for 'math' here */
+@font-face {
+  font-family: 'math';
+  src: url('/fonts/MathFont.ttf'); /* Adjust the path */
+  /* Add other font formats if needed */
+}
+
+/* ... Your existing font definition for 'Reborn' ... */
+
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  font-family: 'Reborn', sans-serif;
+}
+
+.main {
+  background-image: url('/images/bd.png'); /* Adjust the path */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: auto; /* Make the whole page scrollable on smaller screens */
+}
+
+.middle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1048px; /* Adjust the max-width for larger screens */
+  margin: 0 auto;
+  width: 90%; /* Adjust the width for smaller screens */
+  overflow: auto; /* Make the middle section scrollable */
+}
+
+.left {
+  text-align: center;
+  margin: 20px;
+}
+
+.right {
+  background-color: #F1EBE5;
+  width: 100%;
+  max-width: 400px; /* Adjust max-width for better visibility on smaller screens */
+  margin: 20px;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  overflow: auto; /* Make the right section scrollable */
+}
+
+.right form {
+  width: 100%;
+  box-sizing: border-box; /* Include padding in the width calculation */
+}
+
+/* ... Your existing styles ... */
+
+.detail {
+  width: 100%; /* Default width for larger screens */
+  margin: 10px 0;
+  padding: 10px;
+  box-sizing: border-box;
+  border: 1px solid black;
+  border-radius: 4px;
+}
+
+/* Larger width for input boxes on mobile screens */
+@media only screen and (max-width: 768px) {
+  .detail {
+    width: 80vw; /* Adjust the width for mobile screens */
+    max-width: 300px; /* Set a maximum width for better responsiveness */
+    margin: 10px auto; /* Center the input box on mobile screens */
+  }
+}
+
+/* ... Your existing styles ... */
+
+
+.btn {
+  width: 100%;
+  background-color: transparent;
+  color: black;
+  padding: 10px;
+  border: 1px solid black;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background-color: rgb(187, 183, 183);
+}
