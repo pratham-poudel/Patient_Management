@@ -1,14 +1,17 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Booked Appointments</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f0f0f0;
+            background-color: #f8f8f8;
+            color: #333;
         }
 
         .container {
@@ -22,29 +25,37 @@
             background-color: #fff;
             margin-bottom: 20px;
             padding: 20px;
-            border-radius: 5px;
+            border-radius: 8px;
             box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
-        }
-
-        .appointment h2,
-        .appointment p {
-            margin: 0;
-        }
-
-        .appointment h2 {
-            color: #333;
-        }
-
-        .appointment p {
-            color: #666;
         }
 
         .accepted-message {
             color: #4CAF50;
+            font-weight: bold;
         }
 
         .not-accepted-message {
-            color: #f30e0e;
+            color: #f44336;
+            font-weight: bold;
+        }
+
+        h2, p {
+            margin: 0;
+        }
+
+        h2 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        h5 {
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        a {
+            text-decoration: none;
+            color: #fff;
         }
 
         .done-button,
@@ -53,10 +64,11 @@
             top: 10px;
             padding: 10px 20px;
             text-align: center;
-            text-decoration: none;
             display: inline-block;
             font-size: 16px;
             cursor: pointer;
+            border: none;
+            border-radius: 5px;
         }
 
         .done-button {
@@ -66,12 +78,11 @@
         }
 
         .doned-button {
-            right: 90px; /* Adjusted right value to avoid overlap */
-            background-color: #f30e0e;
+            right: 90px;
+            background-color: #f44336;
             color: white;
         }
 
-        /* Modal styles */
         .modal {
             display: none;
             position: fixed;
@@ -85,37 +96,39 @@
             z-index: 1;
         }
 
-        /* Close button styles */
         .close {
             color: #aaa;
             float: right;
             font-size: 28px;
             font-weight: bold;
+            cursor: pointer;
         }
     </style>
 </head>
 
 <body>
     <div class="container">
-        <% if( doctor.appointment.length) { %>
-        <% doctor.appointment.forEach(function(elem){ %>
-        <div class="appointment">
-            <% if( elem.accepted===true) { %>
-                <p class="accepted-message">Accepted</p>
-            <% } else { %>
-                <p class="not-accepted-message">Not Accepted</p>
-            <% } %>
-            <h2>Name:<%= elem.patientName %></h2>
-            <p><h5>Appointment Date:</h5><%= elem.appointmentDate %></p>
-            <p><h5>Note:</h5><%= elem.notes %></p>
-            <p><h5>Patient Email:</h5><%= elem.email %></p>
-            <p><h5>Patient Contact:</h5><%= elem.connumber %></p>
-            <a href="#" data-id="<%= elem._id %>" class="acd"><button class="done-button">Accept</button></a>
-            <a href="#" data-id="<%= elem._id %>" class="acdd"><button class="doned-button">Decline</button></a>
-        </div>
-        <% }) %>
+        <% if(doctor.appointment.length) { %>
+            <% doctor.appointment.forEach(function(elem){ %>
+                <div class="appointment">
+                    <% if(elem.accepted === true) { %>
+                        <p class="accepted-message">Accepted</p>
+                    <% } else { %>
+                        <p class="not-accepted-message">Not Accepted</p>
+                    <% } %>
+                    <h2>Name: <%= elem.patientName %></h2>
+                    <p><h5>Appointment Date:</h5> <%= elem.appointmentDate %></p>
+                    <p><h5>Note:</h5> <%= elem.notes %></p>
+                    <p><h5>Patient Email:</h5> <%= elem.email %></p>
+                    <p><h5>Patient Contact:</h5> <%= elem.connumber %></p>
+                    <a href="#" data-id="<%= elem._id %>" class="acd"><button class="done-button">Accept</button></a>
+                    <a href="#" data-id="<%= elem._id %>" class="acdd"><button class="doned-button">Decline</button></a>
+                    <a href="#" data-id="<%= elem._id %>" class="acddd"><button class="donedd-button">Marks As Completed And Remove</button></a>
+                </div>
+            <% }) %>
         <% } else { %>
-        <p>No appointments found.</p>
+            <p>No appointments found.</p>
+            <a href="/profile"  ><button >Go to Main Menu</button></a>
         <% } %>
     </div>
 
@@ -136,7 +149,7 @@
             const modal = document.getElementById("myModal");
             modal.style.display = "none";
         }
-
+        //for accept
         const patientLinks = document.querySelectorAll(".acd");
         patientLinks.forEach(function (link) {
             link.addEventListener("click", function (event) {
@@ -149,7 +162,7 @@
                 window.location.href = `/appnt/${data}`; // for accept
             });
         });
-
+        //for decline
         const patientLinkss = document.querySelectorAll(".acdd");
         patientLinkss.forEach(function (link) {
             link.addEventListener("click", function (event) {
@@ -160,6 +173,19 @@
                 window.location.href = `/appnts/${datas}`; // for decline
             });
         });
+
+        //for remove
+        const patientLinksss = document.querySelectorAll(".acddd");
+        patientLinksss.forEach(function (link) {
+            link.addEventListener("click", function (event) {
+                event.preventDefault();
+                const datass = link.dataset.id;
+                console.log(datass);
+                // Redirect to a new page with patientId as a parameter
+                window.location.href = `/toremove/${datass}`; // for decline
+            });
+        });
+
     </script>
 </body>
 

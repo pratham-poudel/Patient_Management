@@ -1,4 +1,5 @@
 var express = require("express");
+const mongoose = require('mongoose');
 var router = express.Router();
 const userModel = require("./users");
 const upload = require("./multer");
@@ -9,27 +10,31 @@ const LabReport = require("./lab"); // Import your LabReport model
 const patient = require("./patient");
 const Appointment = require("./appointment")
 const nodemailer = require('nodemailer');
+const QRCode = require('qrcode');
 
 
 passport.use(new localStrategy(userModel.authenticate()));
 
+
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: 'aptikpandey9@gmail.com',
-    pass: 'wmzs tcal qhlg kmkd',
+    user: 'ppoudel_be23@thapar.edu',
+    pass: 'uodt buei zzhe cvaq',
   },
 });
 
 // Define a function to send email
-async function sendEmail(to, subject, text) {
+async function sendEmail(to, subject, html) {
+ 
   try {
     // Compose the email
     const mailOptions = {
-      from: 'aptikpandey9@gmail.com',
+      from: 'ppoudel_be23@thapar.edu',
       to: to,
       subject: subject,
-      text: text,
+      html: html,
+      
     };
 
     // Send the email
@@ -39,6 +44,53 @@ async function sendEmail(to, subject, text) {
     console.error('Error sending email:', error);
   }
 }
+
+
+
+//for sms
+const accountSid = 'ACf2658e168878eda357afd9d3bd1485d5';
+const authToken = '95fb9f479ca40c675fd2c7986a1775a1';
+const twilioPhoneNumber = '+16593997115';
+
+const client = require('twilio')(accountSid, authToken);
+
+const sendSMS = async (to, body) => {
+  try {
+    const message = await client.messages.create({
+      body: body,
+      from: twilioPhoneNumber,
+      to: to
+    });
+
+    console.log(`SMS sent. SID: ${message.sid}`);
+    return true;
+  } catch (error) {
+    console.error(`Error sending SMS: ${error.message}`);
+    return false;
+  }
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -78,6 +130,7 @@ router.post("/register", function (req, res) {
     username: req.body.username,
     medicalname: req.body.medicalname,
     nickname: req.body.username,
+    speciality:req.body.speciality,
     fullName: req.body.name,
     email: req.body.email,
     password: req.body.password,
@@ -248,13 +301,15 @@ router.get("/patient", function (req, res, next) {
     errorMessage: req.flash("error"),
   });
 });
+
 router.post("/patient", async function (req, res) {
   const doctors = await userModel.findOne({
     username: req.session.passport.user,
   });
+
   const userdata = await new patient({
     name: req.body.name,
-    email:req.body.email,
+    email: req.body.email,
     dname: doctors.fullName,
     medicalname: doctors.medicalname,
     age: req.body.age,
@@ -263,14 +318,44 @@ router.post("/patient", async function (req, res) {
     medicinesUsed: req.body.medicinesUsed,
     doctor: doctors._id
   });
+
   doctors.patient.push(userdata._id);
   await doctors.save();
+
   try {
     await userdata.save();
-    await sendEmail(userdata.email, 'Patient ID',`Your Patient Id is ${userdata._id}` );
-    console.log(doctors);
 
-    console.log(userdata);
+    // Generate QR code
+    const qrCodeData = `http://localhost:3000/submitpatient/${userdata._id}`;
+    
+
+    // Send email with QR code
+    await sendEmail(userdata.email, 'Patient ID', `
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Medical Report</title>
+    </head>
+    <body>
+      <p>Dear ${userdata.name},</p>
+    
+      <p>We hope this email finds you in good health. We are pleased to inform you that your comprehensive medical report has been successfully generated. To access and review your report, please use the following Patient ID:</p>
+    
+      <p>Your Patient ID: ${userdata._id}</p>
+    
+      Click on the button to view your report:
+      <a href="${qrCodeData}"><button>Click to see report</button></a>
+      
+      
+      
+    
+      <p>This unique identifier is crucial for securely accessing your confidential medical information. Kindly keep it confidential and do not share it with anyone else. Your privacy and security are of the utmost importance to us.</p>
+    </body>
+    </html>
+    
+    `);
 
     req.flash("success", "Patient Data Recorded successfully");
     res.redirect("/patient"); // Redirect to the desired page
@@ -279,6 +364,7 @@ router.post("/patient", async function (req, res) {
     res.redirect("/patient"); // Redirect to the desired page
   }
 });
+
 
 
 router.get("/searchmedical", function (req, res, next) {
@@ -315,7 +401,18 @@ router.get("/profile/:id", isLoggedIn, async function (req, res, next) {
 router.get("/appnt/:data",isLoggedIn,async function(req,res,next){
   const regex = req.params.data;
   const users =  await Appointment.findOne({_id:regex});
-  await sendEmail(users.email, 'Appointment Accepted', 'Your appointment has been accepted.');
+//   const recipientPhoneNumber = `+${users.connumber}`;
+//   console.log(recipientPhoneNumber)
+//   const smsBody = `Hey ${users.patientName} appointment has been accepted by Dr.${users.
+//     doctorName
+//     } pls come on the exact time as you mentioned on your appointment`;
+
+//  await sendSMS(recipientPhoneNumber, smsBody);
+
+
+  await sendEmail(users.email, 'Appointment Accepted', `Hey ${users.patientName} appointment has been accepted by Dr.${users.
+    doctorName
+    } pls come on the exact time as you mentioned on your appointment` );
 
   users.accepted=true;
   await users.save();
@@ -328,10 +425,70 @@ router.get("/appnts/:datas",isLoggedIn,async function(req,res,next){
   const users =  await Appointment.findOne({_id:regex});
   users.accepted=false;
   await users.save();
-  await sendEmail(users.email, 'Appointment Declined', 'Your appointment has been declined.');
+  await sendEmail(users.email, 'Appointment Declined', `Your appointment has been REJECTED by ${users.
+    doctorName
+    } Sorry For the inconvinience Caused`);
   res.redirect("/viewappoint")
 
 })
+
+//for remove
+const ObjectId = require('mongoose').Types.ObjectId;
+router.get("/toremove/:datass",isLoggedIn,async function(req,res,next){
+   const regex = req.params.datass;
+   
+   const patientss = await Appointment.findOne({_id:regex});
+   
+  
+  
+  const docs = await userModel.findOne({username : req.session.passport.user})
+  await sendEmail(patientss.email, `Thank You for Choosing ${docs.medicalname} for Your Recent Checkup`, `
+  Dear ${patientss.patientName},
+
+  I hope this email finds you in good health. On behalf of the entire team at ${docs.medicalname}, I would like to express our sincere gratitude for choosing our medical services for your recent checkup.
+  
+  It was our pleasure to have you as our valued patient, and we trust that your experience with us was positive and satisfactory. We understand that selecting a healthcare provider is a significant decision, and we are honored that you entrusted us with your health and well-being.
+  
+  Our team of dedicated healthcare professionals strives to provide the highest standard of care, and your trust in our services motivates us to continually improve and exceed expectations. If you have any feedback or suggestions regarding your experience, we would greatly appreciate hearing from you. Your input helps us enhance the quality of our services and ensures that we meet the needs of our patients.
+  
+  
+  Once again, thank you for choosing ${docs.medicalname}. We look forward to serving you in the future and being a part of your healthcare journey.
+  
+  Wishing you continued good health and well-being.
+  
+  Warm regards,
+  
+  Dr.${docs.fullName}
+  ${docs.speciality}
+  ${docs.medicalname}
+  ${docs.connumber}`);
+  const appointmentIdToRemove = new ObjectId(regex);
+  console.log(appointmentIdToRemove)
+  console.log(docs.appointment)
+  await userModel.updateOne(
+    { username: req.session.passport.user },
+    { $pull: { appointment: appointmentIdToRemove } }
+  );
+  
+
+  
+ 
+  res.redirect("/viewappoint")
+
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 router.get("/profiles/:id", isLoggedIn, async function (req, res, next) {
   const regex = req.params.id;
@@ -344,7 +501,10 @@ router.get("/profiles/:id", isLoggedIn, async function (req, res, next) {
 });
 
 router.get("/appointment", async function(req,res,next){
+  const users = await userModel.find()
+  console.log(users)
   res.render("appoint",{
+    users: users,
     successMessage: req.flash("success"),
     errorMessage: req.flash("error"),
   });
@@ -376,7 +536,12 @@ router.post("/appointments", async function(req, res, next) {
 
     // Send email only if severityLevel is Moderate or High
     if (appointment.severityLevel.toLowerCase() === "moderate" || appointment.severityLevel.toLowerCase() === "high") {
-      await sendEmail(doctor.email, 'EMERGENCY APPOINTMENT FOR YOU', `A patient named ${appointment.patientName} with ${appointment.severityLevel} condition is waiting for you to approve their appointment`);
+      await sendEmail(doctor.email, 'EMERGENCY APPOINTMENT FOR YOU', `Hey Dr.${doctor.fullName} A patient named ${appointment.patientName} with ${appointment.severityLevel} health  condition is waiting for you to approve their appointment.
+      
+      Note:${appointment.notes}
+      
+      
+      `);
     }
 
     req.flash("success", "Your Appointment Has been taken under review");
@@ -401,17 +566,169 @@ router.get("/ptrpt", async function(req,res,next){
 router.get("/llm", async function(req,res,next){
   res.render("labuserid")
 })
-router.post("/submitpatient",async function(req,res,next){
-  const regex = req.body.userId;
-  const users = await patient.findOne({ _id: regex });
-  res.render("patientpr",{users})
-})
+router.post("/submitpatient", async function(req, res, next) {
+  const userId = req.body.userId;
+  const user = await patient.findOne({ _id: userId });
+
+  // Check if the user is found
+  if (user) {
+      // Redirect to /submitpatient/userId
+      res.redirect(`/submitpatient/${userId}`);
+  } else {
+      // Handle case when user is not found, you might want to render an error page or redirect to a different page
+      res.status(404).send("User not found");
+  }
+});
+router.get("/submitpatient/:userId", async function(req, res, next) {
+  const userId = req.params.userId;
+  // Fetch the user data or perform any other necessary operations
+  const users = await patient.findOne({ _id: userId });
+
+  // Render the patientpr template with the user data
+  res.render("patientpr", { users });
+});
 router.post("/submitreport",async function(req,res,next){
   const regex = req.body.userId;
   const users = await LabReport.findOne({ _id: regex });
+  
   res.render("patientrp",{users})
-})
+});
 router.get("/daktars", async function(req,res,next){
   res.redirect('/daktar')
 })
+
+
+
+
+
+const allMedicines = [
+  'Acetaminophen',
+  'Aspirin',
+  'Ibuprofen',
+  'Lisinopril',
+  'Simvastatin',
+  'Levothyroxine',
+  'Metformin',
+  'Atorvastatin',
+  'Amlodipine',
+  'Omeprazole',
+  'Amoxicillin',
+  'Losartan',
+  'Gabapentin',
+  'Sertraline',
+  'Hydrochlorothiazide',
+  'Metoprolol',
+  'Escitalopram',
+  'Aspirin',
+  'Clopidogrel',
+  'Furosemide',
+  'Diazepam',
+  'Alprazolam',
+  'Fluoxetine',
+  'Citalopram',
+  'Pantoprazole',
+  'Ranitidine',
+  'Ciprofloxacin',
+  'Doxycycline',
+  'Hydrocodone/Acetaminophen',
+  'Oxycodone/Acetaminophen',
+  'Tramadol',
+  'Warfarin',
+  'Metoprolol',
+  'Albuterol',
+  'Fluticasone/Salmeterol',
+  'Montelukast',
+  'Insulin (Various Types)',
+  'Atenolol',
+  'Risperidone',
+  'Aripiprazole',
+  'Duloxetine',
+  'Venlafaxine',
+  'Lorazepam',
+  'Clonazepam',
+  'Carvedilol',
+  'Valsartan',
+  'Pioglitazone',
+  'Sitagliptin',
+  'Esomeprazole',
+  'Dexamethasone',
+  'Ezetimibe',
+  'Celecoxib',
+  'Naproxen',
+  'Metoclopramide',
+  'Methylphenidate',
+  'Lansoprazole',
+  'Meloxicam',
+  'Hydralazine',
+  'Phenytoin',
+  'Divalproex',
+  'Levetiracetam',
+  'Olanzapine',
+  'Quetiapine',
+  'Ipratropium/Albuterol',
+  'Budesonide/Formoterol',
+  'Latanoprost',
+  'Tiotropium',
+  'Ropinirole',
+  'Pregabalin',
+  'Fluconazole',
+  'Amiodarone',
+  'Digoxin',
+  'Nitroglycerin',
+  'Hydromorphone',
+  'Morphine',
+  'Lisinopril/Hydrochlorothiazide',
+  'Sildenafil',
+  'Tadalafil',
+  'Finasteride',
+  'Levonorgestrel/Ethinyl Estradiol',
+  'Drospirenone/Ethinyl Estradiol',
+  'Cyclobenzaprine',
+  'Alendronate',
+  'Raloxifene',
+  'Latuda',
+  'Lurasidone',
+  'Metronidazole',
+  'Hydroxychloroquine',
+  'Prednisone',
+  'Methylprednisolone',
+  'Acyclovir',
+  'Valacyclovir',
+  'Cephalexin',
+  'Amoxicillin/Clavulanate',
+  'Ceftriaxone',
+  'Cefuroxime',
+  'Famotidine',
+  'Ondansetron',
+  'Metoclopramide',
+  'Sumatriptan',
+  'Naproxen',
+  'Ketorolac',
+  'Mometasone',
+  'Desloratadine',
+  'Loratadine',
+  'Oxcarbazepine',
+  'Nortriptyline',
+  'Zolpidem',
+  'Zopiclone',
+  'Amitriptyline',
+ 
+];
+
+
+router.get('/suggestions', (req, res) => {
+  console.log('Received suggestion request'); 
+  const input = req.query.input.toLowerCase();
+
+  // Filter medicines that start with the input
+  const suggestions = allMedicines.filter(medicine => medicine.toLowerCase().startsWith(input));
+  console.log('Suggestions:', suggestions);
+  res.json(suggestions);
+});
+
+
+
+
+
+
 module.exports = router;

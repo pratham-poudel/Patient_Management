@@ -16,6 +16,9 @@
         }
 
         form {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
             width: 400px;
             padding: 20px;
             background-color: #fff;
@@ -83,6 +86,36 @@
             border-color: #ebccd1;
             color: #a94442;
         }
+
+        /* New styles for the specialization div */
+        .specialization {
+            background-color: #4CAF50;
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-left: 20px;
+            flex-shrink: 0;
+            text-align: center;
+        }
+
+        /* New styles for the doctors list div */
+        .doctors-list {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+            margin-left: 20px;
+            flex-shrink: 0;
+        }
+
+        .doctors-list h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .doctor-item {
+            margin-bottom: 8px;
+        }
     </style>
 </head>
 
@@ -108,7 +141,7 @@
         <input type="email" id="email" name="email" required>
 
         <label for="connumber">Contact Number:</label>
-        <input type="text" id="connumber" name="connumber" required>
+        <input type="text" id="connumber" name="connumber" value="+91" required>
 
         <label for="doctorName">Doctor Name:</label>
         <input type="text" id="doctorName" name="doctorName" required>
@@ -128,6 +161,23 @@
 
         <input type="submit" value="Submit">
     </form>
+
+    <!-- Doctor Specialization div -->
+    
+
+    <!-- Doctors List div -->
+    <div class="doctors-list">
+        <h3>Doctors List</h3>
+        <% users.forEach(function(elem){
+            %>
+            <div class="doctor-item"> Dr. <%=elem.fullName%> -<%=elem.speciality%></div>
+            <%
+
+        })%>
+        
+        
+        <!-- Add more doctor items as needed -->
+    </div>
 </body>
 
 </html>

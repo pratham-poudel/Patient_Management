@@ -1,109 +1,205 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Patient Data Form</title>
-    <style>
-      body {
-        font-family: "Arial", sans-serif;
-        background-color: #f4f4f4;
-        margin: 0;
-        padding: 0;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        min-height: 100vh;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Patient Data Form</title>
+  <style>
+    body {
+      font-family: "Arial", sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
 
-      h1 {
-        text-align: center;
-        color: #4caf50;
-        margin-bottom: 30px;
-      }
+    h1 {
+      text-align: center;
+      color: #4caf50;
+      margin-bottom: 20px;
+    }
 
+    form {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      width: 80%;
+      max-width: 400px;
+      position: relative;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      color: #333;
+    }
+
+    input,
+    select {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 16px;
+      box-sizing: border-box;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    button {
+      background-color: #4caf50;
+      color: #fff;
+      padding: 10px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    .flash {
+      background-color: red;
+      position: absolute;
+      top: 8px;
+    }
+
+    .suggestions-container {
+      position: absolute;
+      width: calc(100% - 16px);
+      max-height: 150px;
+      overflow-y: auto;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      margin-top: 5px;
+      background-color: #fff;
+      z-index: 1;
+      left: 0;
+      top: calc(100% + 5px);
+      display: none;
+    }
+
+    .suggestion {
+      padding: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .suggestion:hover {
+      background-color: #e0e0e0;
+    }
+
+    .suggestion span {
+      color: #333;
+    }
+
+    .suggestions-container.active {
+      display: block;
+    }
+
+    @media (max-width: 600px) {
       form {
-        background-color: #fff;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        width: 300px;
-        margin-top: 0px; /* Adjust this value for vertical positioning */
+        width: 90%;
       }
-
-      label {
-        display: block;
-        margin-bottom: 8px;
-        color: #333;
-      }
-
-      input,
-      select {
-        width: calc(100% - 16px);
-        padding: 8px;
-        margin-bottom: 16px;
-        box-sizing: border-box;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-      }
-
-      button {
-        background-color: #4caf50;
-        color: #fff;
-        padding: 10px;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        width: 100%;
-      }
-
-      button:hover {
-        background-color: #45a049;
-      }
-
-      .flash {
-        background-color: red;
-        position: absolute;
-        top: 8px;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="flash">
-      <% if (successMessage) { %>
-      <div class="alert alert-success">
-        <a href="/searchmedical"><%= successMessage %> </a>
-      </div>
-      <% } %> <% if (errorMessage) { %>
-      <div class="alert alert-danger"><%= errorMessage %></div>
-      <% } %>
+    }
+  </style>
+</head>
+<body>
+  <div class="flash">
+    <% if (successMessage) { %>
+    <div class="alert alert-success">
+      <a href="/searchmedical"><%= successMessage %> </a>
     </div>
-    <h1>Patient Data Form</h1>
-    <form action="/patient" method="post">
-      <label for="name">Name:</label>
-      <input type="text" id="name" name="name" required />
+    <% } %> <% if (errorMessage) { %>
+    <div class="alert alert-danger"><%= errorMessage %></div>
+    <% } %>
+  </div>
+  <h1>Patient Data Form</h1>
+  <form action="/patient" method="post">
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" required />
 
-      <label for="age">Email:</label>
-      <input type="email" id="email" name="email" required />
+    <label for="age">Email:</label>
+    <input type="email" id="email" name="email" required />
 
-      <label for="age">Age:</label>
-      <input type="number" id="age" name="age" required />
+    <label for="age">Age:</label>
+    <input type="number" id="age" name="age" required />
 
-      <label for="gender">Gender:</label>
-      <select id="gender" name="gender" required>
-        <option value="Male">Male</option>
-        <option value="Female">Female</option>
-        <option value="Other">Other</option>
-      </select>
+    <label for="gender">Gender:</label>
+    <select id="gender" name="gender" required>
+      <option value="Male">Male</option>
+      <option value="Female">Female</option>
+      <option value="Other">Other</option>
+    </select>
 
-      <label for="symptoms">Symptoms (comma-separated):</label>
-      <input type="text" id="symptoms" name="symptoms" required />
+    <label for="symptoms">Symptoms (comma-separated):</label>
+    <input type="text" id="symptoms" name="symptoms" required />
 
-      <label for="medicinesUsed">Medicines Used (comma-separated):</label>
-      <input type="text" id="medicinesUsed" name="medicinesUsed" />
+    <label for="medicinesUsed">Prescribed Medications:</label>
+    <input type="text" id="medicinesUsed" name="medicinesUsed" required>
+    <div id="suggestions-container" class="suggestions-container"></div>
 
-      <button type="submit">Submit</button>
-    </form>
-  </body>
+    <button type="submit">Submit</button>
+  </form>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const medicinesInput = document.getElementById('medicinesUsed');
+      const suggestionsContainer = document.getElementById('suggestions-container');
+
+      medicinesInput.addEventListener('input', async function () {
+        const inputValue = medicinesInput.value.trim();
+        const medicines = inputValue.split(',');
+
+        // Clear previous suggestions
+        suggestionsContainer.innerHTML = '';
+
+        for (const medicine of medicines) {
+          const trimmedMedicine = medicine.trim();
+
+          if (trimmedMedicine.length >= 3) {
+            // Fetch suggestions from the server
+            const response = await fetch(`/suggestions?input=${trimmedMedicine}`);
+            const suggestions = await response.json();
+
+            // Display suggestions
+            suggestions.forEach(suggestion => {
+              const suggestionItem = document.createElement('div');
+              suggestionItem.classList.add('suggestion');
+              suggestionItem.innerHTML = `<span>${suggestion}</span><span style="color: #2196F3;">Use</span>`;
+              suggestionItem.addEventListener('click', function () {
+                medicinesInput.value = inputValue.replace(trimmedMedicine, suggestion);
+                suggestionsContainer.innerHTML = '';
+              });
+
+              suggestionsContainer.appendChild(suggestionItem);
+            });
+          }
+        }
+
+        // Show suggestions container if there are suggestions
+        if (suggestionsContainer.children.length > 0) {
+          suggestionsContainer.classList.add('active');
+        } else {
+          suggestionsContainer.classList.remove('active');
+        }
+      });
+
+      // Close suggestions on clicking outside
+      document.addEventListener('click', function (event) {
+        if (!event.target.closest('.suggestions-container') && !event.target.closest('#medicinesUsed')) {
+          suggestionsContainer.innerHTML = '';
+          suggestionsContainer.classList.remove('active');
+        }
+      });
+    });
+  </script>
+</body>
 </html>

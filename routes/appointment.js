@@ -22,13 +22,12 @@ const AppointmentSchema = new mongoose.Schema({
     required: false
   },
   connumber: {
-    type: Number,
+    type: String,
     required: false
   },
   email: {
     type: String,
     required: true,
-    unique: true,
   },
   accepted:{
     type:Boolean

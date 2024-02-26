@@ -35,9 +35,12 @@ const userSchema = new mongoose.Schema({
     type:String,
   },
   connumber:{
-    type:Number,
+    type:String,
   },
   address:{
+    type:String,
+  },
+  speciality:{
     type:String,
   },
   patient: [{
