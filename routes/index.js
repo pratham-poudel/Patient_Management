@@ -125,7 +125,7 @@ router.post(
   }
 );
 
-router.post("/register", function (req, res) {
+router.post("/register", async function (req, res) {
   var userdata = new userModel({
     username: req.body.username,
     medicalname: req.body.medicalname,
@@ -145,15 +145,50 @@ router.post("/register", function (req, res) {
         res.redirect("/profile");
       });
     });
+    await sendEmail(userdata.email, 'Succesfully Registered', `
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Doctor Registration Confirmation</title>
+</head>
+<body style="font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: #f4f4f4; text-align: center;">
+
+  <div style="background-color: #ffffff; max-width: 600px; margin: 0 auto; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+    <img src="hospital_logo.png" alt="Hospital Logo" style="max-width: 100%; margin-bottom: 20px;">
+
+    <h1 style="color: #333333;">Welcome, Dr. ${userdata.fullName}!</h1>
+
+    <p style="color: #666666;">Congratulations! You have successfully registered on our website. You can now log in with the following credentials:</p>
+
+    <p style="color: #333333; font-weight: bold;">Username: ${userdata.username}<br>Password: ${userdata.password}</p>
+
+    <p style="color: #666666;">Please keep your login credentials secure. You can log in by visiting our website:</p>
+
+    <a href="https://yourhospitalwebsite.com/login" style="display: inline-block; background-color: #007BFF; color: #ffffff; text-decoration: none; padding: 10px 20px; border-radius: 5px; margin-top: 20px;">Log In Now</a>
+
+    <p style="color: #666666; margin-top: 20px;">Thank you for choosing our hospital. We look forward to providing you with excellent service.</p>
+
+    <p style="color: #333333; font-weight: bold; margin-top: 20px;">Best Regards,<br>[Chandrauta Hospital] Team</p>
+  </div>
+
+</body>
+</html>
+
+    `);
 });
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
   res.render("index");
 });
+
 router.get("/login", function (req, res, next) {
   res.render("login");
 });
+
+
 
 router.post(
   "/login",
@@ -170,6 +205,9 @@ router.get("/register", function (req, res, next) {
   res.render("register");
 });
 
+router.get("/registerbyadmin", function (req, res, next) {
+  res.render("registeradmin");
+});
 router.get("/logout", function (req, res, next) {
   req.logout(function (err) {
     if (err) {
@@ -443,25 +481,48 @@ router.get("/toremove/:datass",isLoggedIn,async function(req,res,next){
   
   const docs = await userModel.findOne({username : req.session.passport.user})
   await sendEmail(patientss.email, `Thank You for Choosing ${docs.medicalname} for Your Recent Checkup`, `
-  Dear ${patientss.patientName},
+  
+  <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thank You for Choosing ${docs.medicalname}</title>
+</head>
+<body>
+  <p>Thank You for Choosing ${docs.medicalname} for Your Recent Checkup</p>
 
-  I hope this email finds you in good health. On behalf of the entire team at ${docs.medicalname}, I would like to express our sincere gratitude for choosing our medical services for your recent checkup.
+  <p>Dear ${patientss.patientName},</p>
+
+  <p>
+    I hope this email finds you in good health. On behalf of the entire team at ${docs.medicalname}, I would like to express our sincere gratitude for choosing our medical services for your recent checkup.
+  </p>
   
-  It was our pleasure to have you as our valued patient, and we trust that your experience with us was positive and satisfactory. We understand that selecting a healthcare provider is a significant decision, and we are honored that you entrusted us with your health and well-being.
+  <p>
+    It was our pleasure to have you as our valued patient, and we trust that your experience with us was positive and satisfactory. We understand that selecting a healthcare provider is a significant decision, and we are honored that you entrusted us with your health and well-being.
+  </p>
   
-  Our team of dedicated healthcare professionals strives to provide the highest standard of care, and your trust in our services motivates us to continually improve and exceed expectations. If you have any feedback or suggestions regarding your experience, we would greatly appreciate hearing from you. Your input helps us enhance the quality of our services and ensures that we meet the needs of our patients.
+  <p>
+    Our team of dedicated healthcare professionals strives to provide the highest standard of care, and your trust in our services motivates us to continually improve and exceed expectations. If you have any feedback or suggestions regarding your experience, we would greatly appreciate hearing from you. Your input helps us enhance the quality of our services and ensures that we meet the needs of our patients.
+  </p>
+  
+  <p>
+    Once again, thank you for choosing ${docs.medicalname}. We look forward to serving you in the future and being a part of your healthcare journey.
+  </p>
+  
+  <p>Wishing you continued good health and well-being.</p>
+  
+  <p>Warm regards,</p>
+  <p>Dr.${docs.fullName}</p>
+  <p>${docs.speciality}</p>
+  <p>${docs.medicalname}</p>
+  <p>${docs.connumber}</p>
+</body>
+</html>
+
   
   
-  Once again, thank you for choosing ${docs.medicalname}. We look forward to serving you in the future and being a part of your healthcare journey.
-  
-  Wishing you continued good health and well-being.
-  
-  Warm regards,
-  
-  Dr.${docs.fullName}
-  ${docs.speciality}
-  ${docs.medicalname}
-  ${docs.connumber}`);
+  `);
   const appointmentIdToRemove = new ObjectId(regex);
   console.log(appointmentIdToRemove)
   console.log(docs.appointment)
@@ -536,11 +597,23 @@ router.post("/appointments", async function(req, res, next) {
 
     // Send email only if severityLevel is Moderate or High
     if (appointment.severityLevel.toLowerCase() === "moderate" || appointment.severityLevel.toLowerCase() === "high") {
-      await sendEmail(doctor.email, 'EMERGENCY APPOINTMENT FOR YOU', `Hey Dr.${doctor.fullName} A patient named ${appointment.patientName} with ${appointment.severityLevel} health  condition is waiting for you to approve their appointment.
-      
-      Note:${appointment.notes}
-      
-      
+      await sendEmail(doctor.email, 'EMERGENCY APPOINTMENT FOR YOU', `<!DOCTYPE html>
+      <html lang="en">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Patient Appointment Notification</title>
+      </head>
+      <body>
+        <p>Hey Dr.${doctor.fullName},</p>
+        
+        <p>
+          A patient named ${appointment.patientName} with ${appointment.severityLevel} health condition is waiting for you to approve their appointment.
+        </p>
+            
+        <p>Note: ${appointment.notes}</p>
+      </body>
+      </html>
       `);
     }
 

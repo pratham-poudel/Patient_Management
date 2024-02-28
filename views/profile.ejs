@@ -21,14 +21,21 @@
     <div class="infos">
       <div class="welcome"><h1>Welcome <%= user.fullName %> </h1></div>
       <div class="bio">
-        <p>"<%= user.bio %> "</p>
+        <p>"  <%= user.bio %> "</p>
       </div>
       <div class="buttons">
+     
+         
         <a href="/edit"><button>Edit Profile
         </button></a>
         <a href="/logout"><button>Log Out
         </button></a>
+        <% if (user._id.toString() === '65c88c9428c98da31cbcc8dc') { %>
+          <!-- Show the button if user is an admin -->
+          <a href="/register"><button>Register New Doctor</button></a>
+        <% } %>
         <a href="/daktar"><button>View All Doctors</button></a>
+        
       </div>
     </div>
   </div>
