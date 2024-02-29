@@ -26,7 +26,7 @@ const transporter = nodemailer.createTransport({
 
 // Define a function to send email
 async function sendEmail(to, subject, html) {
- 
+
   try {
     // Compose the email
     const mailOptions = {
@@ -34,7 +34,7 @@ async function sendEmail(to, subject, html) {
       to: to,
       subject: subject,
       html: html,
-      
+
     };
 
     // Send the email
@@ -130,7 +130,7 @@ router.post("/register", async function (req, res) {
     username: req.body.username,
     medicalname: req.body.medicalname,
     nickname: req.body.username,
-    speciality:req.body.speciality,
+    speciality: req.body.speciality,
     fullName: req.body.name,
     email: req.body.email,
     password: req.body.password,
@@ -145,7 +145,7 @@ router.post("/register", async function (req, res) {
         res.redirect("/profile");
       });
     });
-    await sendEmail(userdata.email, 'Succesfully Registered', `
+  await sendEmail(userdata.email, 'Succesfully Registered', `
     <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -266,7 +266,7 @@ router.post("/submitLabReport", async function (req, res) {
   console.log(doctor.connumber);
   const labReport = new LabReport({
     patientName: req.body.patientName,
-    email:req.body.email,
+    email: req.body.email,
     age: req.body.age,
     dname: doctor.fullName,
     connumber: doctor.connumber,
@@ -301,10 +301,47 @@ router.post("/submitLabReport", async function (req, res) {
   });
   doctor.patientlab.push(labReport._id)
   await doctor.save();
+  
   try {
     await labReport.save();
+    const qrCodeData = `http://localhost:3000/submitreport/${labReport._id}`;
     console.log(labReport);
-    await sendEmail(labReport.email, 'Lab Report', `Hey ${labReport.patientName} Your Lab Report ID is ${labReport._id}`);
+    await sendEmail(labReport.email, 'Lab Report', `
+    
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Medical Report Notification</title>
+    </head>
+    <body style="font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: #f4f4f4; text-align: center;">
+    
+      <div style="background-color: #ffffff; max-width: 600px; margin: 0 auto; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+        <h1 style="color: #333333;">Dear ${labReport.patientName},</h1>
+    
+        <p style="color: #666666;">हामी आशा गर्दछौं कि यो इमेलले तपाईंलाई राम्रो स्वास्थ्यमा भेट्टाउँछ। हामी तपाईंलाई सूचित गर्न पाउँदा खुसी छौं कि तपाईंको व्यापक प्रयोगशाला रिपोर्ट सफलतापूर्वक उत्पन्न भएको छ।</p>
+    
+        <p style="color: #333333;">तपाईंको रिपोर्ट पहुँच गर्न र समीक्षा गर्न, कृपया निम्न बिरामी आईडी प्रयोग गर्नुहोस्:</p>
+    
+        <p style="color: #333333; font-weight: bold;">तपाईंको बिरामी ID: ${labReport._id}</p>
+    
+        <a href="${qrCodeData}" style="display: inline-block; background-color: #007BFF; color: #ffffff; text-decoration: none; padding: 10px 20px; border-radius: 5px; margin-top: 20px;">रिपोर्ट हेर्न क्लिक गर्नुहोस्</a>
+    
+        <p style="color: #666666; margin-top: 20px;">
+        तपाईंको गोप्य चिकित्सा जानकारी सुरक्षित रूपमा पहुँच गर्नको लागि यो अद्वितीय पहिचानकर्ता महत्त्वपूर्ण छ। कृपया यसलाई गोप्य राख्नुहोस् र अरू कसैसँग साझा नगर्नुहोस्। तपाईंको गोपनीयता र सुरक्षा हाम्रो लागि अत्यन्तै महत्त्वपूर्ण छ।</p>
+    
+        <p style="color: #333333; font-weight: bold; margin-top: 20px;">Best Regards,<br>Chandrauta Hospital Team<br>गुणस्तरीय स्वस्थ्य सेवा हाम्रो प्रतिबद्धता !!</p>
+        
+      </div>
+    
+    </body>
+    </html>
+    
+    
+    
+    
+    `);
     req.flash("success", "Patient Data Recorded successfully");
     res.redirect("/lreport"); // Redirect to the desired page
   } catch (error) {
@@ -365,33 +402,40 @@ router.post("/patient", async function (req, res) {
 
     // Generate QR code
     const qrCodeData = `http://localhost:3000/submitpatient/${userdata._id}`;
-    
+
 
     // Send email with QR code
     await sendEmail(userdata.email, 'Patient ID', `
+
     <!DOCTYPE html>
-    <html lang="en">
-    <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Medical Report</title>
-    </head>
-    <body>
-      <p>Dear ${userdata.name},</p>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Medical Report Notification</title>
+</head>
+<body style="font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: #f4f4f4; text-align: center;">
+
+  <div style="background-color: #ffffff; max-width: 600px; margin: 0 auto; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+    <h1 style="color: #333333;">Dear ${userdata.name},</h1>
+
+    <p style="color: #666666;">We hope this email finds you in good health. We are pleased to inform you that your comprehensive medical report has been successfully generated.</p>
+
+    <p style="color: #333333;">To access and review your report, please use the following Patient ID:</p>
+
+    <p style="color: #333333; font-weight: bold;">Your Patient ID: ${userdata._id}</p>
+
+    <a href="${qrCodeData}" style="display: inline-block; background-color: #007BFF; color: #ffffff; text-decoration: none; padding: 10px 20px; border-radius: 5px; margin-top: 20px;">Click to see report</a>
+
+    <p style="color: #666666; margin-top: 20px;">This unique identifier is crucial for securely accessing your confidential medical information. Kindly keep it confidential and do not share it with anyone else. Your privacy and security are of the utmost importance to us.</p>
+
+    <p style="color: #333333; font-weight: bold; margin-top: 20px;">Best Regards,<br>Chandrauta Hospital Team<br>गुणस्तरीय स्वस्थ्य सेवा हाम्रो प्रतिबद्धता !!</p>
     
-      <p>We hope this email finds you in good health. We are pleased to inform you that your comprehensive medical report has been successfully generated. To access and review your report, please use the following Patient ID:</p>
-    
-      <p>Your Patient ID: ${userdata._id}</p>
-    
-      Click on the button to view your report:
-      <a href="${qrCodeData}"><button>Click to see report</button></a>
-      
-      
-      
-    
-      <p>This unique identifier is crucial for securely accessing your confidential medical information. Kindly keep it confidential and do not share it with anyone else. Your privacy and security are of the utmost importance to us.</p>
-    </body>
-    </html>
+  </div>
+
+</body>
+</html>
+
     
     `);
 
@@ -415,7 +459,7 @@ router.get("/daktar", async function (req, res, next) {
 });
 
 
-router.get("/name/:username",isLoggedIn, async function (req, res, next) {
+router.get("/name/:username", isLoggedIn, async function (req, res, next) {
   const regex = new RegExp(`^${req.params.username}`, "i");
   const users = await patient.find({ name: regex });
   res.json(users);
@@ -436,50 +480,106 @@ router.get("/profile/:id", isLoggedIn, async function (req, res, next) {
   res.render("medical-report", { users });
 });
 //for accept
-router.get("/appnt/:data",isLoggedIn,async function(req,res,next){
+router.get("/appnt/:data", isLoggedIn, async function (req, res, next) {
   const regex = req.params.data;
-  const users =  await Appointment.findOne({_id:regex});
-//   const recipientPhoneNumber = `+${users.connumber}`;
-//   console.log(recipientPhoneNumber)
-//   const smsBody = `Hey ${users.patientName} appointment has been accepted by Dr.${users.
-//     doctorName
-//     } pls come on the exact time as you mentioned on your appointment`;
+  const users = await Appointment.findOne({ _id: regex });
+  //   const recipientPhoneNumber = `+${users.connumber}`;
+  //   console.log(recipientPhoneNumber)
+  //   const smsBody = `Hey ${users.patientName} appointment has been accepted by Dr.${users.
+  //     doctorName
+  //     } pls come on the exact time as you mentioned on your appointment`;
 
-//  await sendSMS(recipientPhoneNumber, smsBody);
+  //  await sendSMS(recipientPhoneNumber, smsBody);
 
 
-  await sendEmail(users.email, 'Appointment Accepted', `Hey ${users.patientName} appointment has been accepted by Dr.${users.
-    doctorName
-    } pls come on the exact time as you mentioned on your appointment` );
+  await sendEmail(users.email, 'Appointment Accepted', `<!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appointment Accepted Notification</title>
+  </head>
+  <body style="font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: #f4f4f4; text-align: center;">
+  
+    <div style="background-color: #ffffff; max-width: 600px; margin: 0 auto; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+      <h1 style="color: #333333;">Appointment Accepted</h1>
+  
+      <p style="color: #666666;">Hey ${users.patientName},</p>
+  
+      <p style="color: #666666;">Your appointment has been accepted by Dr. ${users.doctorName}. Please make sure to arrive at the exact time as you mentioned on your appointment.</p>
+  
+      <p style="color: #333333; font-weight: bold;">Appointment Details:</p>
+      <ul style="color: #666666; list-style: none; padding: 0; margin: 0;">
+        <li><strong>Patient Name:</strong> ${users.patientName}</li>
+        <li><strong>Doctor Name:</strong> ${users.doctorName}</li>
+        <li><strong>Appointment Date:</strong> ${users.appointmentDate}</li>
+        <li><strong>Severity Level:</strong> ${users.severityLevel}</li>
+        <li><strong>Notes:</strong> ${users.notes || 'N/A'}</li>
+        <li><strong>Contact Number:</strong> ${users.connumber || 'N/A'}</li>
+      </ul>
+  
+      <p style="color: #666666;">If you have any questions or need further assistance, feel free to contact us at ${users.email}.</p>
+  
+      <p style="color: #333333; font-weight: bold; margin-top: 20px;">Best Regards,<br>Chandrauta Hospital Team<br>गुणस्तरीय स्वस्थ्य सेवा हाम्रो प्रतिबद्धता !!</p>
+    </div>
+  
+  </body>
+  </html>
+  `);
 
-  users.accepted=true;
+  users.accepted = true;
   await users.save();
   res.redirect("/viewappoint")
 
 })
 //for decline
-router.get("/appnts/:datas",isLoggedIn,async function(req,res,next){
+router.get("/appnts/:datas", isLoggedIn, async function (req, res, next) {
   const regex = req.params.datas;
-  const users =  await Appointment.findOne({_id:regex});
-  users.accepted=false;
+  const users = await Appointment.findOne({ _id: regex });
+  users.accepted = false;
   await users.save();
-  await sendEmail(users.email, 'Appointment Declined', `Your appointment has been REJECTED by ${users.
-    doctorName
-    } Sorry For the inconvinience Caused`);
+  await sendEmail(users.email, 'Appointment Declined', `<!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appointment Rejected Notification</title>
+  </head>
+  <body style="font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: #f4f4f4; text-align: center;">
+  
+    <div style="background-color: #ffffff; max-width: 600px; margin: 0 auto; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+      <h1 style="color: #333333;">Appointment Rejected</h1>
+  
+      <p style="color: #666666;">Dear ${users.patientName},</p>
+  
+      <p style="color: #666666;">We sincerely apologize for the inconvenience caused. Unfortunately, your appointment with Dr. ${users.doctorName} has been rejected due to overlapping of time.</p>
+  
+      <p style="color: #666666;">To compensate for the inconvenience, we would like to offer you a discount on your next appointment. We value your trust in our services and want to ensure a positive experience for you.</p>
+  
+      <p style="color: #666666;">Please feel free to contact us at ${users.email} to reschedule your appointment or discuss any further concerns you may have.</p>
+  
+      <p style="color: #333333; font-weight: bold; margin-top: 20px;">We appreciate your understanding and look forward to serving you better in the future.</p>
+  
+      <p style="color: #333333; font-weight: bold;">Best Regards,<br>Chandrauta Hospital Team<br>गुणस्तरीय स्वस्थ्य सेवा हाम्रो प्रतिबद्धता !!</p>
+    </div>
+  
+  </body>
+  </html>
+  `);
   res.redirect("/viewappoint")
 
 })
 
 //for remove
 const ObjectId = require('mongoose').Types.ObjectId;
-router.get("/toremove/:datass",isLoggedIn,async function(req,res,next){
-   const regex = req.params.datass;
-   
-   const patientss = await Appointment.findOne({_id:regex});
-   
-  
-  
-  const docs = await userModel.findOne({username : req.session.passport.user})
+router.get("/toremove/:datass", isLoggedIn, async function (req, res, next) {
+  const regex = req.params.datass;
+
+  const patientss = await Appointment.findOne({ _id: regex });
+
+
+
+  const docs = await userModel.findOne({ username: req.session.passport.user })
   await sendEmail(patientss.email, `Thank You for Choosing ${docs.medicalname} for Your Recent Checkup`, `
   
   <!DOCTYPE html>
@@ -530,10 +630,10 @@ router.get("/toremove/:datass",isLoggedIn,async function(req,res,next){
     { username: req.session.passport.user },
     { $pull: { appointment: appointmentIdToRemove } }
   );
-  
 
-  
- 
+
+
+
   res.redirect("/viewappoint")
 
 })
@@ -561,10 +661,10 @@ router.get("/profiles/:id", isLoggedIn, async function (req, res, next) {
   res.render("report", { users, doctor });
 });
 
-router.get("/appointment", async function(req,res,next){
+router.get("/appointment", async function (req, res, next) {
   const users = await userModel.find()
   console.log(users)
-  res.render("appoint",{
+  res.render("appoint", {
     users: users,
     successMessage: req.flash("success"),
     errorMessage: req.flash("error"),
@@ -572,7 +672,7 @@ router.get("/appointment", async function(req,res,next){
 
 })
 
-router.post("/appointments", async function(req, res, next) {
+router.post("/appointments", async function (req, res, next) {
   try {
     const doctor = await userModel.findOne({
       fullName: { $regex: new RegExp(req.body.doctorName, 'i') }
@@ -603,17 +703,56 @@ router.post("/appointments", async function(req, res, next) {
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Patient Appointment Notification</title>
+        <style>
+          body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+          }
+      
+          p {
+            color: #333333;
+            font-size: 16px;
+            line-height: 1.6;
+          }
+      
+          .container {
+            background-color: #ffffff;
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+          }
+      
+          h1 {
+            color: #007BFF;
+            font-size: 24px;
+            margin-bottom: 20px;
+          }
+      
+          .note {
+            color: #666666;
+            margin-top: 10px;
+          }
+        </style>
       </head>
-      <body>
-        <p>Hey Dr.${doctor.fullName},</p>
-        
-        <p>
-          A patient named ${appointment.patientName} with ${appointment.severityLevel} health condition is waiting for you to approve their appointment.
-        </p>
-            
-        <p>Note: ${appointment.notes}</p>
+      <body style="font-family: 'Arial', sans-serif; background-color: #f4f4f4; margin: 0; padding: 20px;">
+        <div style="background-color: #ffffff; max-width: 600px; margin: 20px auto; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+          <h1 style="color: #007BFF; font-size: 24px; margin-bottom: 20px;">Hey Dr. ${doctor.fullName},</h1>
+          
+          <p style="color: #333333; font-size: 16px; line-height: 1.6;">
+            A patient named ${appointment.patientName} with a ${appointment.severityLevel} health condition is waiting for you to approve their appointment.
+          </p>
+              
+          <p style="color: #666666; margin-top: 10px;">Note: ${appointment.notes}</p>
+          
+          <p style="color: #007BFF; font-weight: bold; margin-top: 20px; font-size: 16px; line-height: 1.6;">Your dedication to patient care is highly appreciated. Thank you for your commitment to providing excellent healthcare!</p>
+        </div>
       </body>
       </html>
+      
       `);
     }
 
@@ -625,34 +764,34 @@ router.post("/appointments", async function(req, res, next) {
   }
 });
 
-router.get("/viewappoint", async function(req,res,next){
+router.get("/viewappoint", async function (req, res, next) {
   const doctor = await userModel.findOne({
-    username : req.session.passport.user
+    username: req.session.passport.user
   }).populate("appointment")
   console.log(doctor)
-  
-  res.render("allappns",{doctor})
+
+  res.render("allappns", { doctor })
 })
-router.get("/ptrpt", async function(req,res,next){
+router.get("/ptrpt", async function (req, res, next) {
   res.render("patientuserid")
 })
-router.get("/llm", async function(req,res,next){
+router.get("/llm", async function (req, res, next) {
   res.render("labuserid")
 })
-router.post("/submitpatient", async function(req, res, next) {
+router.post("/submitpatient", async function (req, res, next) {
   const userId = req.body.userId;
   const user = await patient.findOne({ _id: userId });
 
   // Check if the user is found
   if (user) {
-      // Redirect to /submitpatient/userId
-      res.redirect(`/submitpatient/${userId}`);
+    // Redirect to /submitpatient/userId
+    res.redirect(`/submitpatient/${userId}`);
   } else {
-      // Handle case when user is not found, you might want to render an error page or redirect to a different page
-      res.status(404).send("User not found");
+    // Handle case when user is not found, you might want to render an error page or redirect to a different page
+    res.status(404).send("User not found");
   }
 });
-router.get("/submitpatient/:userId", async function(req, res, next) {
+router.get("/submitpatient/:userId", async function (req, res, next) {
   const userId = req.params.userId;
   // Fetch the user data or perform any other necessary operations
   const users = await patient.findOne({ _id: userId });
@@ -660,13 +799,29 @@ router.get("/submitpatient/:userId", async function(req, res, next) {
   // Render the patientpr template with the user data
   res.render("patientpr", { users });
 });
-router.post("/submitreport",async function(req,res,next){
+router.post("/submitreport", async function (req, res, next) {
   const regex = req.body.userId;
   const users = await LabReport.findOne({ _id: regex });
+  if (users) {
+    // Redirect to /submitpatient/userId
+    res.redirect(`/submitreport/${users._id}`);
+  } else {
+    // Handle case when user is not found, you might want to render an error page or redirect to a different page
+    res.status(404).send("User not found");
+  }
   
-  res.render("patientrp",{users})
 });
-router.get("/daktars", async function(req,res,next){
+router.get("/submitreport/:userId",async function(req,res,next){
+  const userId = req.params.userId;
+  // Fetch the user data or perform any other necessary operations
+  const users = await LabReport.findOne({ _id: userId });
+
+  // Render the patientpr template with the user data
+  res.render("patientrp", { users });
+
+
+});
+router.get("/daktars", async function (req, res, next) {
   res.redirect('/daktar')
 })
 
@@ -785,12 +940,12 @@ const allMedicines = [
   'Zolpidem',
   'Zopiclone',
   'Amitriptyline',
- 
+
 ];
 
 
 router.get('/suggestions', (req, res) => {
-  console.log('Received suggestion request'); 
+  console.log('Received suggestion request');
   const input = req.query.input.toLowerCase();
 
   // Filter medicines that start with the input
