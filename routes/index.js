@@ -304,7 +304,7 @@ router.post("/submitLabReport", async function (req, res) {
   
   try {
     await labReport.save();
-    const qrCodeData = `http://localhost:3000/submitreport/${labReport._id}`;
+    const qrCodeData = `https://patient-management-prxp.onrender.com/submitreport/${labReport._id}`;
     console.log(labReport);
     await sendEmail(labReport.email, 'Lab Report', `
     
