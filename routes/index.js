@@ -583,42 +583,76 @@ router.get("/toremove/:datass", isLoggedIn, async function (req, res, next) {
   await sendEmail(patientss.email, `Thank You for Choosing ${docs.medicalname} for Your Recent Checkup`, `
   
   <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Thank You for Choosing ${docs.medicalname}</title>
-</head>
-<body>
-  <p>Thank You for Choosing ${docs.medicalname} for Your Recent Checkup</p>
-
-  <p>Dear ${patientss.patientName},</p>
-
-  <p>
-    I hope this email finds you in good health. On behalf of the entire team at ${docs.medicalname}, I would like to express our sincere gratitude for choosing our medical services for your recent checkup.
-  </p>
+  <html lang="en">
   
-  <p>
-    It was our pleasure to have you as our valued patient, and we trust that your experience with us was positive and satisfactory. We understand that selecting a healthcare provider is a significant decision, and we are honored that you entrusted us with your health and well-being.
-  </p>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+        margin: 0;
+        padding: 20px;
+        background-color: #f5f5f5;
+      }
   
-  <p>
-    Our team of dedicated healthcare professionals strives to provide the highest standard of care, and your trust in our services motivates us to continually improve and exceed expectations. If you have any feedback or suggestions regarding your experience, we would greatly appreciate hearing from you. Your input helps us enhance the quality of our services and ensures that we meet the needs of our patients.
-  </p>
+      .container {
+        max-width: 600px;
+        margin: 0 auto;
+      }
   
-  <p>
-    Once again, thank you for choosing ${docs.medicalname}. We look forward to serving you in the future and being a part of your healthcare journey.
-  </p>
+      h1 {
+        color: #333;
+      }
   
-  <p>Wishing you continued good health and well-being.</p>
+      p {
+        color: #555;
+      }
   
-  <p>Warm regards,</p>
-  <p>Dr.${docs.fullName}</p>
-  <p>${docs.speciality}</p>
-  <p>${docs.medicalname}</p>
-  <p>${docs.connumber}</p>
-</body>
-</html>
+      .footer {
+        margin-top: 20px;
+        color: #777;
+      }
+    </style>
+    <title>Thank You for Choosing ${docs.medicalname}</title>
+  </head>
+  
+  <body>
+    <div class="container">
+      <h1>Thank You for Choosing ${docs.medicalname} for Your Recent Checkup</h1>
+  
+      <p>Dear ${patientss.patientName},</p>
+  
+      <p>
+        I hope this email finds you in good health. On behalf of the entire team at ${docs.medicalname}, I would like to express our sincere gratitude for choosing our medical services for your recent checkup.
+      </p>
+  
+      <p>
+        It was our pleasure to have you as our valued patient, and we trust that your experience with us was positive and satisfactory. We understand that selecting a healthcare provider is a significant decision, and we are honored that you entrusted us with your health and well-being.
+      </p>
+  
+      <p>
+        Our team of dedicated healthcare professionals strives to provide the highest standard of care, and your trust in our services motivates us to continually improve and exceed expectations. If you have any feedback or suggestions regarding your experience, we would greatly appreciate hearing from you. Your input helps us enhance the quality of our services and ensures that we meet the needs of our patients.
+      </p>
+  
+      <p>
+        Once again, thank you for choosing ${docs.medicalname}. We look forward to serving you in the future and being a part of your healthcare journey.
+      </p>
+  
+      <p>Wishing you continued good health and well-being.</p>
+  
+      <p class="footer">Warm regards,<br>
+        Dr.${docs.fullName}<br>
+        ${docs.speciality}<br>
+        ${docs.medicalname}<br>
+        ${docs.connumber}
+      </p>
+    </div>
+  </body>
+  
+  </html>
+  
 
   
   
