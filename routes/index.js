@@ -304,7 +304,7 @@ router.post("/submitLabReport", async function (req, res) {
   
   try {
     await labReport.save();
-    const qrCodeData = `https://patient-management-prxp.onrender.com/submitreport/${labReport._id}`;
+    const qrCodeData = `https://patient-management-gs7d.onrender.com/submitreport/${labReport._id}`;
     console.log(labReport);
     await sendEmail(labReport.email, 'Lab Report', `
     
@@ -401,7 +401,7 @@ router.post("/patient", async function (req, res) {
     await userdata.save();
 
     // Generate QR code
-    const qrCodeData = `https://patient-management-prxp.onrender.com/submitpatient/${userdata._id}`;
+    const qrCodeData = `https://patient-management-gs7d.onrender.com/submitpatient/${userdata._id}`;
 
 
     // Send email with QR code
