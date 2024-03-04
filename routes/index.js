@@ -401,7 +401,7 @@ router.post("/patient", async function (req, res) {
     await userdata.save();
 
     // Generate QR code
-    const qrCodeData = `http://localhost:3000/submitpatient/${userdata._id}`;
+    const qrCodeData = `https://patient-management-prxp.onrender.com/submitpatient/${userdata._id}`;
 
 
     // Send email with QR code
