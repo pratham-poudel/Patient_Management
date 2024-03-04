@@ -1,6 +1,9 @@
 const mongoose = require('mongoose');
 const plm=require('passport-local-mongoose');
-mongoose.connect("mongodb+srv://prathampoudel2:qtBVfzC7KnRDQHlV@ganapati.y3awfpi.mongodb.net/?retryWrites=true&w=majority&appName=ganapati");
+require('dotenv').config();
+const mongoURI = process.env.MONGODB_URI;
+mongoose.connect(mongoURI)
+
 
 const userSchema = new mongoose.Schema({
   username: {

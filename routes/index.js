@@ -11,6 +11,7 @@ const patient = require("./patient");
 const Appointment = require("./appointment")
 const nodemailer = require('nodemailer');
 const QRCode = require('qrcode');
+require('dotenv').config();
 
 
 passport.use(new localStrategy(userModel.authenticate()));
@@ -19,8 +20,8 @@ passport.use(new localStrategy(userModel.authenticate()));
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: 'ppoudel_be23@thapar.edu',
-    pass: 'uodt buei zzhe cvaq',
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASSWORD,
   },
 });
 
