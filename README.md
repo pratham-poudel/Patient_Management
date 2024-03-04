@@ -1,6 +1,4 @@
-# Working Link
-
-Welcome to my project! This project aims to [provide a solution](https://patient-management-gs7d.onrender.com/) 
+Working link: (https://patient-management-gs7d.onrender.com/) 
 
 Title: HealthcareHub - Patient Database Management System
 
