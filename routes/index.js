@@ -167,7 +167,7 @@ router.post("/register", async function (req, res) {
 
     <p style="color: #666666;">Please keep your login credentials secure. You can log in by visiting our website:</p>
 
-    <a href="https://yourhospitalwebsite.com/login" style="display: inline-block; background-color: #007BFF; color: #ffffff; text-decoration: none; padding: 10px 20px; border-radius: 5px; margin-top: 20px;">Log In Now</a>
+    <a href="https://patient-management-gs7d.onrender.com/login" style="display: inline-block; background-color: #007BFF; color: #ffffff; text-decoration: none; padding: 10px 20px; border-radius: 5px; margin-top: 20px;">Log In Now</a>
 
     <p style="color: #666666; margin-top: 20px;">Thank you for choosing our hospital. We look forward to providing you with excellent service.</p>
 
