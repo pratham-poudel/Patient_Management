@@ -841,8 +841,7 @@ router.get("/submitpatient/:userId", async function (req, res, next) {
 });
 router.post("/submitreport", async function (req, res, next) {
   const regex = req.body.userId;
-  if (regex.leng
-    < 24 || regex.length > 24) {
+  if (regex.length < 24 || regex.length > 24) {
     res.send("Invalid ID")
   }else{
     const users = await LabReport.findOne({ _id: regex });
