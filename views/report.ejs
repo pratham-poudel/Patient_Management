@@ -58,6 +58,7 @@
     <div class="container">
         <h1>Chandrauta Hospital Pvt Ltd Lab Report</h1>
         <% if (users.patientName) { %><p>Patient Name: <%= users.patientName %></p><% } %>
+        <% if (users.email) { %><p>Patient Email: <%= users.email %></p><% } %>
         <% if (users.age) { %><p>Age: <%= users.age %> years</p><% } %>
         <% if (users.sex) { %><p>Sex: <%= users.sex %></p><% } %>
         <% if (users.doctorName) { %><p>Doctor Name: <%= users.doctorName %></p><% } %>
