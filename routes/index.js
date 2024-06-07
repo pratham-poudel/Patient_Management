@@ -254,102 +254,146 @@ router.post("/change", async function (req, res, next) {
   }
 });
 
-router.get("/lreport", function (req, res, next) {
+router.get("/lreport", async function (req, res, next) {
+  const user = await userModel.findOne({ username: req.session.passport.user });
   res.render("lreport", {
     successMessage: req.flash("success"),
     errorMessage: req.flash("error"),
+    user
   });
 });
 router.post("/submitLabReport", async function (req, res) {
-  const doctor = await userModel.findOne({
-    username: req.session.passport.user,
-  });
-  console.log(doctor.connumber);
-  const labReport = new LabReport({
-    patientName: req.body.patientName,
-    email: req.body.email,
-    age: req.body.age,
-    dname: doctor.fullName,
-    connumber: doctor.connumber,
-    medicalname: doctor.medicalname,
-    address: doctor.address,
-    gender: req.body.gender,
-    bloodpressure: req.body.bloodpressure,
-    glucose: req.body.glucose,
-    cholesterol: req.body.cholesterol,
-    triglycerides: req.body.triglycerides,
-    creatinine: req.body.creatinine,
-    urea: req.body.urea,
-    alt: req.body.alt,
-    ast: req.body.ast,
-    alkalinePhosphatase: req.body.alkalinePhosphatase,
-    totalBilirubin: req.body.totalBilirubin,
-    sodium: req.body.sodium,
-    potassium: req.body.potassium,
-    chloride: req.body.chloride,
-    totalProtein: req.body.totalProtein,
-    albumin: req.body.albumin,
-    globulin: req.body.globulin,
-
-    hdlCholesterol: req.body.hdlCholesterol,
-    ldlCholesterol: req.body.ldlCholesterol,
-    vldlCholesterol: req.body.vldlCholesterol,
-
-    hemoglobin: req.body.hemoglobin,
-    whiteBloodCells: req.body.whiteBloodCells,
-    plateletCount: req.body.plateletCount,
-    doctor: doctor._id,
-  });
-  doctor.patientlab.push(labReport._id)
-  await doctor.save();
-
   try {
+    const doctor = await userModel.findOne({
+      username: req.session.passport.user,
+    });
+
+    if (!doctor) {
+      req.flash("error", "Doctor not found");
+      return res.redirect("/lreport");
+    }
+
+    const labReport = new LabReport({
+      patientName: req.body.patient_name,
+      age: req.body.age,
+      email: req.body.email,
+      sex: req.body.sex,
+      doctorName: doctor.fullName,
+      date: req.body.date ? new Date(req.body.date) : new Date(), // Ensure date is valid
+      address: req.body.address, // Use address from req.body if available
+      hb: req.body.hb_result,
+      tlc: req.body.tlc_result,
+      dlc: req.body.dlc_result,
+      poly: req.body.poly_result,
+      lympho: req.body.lympho_result,
+      mono: req.body.mono_result,
+      eosino: req.body.eosino_result,
+      esr: req.body.esr_result,
+      pcv: req.body.pcv_result,
+      bleedingTime: req.body.bleeding_time_result,
+      clottingTime: req.body.clotting_time_result,
+      pt: req.body.pt_result,
+      inr: req.body.inr_result,
+      plateletCount: req.body.platelet_count_result,
+      reticCount: req.body.retic_count_result,
+      rbcCount: req.body.rbc_count_result,
+      mcv: req.body.mcv_result,
+      mch: req.body.mch_result,
+      mchc: req.body.mchc_result,
+      crp: req.body.crp_result,
+      raFactor: req.body.ra_factor_result,
+      hPylori: req.body.h_pylori_result,
+      hiv: req.body.hiv_result,
+      hbsAgTest: req.body.hbs_ag_test_result,
+      hcv: req.body.hcv_result,
+      vdrl: req.body.vdrl_result,
+      dengue: req.body.dengue_result,
+      mp: req.body.mp_result,
+      troponin: req.body.troponin_result,
+      sTyphiO: req.body.s_typhi_o_result,
+      sTyphiH: req.body.s_typhi_h_result,
+      sParaTyphiAH: req.body.s_para_typhi_ah_result,
+      sParaTyphiBH: req.body.s_para_typhi_bh_result,
+      bloodSugarF: req.body.blood_sugar_f_result,
+      bloodSugarPP: req.body.blood_sugar_pp_result,
+      bloodSugarR: req.body.blood_sugar_r_result,
+      fasting: req.body.fasting_result,
+      firstHour: req.body.first_hour_result,
+      secondHour: req.body.second_hour_result,
+      thirdHour: req.body.third_hour_result,
+      bloodUrea: req.body.blood_urea_result,
+      serumCreatinine: req.body.serum_creatinine_result,
+      serumUricAcid: req.body.serum_uric_acid_result,
+      sCholesterol: req.body.s_cholesterol_result,
+      sTriglycerides: req.body.s_triglycerides_result,
+      vldlCholesterol: req.body.vldl_cholesterol_result,
+      hdlCholesterol: req.body.hdl_cholesterol_result,
+      ldlCholesterol: req.body.ldl_cholesterol_result,
+      sBilirubinTotal: req.body.s_bilirubin_total_result,
+      sBilirubinDirect: req.body.s_bilirubin_direct_result,
+      sProteinsTotal: req.body.s_proteins_total_result,
+      sAlbumin: req.body.s_albumin_result,
+      ggtp: req.body.ggtp_result,
+      sAlkalinePhos: req.body.s_alkaline_phos_result,
+      sgpt: req.body.sgpt_result,
+      sgot: req.body.sgot_result,
+      sSodium: req.body.s_sodium_result,
+      sPotassium: req.body.s_potassium_result,
+      sChloride: req.body.s_chloride_result,
+      sPhosphorous: req.body.s_phosphorous_result,
+      serumCalcium: req.body.serum_calcium_result,
+      hba1c: req.body.hba1c_result,
+      amylase: req.body.amylase_result,
+      ckMb: req.body.ck_mb_result,
+      labAssistant: req.body.lab_assistant,
+    },);
+
+    // Save the lab report and update the doctor's patientlab
+    doctor.patientlab.push(labReport._id);
+    await doctor.save();
     await labReport.save();
+
     const qrCodeData = `https://patient-management-gs7d.onrender.com/submitreport/${labReport._id}`;
-    console.log(labReport);
-    await sendEmail(labReport.email, 'Lab Report', `
-    
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Medical Report Notification</title>
-    </head>
-    <body style="font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: #f4f4f4; text-align: center;">
-    
-      <div style="background-color: #ffffff; max-width: 600px; margin: 0 auto; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
-        <h1 style="color: #333333;">Dear ${labReport.patientName},</h1>
-    
-        <p style="color: #666666;">हामी आशा गर्दछौं कि यो इमेलले तपाईंलाई राम्रो स्वास्थ्यमा भेट्टाउँछ। हामी तपाईंलाई सूचित गर्न पाउँदा खुसी छौं कि तपाईंको व्यापक प्रयोगशाला रिपोर्ट सफलतापूर्वक उत्पन्न भएको छ।</p>
-    
-        <p style="color: #333333;">तपाईंको रिपोर्ट पहुँच गर्न र समीक्षा गर्न, कृपया निम्न बिरामी आईडी प्रयोग गर्नुहोस्:</p>
-    
-        <p style="color: #333333; font-weight: bold;">तपाईंको बिरामी ID: ${labReport._id}</p>
-    
-        <a href="${qrCodeData}" style="display: inline-block; background-color: #007BFF; color: #ffffff; text-decoration: none; padding: 10px 20px; border-radius: 5px; margin-top: 20px;">रिपोर्ट हेर्न क्लिक गर्नुहोस्</a>
-    
-        <p style="color: #666666; margin-top: 20px;">
-        तपाईंको गोप्य चिकित्सा जानकारी सुरक्षित रूपमा पहुँच गर्नको लागि यो अद्वितीय पहिचानकर्ता महत्त्वपूर्ण छ। कृपया यसलाई गोप्य राख्नुहोस् र अरू कसैसँग साझा नगर्नुहोस्। तपाईंको गोपनीयता र सुरक्षा हाम्रो लागि अत्यन्तै महत्त्वपूर्ण छ।</p>
-    
-        <p style="color: #333333; font-weight: bold; margin-top: 20px;">Best Regards,<br>Chandrauta Hospital Team<br>गुणस्तरीय स्वस्थ्य सेवा हाम्रो प्रतिबद्धता !!</p>
-        
-      </div>
-    
-    </body>
-    </html>
-    
-    
-    
-    
-    `);
+
+    // Send email notification
+    await sendEmail(
+      labReport.email,
+      'Lab Report',
+      `
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Medical Report Notification</title>
+        </head>
+        <body style="font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: #f4f4f4; text-align: center;">
+          <div style="background-color: #ffffff; max-width: 600px; margin: 0 auto; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+            <h1 style="color: #333333;">Dear ${labReport.patientName},</h1>
+            <p style="color: #666666;">हामी आशा गर्दछौं कि यो इमेलले तपाईंलाई राम्रो स्वास्थ्यमा भेट्टाउँछ। हामी तपाईंलाई सूचित गर्न पाउँदा खुसी छौं कि तपाईंको व्यापक प्रयोगशाला रिपोर्ट सफलतापूर्वक उत्पन्न भएको छ।</p>
+            <p style="color: #333333;">तपाईंको रिपोर्ट पहुँच गर्न र समीक्षा गर्न, कृपया निम्न बिरामी आईडी प्रयोग गर्नुहोस्:</p>
+            <p style="color: #333333; font-weight: bold;">तपाईंको बिरामी ID: ${labReport._id}</p>
+            <a href="${qrCodeData}" style="display: inline-block; background-color: #007BFF; color: #ffffff; text-decoration: none; padding: 10px 20px; border-radius: 5px; margin-top: 20px;">रिपोर्ट हेर्न क्लिक गर्नुहोस्</a>
+            <p style="color: #666666; margin-top: 20px;">
+            तपाईंको गोप्य चिकित्सा जानकारी सुरक्षित रूपमा पहुँच गर्नको लागि यो अद्वितीय पहिचानकर्ता महत्त्वपूर्ण छ। कृपया यसलाई गोप्य राख्नुहोस् र अरू कसैसँग साझा नगर्नुहोस्। तपाईंको गोपनीयता र सुरक्षा हाम्रो लागि अत्यन्तै महत्त्वपूर्ण छ।</p>
+            <p style="color: #333333; font-weight: bold; margin-top: 20px;">Best Regards,<br>Chandrauta Hospital Team<br>गुणस्तरीय स्वस्थ्य सेवा हाम्रो प्रतिबद्धता !!</p>
+          </div>
+        </body>
+        </html>
+      `
+    );
+
     req.flash("success", "Patient Data Recorded successfully");
     res.redirect("/lreport"); // Redirect to the desired page
   } catch (error) {
+    console.error(error);
     req.flash("error", "Patient Data Failed to record");
     res.redirect("/lreport"); // Redirect to the desired page
   }
 });
+
+
+
 
 router.get("/search", function (req, res, next) {
   res.render("search");
@@ -821,15 +865,15 @@ router.post("/submitpatient", async function (req, res, next) {
   } else {
     const user = await patient.findOne({ _id: regex });
     if (user) {
-     
+
       res.redirect(`/submitpatient/${regex}`);
     } else {
-     
+
       res.status(404).send("User not found");
     }
   }
 
-  
+
 });
 router.get("/submitpatient/:userId", async function (req, res, next) {
   const userId = req.params.userId;
@@ -843,7 +887,7 @@ router.post("/submitreport", async function (req, res, next) {
   const regex = req.body.userId;
   if (regex.length < 24 || regex.length > 24) {
     res.send("Invalid ID")
-  }else{
+  } else {
     const users = await LabReport.findOne({ _id: regex });
     if (users) {
       // Redirect to /submitpatient/userId
@@ -853,9 +897,9 @@ router.post("/submitreport", async function (req, res, next) {
       res.status(404).send("User not found");
     }
   }
-  
 
- 
+
+
 
 });
 router.get("/submitreport/:userId", async function (req, res, next) {

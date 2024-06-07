@@ -1,201 +1,596 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lab Report</title>
-  <link rel="stylesheet" href="/stylesheets/report.css">
-</head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab Report</title>
+    <style>
+       body {
+    font-family: Arial, sans-serif;
+}
 
-<body>
-  <div class="lab-report">
-    <div class="logo">
-      <img src="/images/ganesha.png" alt="Ganesha Logo">
-    </div> <!-- Placeholder for the logo -->
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
 
-    <h1>Lab Report</h1>
+.section {
+    margin-bottom: 20px;
+    page-break-inside: avoid; /* Ensure sections do not break across pages */
+}
 
-    <div class="medical-info">
-      <h2><%=users.medicalname%></h2>
-      <p>Location:<%=users.address%> </p>
-      <p>Contact: <%=users.connumber%></p>
-      <p>Country: Nepal</p>
-    </div>
+.section h2, .section h3 {
+    margin-bottom: 10px;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 5px;
+}
 
-    <div class="patient-info">
-      <h2>Patient: <%=users.patientName%></h2>
-      <p id="patientGender">Gender: <%=users.gender%></p>
-      <p id="patientAge">Age: <%=users.age%></p>
-    </div>
+.section table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    font-size: 12px; /* Adjust font size */
+}
 
-    <p>
-      <%= users.formatime %>
-    </p>
+.section th, .section td {
+    border: 1px solid #ccc;
+    padding: 4px; /* Adjust padding */
+    text-align: left;
+}
 
-    <h3>Test Results</h3>
-    <table>
-      <tr>
-        <th>Test</th>
-        <th>Result</th>
-      </tr>
-      <% if (users.cholesterol) { %>
-      <tr>
-        <td>Cholesterol</td>
-        <td><%= users.cholesterol %></td>
-      </tr>
-      <% } %>
-      <% if (users.glucose) { %>
-      <tr>
-        <td>Glucose</td>
-        <td><%= users.glucose %></td>
-      </tr>
-      <% } %>
-      <% if (users.triglycerides) { %>
-      <tr>
-        <td>Triglycerides</td>
-        <td><%= users.triglycerides %></td>
-      </tr>
-      <% } %>
-      <% if (users.creatinine) { %>
-      <tr>
-        <td>Creatinine</td>
-        <td><%= users.creatinine %></td>
-      </tr>
-      <% } %>
-      <% if (users.urea) { %>
-      <tr>
-        <td>Urea</td>
-        <td><%= users.urea %></td>
-      </tr>
-      <% } %>
-      <% if (users.alt) { %>
-      <tr>
-        <td>ALT</td>
-        <td><%= users.alt %></td>
-      </tr>
-      <% } %>
-      <% if (users.ast) { %>
-      <tr>
-        <td>AST</td>
-        <td><%= users.ast %></td>
-      </tr>
-      <% } %>
-      <% if (users.alkalinePhosphatase) { %>
-      <tr>
-        <td>Alkaline Phosphatase</td>
-        <td><%= users.alkalinePhosphatase %></td>
-      </tr>
-      <% } %>
-      <% if (users.totalBilirubin) { %>
-      <tr>
-        <td>Total Bilirubin</td>
-        <td><%= users.totalBilirubin %></td>
-      </tr>
-      <% } %>
-      <% if (users.sodium) { %>
-      <tr>
-        <td>Sodium</td>
-        <td><%= users.sodium %></td>
-      </tr>
-      <% } %>
-      <% if (users.potassium) { %>
-      <tr>
-        <td>Potassium</td>
-        <td><%= users.potassium %></td>
-      </tr>
-      <% } %>
-      <% if (users.chloride) { %>
-      <tr>
-        <td>Chloride</td>
-        <td><%= users.chloride %></td>
-      </tr>
-      <% } %>
-      <% if (users.totalProtein) { %>
-      <tr>
-        <td>Total Protein</td>
-        <td><%= users.totalProtein %></td>
-      </tr>
-      <% } %>
-      <% if (users.albumin) { %>
-      <tr>
-        <td>Albumin</td>
-        <td><%= users.albumin %></td>
-      </tr>
-      <% } %>
-      <% if (users.globulin) { %>
-      <tr>
-        <td>Globulin</td>
-        <td><%= users.globulin %></td>
-      </tr>
-      <% } %>
-      <% if (users.hdlCholesterol) { %>
-      <tr>
-        <td>HDL Cholesterol</td>
-        <td><%= users.hdlCholesterol %></td>
-      </tr>
-      <% } %>
-      <% if (users.ldlCholesterol) { %>
-      <tr>
-        <td>LDL Cholesterol</td>
-        <td><%= users.ldlCholesterol %></td>
-      </tr>
-      <% } %>
-      <% if (users.vldlCholesterol) { %>
-      <tr>
-        <td>VLDL Cholesterol</td>
-        <td><%= users.vldlCholesterol %></td>
-      </tr>
-      <% } %>
-      <% if (users.hemoglobin) { %>
-      <tr>
-        <td>Hemoglobin</td>
-        <td><%= users.hemoglobin %></td>
-      </tr>
-      <% } %>
-      <% if (users.whiteBloodCells) { %>
-      <tr>
-        <td>White Blood Cells</td>
-        <td><%= users.whiteBloodCells %></td>
-      </tr>
-      <% } %>
-      <% if (users.plateletCount) { %>
-      <tr>
-        <td>Platelet Count</td>
-        <td><%= users.plateletCount %></td>
-      </tr>
-      <% } %>
-    </table>
-
-    <div class="signature">
-      <p>Lab Technician: <strong><%=users.dname%></strong></p>
-      <p>
-        <%=users.regtime%>
-      </p>
-    </div>
-  </div>
-  <script>
-    function updateRunningTimeAndDate() {
-      const currentTime = new Date();
-      const hours = currentTime.getHours();
-      const minutes = currentTime.getMinutes();
-      const seconds = currentTime.getSeconds();
-  
-      const formattedTime = `${hours}:${minutes}:${seconds}`;
-  
-      const formattedDate = `${(currentTime.getMonth() + 1).toString().padStart(2, '0')}/` +
-                            `${currentTime.getDate().toString().padStart(2, '0')}/` +
-                            `${currentTime.getFullYear()}`;
-  
-      document.getElementById('runningTime').innerText = `Time: ${formattedTime}`;
-      document.getElementById('currentDate').innerText = `Date: ${formattedDate}`;
-      document.getElementById('runtime').innerText = `Time: ${formattedTime}`;
-      document.getElementById('curdate').innerText = `Date: ${formattedDate}`;
+@media print {
+    body {
+        font-size: 10px; /* Further reduce font size for printing */
     }
-  
-    window.onload = updateRunningTimeAndDate;
-  </script>
-  
-</body>
+    
+    .container {
+        max-width: none; /* Remove max-width constraint for printing */
+        width: 100%; /* Ensure container takes full width when printed */
+        padding: 10px; /* Adjust padding for printing */
+    }
+}
 
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Chandrauta Hospital Pvt Ltd Lab Report</h1>
+        <% if (users.patientName) { %><p>Patient Name: <%= users.patientName %></p><% } %>
+        <% if (users.age) { %><p>Age: <%= users.age %> years</p><% } %>
+        <% if (users.sex) { %><p>Sex: <%= users.sex %></p><% } %>
+        <% if (users.doctorName) { %><p>Doctor Name: <%= users.doctorName %></p><% } %>
+        <% if (users.date) { %><p>Date: <%= users.date.toDateString() %></p><% } %>
+        <% if (users.address) { %><p>Address: <%= users.address %></p><% } %>
+
+        <div class="section">
+            <h2>Hematology Report</h2>
+            <table>
+                <tr>
+                    <th>Test</th>
+                    <th>Result</th>
+                    <th>Normal Range</th>
+                </tr>
+                <% if (users.hb) { %>
+                    <tr>
+                        <td>HB</td>
+                        <td><%= users.hb %> gm/dl</td>
+                        <td>Male: 13.5-16<br>Female: 12-15.5</td>
+                    </tr>
+                <% } %>
+                <% if (users.tlc) { %>
+                    <tr>
+                        <td>TLC</td>
+                        <td><%= users.tlc %> /Cumm</td>
+                        <td>400011000 /Cumm</td>
+                    </tr>
+                <% } %>
+                <% if (users.dlc) { %>
+                    <tr>
+                        <td>DLC</td>
+                        <td><%= users.dlc %></td>
+                        <td></td>
+                    </tr>
+                <% } %>
+                <% if (users.poly) { %>
+                    <tr>
+                        <td>POLY</td>
+                        <td><%= users.poly %>%</td>
+                        <td>40-75%</td>
+                    </tr>
+                <% } %>
+                <% if (users.lympho) { %>
+                    <tr>
+                        <td>LYMPHO</td>
+                        <td><%= users.lympho %>%</td>
+                        <td>20-45%</td> 
+                    </tr>
+                <% } %>
+                <% if (users.mono) { %>
+                    <tr>
+                        <td>MONO</td>
+                        <td><%= users.mono %>%</td>
+                        <td>2-10%</td>
+                    </tr>
+                <% } %>
+                <% if (users.eosino) { %>
+                    <tr>
+                        <td>EOSINO</td>
+                        <td><%= users.eosino %>%</td>
+                        <td>1-6%</td>
+                    </tr>
+                <% } %>
+                <% if (users.esr) { %>
+                    <tr>
+                        <td>ESR</td>
+                        <td><%= users.esr %> mm (1<sup>st</sup> Hr.)</td>
+                        <td>Male: 0-9<br>Female: 0-20</td>
+                    </tr>
+                <% } %>
+                <% if (users.pcv) { %>
+                    <tr>
+                        <td>PCV</td>
+                        <td><%= users.pcv %>%</td>
+                        <td>Male: 41-50<br>Female: 36-48</td>
+                    </tr>
+                <% } %>
+                <% if (users.bleedingTime) { %>
+                    <tr>
+                        <td>Bleeding Time</td>
+                        <td><%= users.bleedingTime %> min</td>
+                        <td>1-6 min</td>
+                    </tr>
+                <% } %>
+                <% if (users.clottingTime) { %>
+                    <tr>
+                        <td>Clotting Time</td>
+                        <td><%= users.clottingTime %> min</td>
+                        <td>6-10 min</td>
+                    </tr>
+                <% } %>
+                <% if (users.pt) { %>
+                    <tr>
+                        <td>PT</td>
+                        <td><%= users.pt %> Sec</td>
+                        <td></td>
+                    </tr>
+                <% } %>
+                <% if (users.inr) { %>
+                    <tr>
+                        <td>INR</td>
+                        <td><%= users.inr %></td>
+                        <td></td>
+                    </tr>
+                <% } %>
+                <% if (users.plateletCount) { %>
+                    <tr>
+                        <td>Platelet Count</td>
+                        <td><%= users.plateletCount %> /Cumm</td>
+                        <td>150,000-450,000 /Cumm</td>
+                    </tr>
+                <% } %>
+                <% if (users.reticCount) { %>
+                    <tr>
+                        <td>Retic Count</td>
+                        <td><%= users.reticCount %>%</td>
+                        <td>0.2-2%</td>
+                    </tr>
+                <% } %>
+                <% if (users.rbcCount) { %>
+                    <tr>
+                        <td>RBC Count</td>
+                        <td><%= users.rbcCount %> million/Cumm</td>
+                        <td>4.6-6.5 million/Cumm</td>
+                    </tr>
+                <% } %>
+                <% if (users.mcv) { %>
+                    <tr>
+                        <td>MCV</td>
+                        <td><%= users.mcv %> FI</td>
+                        <td>83.0-101 FI</td>
+                    </tr>
+                <% } %>
+                <% if (users.mch) { %>
+                    <tr>
+                        <td>MCH</td>
+                        <td><%= users.mch %> PG</td>
+                        <td>27-32 PG</td>
+                    </tr>
+                <% } %>
+                <% if (users.mchc) { %>
+                    <tr>
+                        <td>MCHC</td>
+                        <td><%= users.mchc %>%</td>
+                        <td>33.0-36.0%</td>
+                    </tr>
+                <% } %>
+            </table>
+        </div>
+
+        <div class="section">
+            <h2>Serological Examination</h2>
+            <table>
+                <tr>
+                    <th>Test</th>
+                    <th>Result</th>
+                </tr>
+                <% if (users.crp) { %>
+                    <tr>
+                        <td>CRP</td>
+                        <td><%= users.crp %></td>
+                    </tr>
+                <% } %>
+                <% if (users.raFactor) { %>
+                    <tr>
+                        <td>RA Factor</td>
+                        <td><%= users.raFactor %></td>
+                    </tr>
+                <% } %>
+                <% if (users.hPylori) { %>
+                    <tr>
+                        <td>H. Pylori</td>
+                        <td><%= users.hPylori %></td>
+                    </tr>
+                <% } %>
+                <% if (users.hiv) { %>
+                    <tr>
+                        <td>HIV I & II</td>
+                        <td><%= users.hiv %></td>
+                    </tr>
+                <% } %>
+                <% if (users.hbsAgTest) { %>
+                    <tr>
+                        <td>HBs Ag Test</td>
+                        <td><%= users.hbsAgTest %></td>
+                    </tr>
+                <% } %>
+                <% if (users.hcv) { %>
+                    <tr>
+                        <td>HCV</td>
+                        <td><%= users.hcv %></td>
+                    </tr>
+                <% } %>
+                <% if (users.vdrl) { %>
+                    <tr>
+                        <td>VDRL</td>
+                        <td><%= users.vdrl %></td>
+                    </tr>
+                <% } %>
+                <% if (users.dengue) { %>
+                    <tr>
+                        <td>Dengue</td>
+                        <td><%= users.dengue %></td>
+                    </tr>
+                <% } %>
+                <% if (users.mp) { %>
+                    <tr>
+                        <td>MP</td>
+                        <td><%= users.mp %></td>
+                    </tr>
+                <% } %>
+                <% if (users.troponin) { %>
+                    <tr>
+                        <td>Troponin</td>
+                        <td><%= users.troponin %></td>
+                    </tr>
+                <% } %>
+            </table>
+        </div>
+
+        <div class="section">
+            <h2>Widal Test</h2>
+            <table>
+                <tr>
+                    <th>Test</th>
+                    <th>Result</th>
+                </tr>
+                <% if (users.sTyphiO) { %>
+                    <tr>
+                        <td>S. Typhi 'O'</td>
+                        <td><%= users.sTyphiO %></td>
+                    </tr>
+                <% } %>
+                <% if (users.sTyphiH) { %>
+                    <tr>
+                        <td>S. Typhi 'H'</td>
+                        <td><%= users.sTyphiH %></td>
+                    </tr>
+                <% } %>
+                <% if (users.sParaTyphiAH) { %>
+                    <tr>
+                        <td>S. Para Typhi 'AH'</td>
+                        <td><%= users.sParaTyphiAH %></td>
+                    </tr>
+                <% } %>
+                <% if (users.sParaTyphiBH) { %>
+                    <tr>
+                        <td>S. Para Typhi 'BH'</td>
+                        <td><%= users.sParaTyphiBH %></td>
+                    </tr>
+                <% } %>
+            </table>
+        </div>
+
+        <div class="section">
+            <h2>Bio Chemistry Report</h2>
+            <table>
+                <tr>
+                    <th>Test</th>
+                    <th>Result</th>
+                    <th>Normal Range</th>
+                </tr>
+                <% if (users.bloodSugarF) { %>
+                    <tr>
+                        <td>Blood Sugar (F)</td>
+                        <td><%= users.bloodSugarF %> mg/dl</td>
+                        <td>60-110 mg/dl</td>
+                    </tr>
+                <% } %>
+                <% if (users.bloodSugarPP) { %>
+                    <tr>
+                        <td>Blood Sugar (PP)</td>
+                        <td><%= users.bloodSugarPP %> mg/dl</td>
+                        <td>80-140 mg/dl</td>
+                    </tr>
+                <% } %>
+                <% if (users.bloodSugarR) { %>
+                    <tr>
+                        <td>Blood Sugar (R)</td>
+                        <td><%= users.bloodSugarR %> mg/dl</td>
+                        <td>60-140 mg/dl</td>
+                    </tr>
+                <% } %>
+            </table>
+                </div>
+                <div class="section">
+                    <h2>Glucose Tolerance Test</h2>
+                <% if (users.fasting) { %>
+                    <table> 
+                    <tr>
+                        <td>Fasting</td>
+                        <td><%= users.fasting %> mg/dl</td>
+                        <td>< 105 mg/dl</td>
+                    </tr>
+                <% } %>
+                <% if (users.firstHour) { %>
+                    <tr>
+                        <td>Glucose Tolerance Test (1st Hour)</td>
+                        <td><%= users.firstHour %> mg/dl</td>
+                        <td>< 195 mg/dl</td>
+                    </tr>
+                <% } %>
+                <% if (users.secondHour) { %>
+                    <tr>
+                        <td>Glucose Tolerance Test (2nd Hour)</td>
+                        <td><%= users.secondHour %> mg/dl</td>
+                        <td>< 145 mg/dl</td>
+                    </tr>
+                <% } %>
+                <% if (users.thirdHour) { %>
+                    <tr>
+                        <td>Glucose Tolerance Test (3rd Hour)</td>
+                        <td><%= users.thirdHour %> mg/dl</td>
+                        <td></td>
+                    </tr>
+                <% } %> 
+            </table>
+        </div>
+        <div class="section">
+          <h2>Renal Function Test</h2>
+          <table>
+              <tr>
+                  <th>Test</th>
+                  <th>Result</th>
+                  <th>Normal Range</th>
+              </tr>
+              <% if (users.bloodUrea) { %>
+                  <tr>
+                      <td>Blood Urea</td>
+                      <td><%= users.bloodUrea %> mg/dl</td>
+                      <td>15-45 mg/dl</td>
+                  </tr>
+              <% } %>
+              <% if (users.serumCreatinine) { %>
+                  <tr>
+                      <td>Serum Creatinine</td>
+                      <td><%= users.serumCreatinine %> mg/dl</td>
+                      <td>0.4-1.4 mg/dl</td>
+                  </tr>
+              <% } %>
+              <% if (users.serumUricAcid) { %>
+                  <tr>
+                      <td>Serum Uric Acid</td>
+                      <td><%= users.serumUricAcid %> mg/dl</td>
+                      <td>2-6.0 mg/dl</td>
+                  </tr>
+              <% } %>
+          </table>
+      </div>
+      <div class="section">
+        <h2>Lipid Profile</h2>
+        <table>
+            <tr>
+                <th>Test</th>
+                <th>Result</th>
+                <th>Normal Range</th>
+            </tr>
+            <% if (users.sCholesterol) { %>
+                <tr>
+                    <td>S. Cholesterol</td>
+                    <td><%= users.sCholesterol %> mg/dl</td>
+                    <td>130-200 mg/dl</td>
+                </tr>
+            <% } %>
+            <% if (users.sTriglycerides) { %>
+                <tr>
+                    <td>S. Triglycerides</td>
+                    <td><%= users.sTriglycerides %> mg/dl</td>
+                    <td>50-150 ml/dl</td>
+                </tr>
+            <% } %>
+            <% if (users.vldlCholesterol) { %>
+                <tr>
+                    <td>VLDL Cholesterol</td>
+                    <td><%= users.vldlCholesterol %> mg/dl</td>
+                    <td>2-40 mg/dl</td>
+                </tr>
+            <% } %>
+            <% if (users.hdlCholesterol) { %>
+                <tr>
+                    <td>HDL Cholesterol</td>
+                    <td><%= users.hdlCholesterol %> mg/dl</td>
+                    <td>30-70 mg/dl</td>
+                </tr>
+            <% } %>
+            <% if (users.ldlCholesterol) { %>
+                <tr>
+                    <td>LDL Cholesterol</td>
+                    <td><%= users.ldlCholesterol %> mg/dl</td>
+                    <td>30-175 mg/dl</td>
+                </tr>
+            <% } %>
+        </table>
+    </div>
+    <div class="section">
+      <h2>Liver Function Test</h2>
+      <table>
+          <tr>
+              <th>Test</th>
+              <th>Result</th>
+              <th>Normal Range</th>
+          </tr>
+          <% if (users.sBilirubinTotal) { %>
+              <tr>
+                  <td>S. Bilirubin (Total)</td>
+                  <td><%= users.sBilirubinTotal %> mg/dl</td>
+                  <td>0.4-1.0 mg/dl</td>
+              </tr>
+          <% } %>
+          <% if (users.sBilirubinDirect) { %>
+              <tr>
+                  <td>S. Bilirubin (Direct)</td>
+                  <td><%= users.sBilirubinDirect %> mg/dl</td>
+                  <td>0.1-0.4 mg/dl</td>
+              </tr>
+          <% } %>
+          <% if (users.sProteinsTotal) { %>
+              <tr>
+                  <td>S. Proteins (Total)</td>
+                  <td><%= users.sProteinsTotal %> mg/dl</td>
+                  <td>6.0-8.5 mg/dl</td>
+              </tr>
+          <% } %>
+          <% if (users.sAlbumin) { %>
+              <tr>
+                  <td>S. Albumin</td>
+                  <td><%= users.sAlbumin %> mg/dl</td>
+                  <td>3.7-5.0 mg/dl</td>
+              </tr>
+          <% } %>
+          <% if (users.ggtp) { %>
+              <tr>
+                  <td>GGTP</td>
+                  <td><%= users.ggtp %> IU/L</td>
+                  <td>04-38 IU/L</td>
+              </tr>
+          <% } %>
+          <% if (users.sAlkalinePhos) { %>
+              <tr>
+                  <td>S. Alkaline Phosphatase</td>
+                  <td><%= users.sAlkalinePhos %> IU/L</td>
+                  <td>50-110 IU/L</td>
+              </tr>
+          <% } %>
+          <% if (users.sgpt) { %>
+              <tr>
+                  <td>SGPT</td>
+                  <td><%= users.sgpt %> IU/L</td>
+                  <td>5-37 IU/L</td>
+              </tr>
+          <% } %>
+          <% if (users.sgot) { %>
+              <tr>
+                  <td>SGOT</td>
+                  <td><%= users.sgot %> IU/L</td>
+                  <td>3-45 IU/L</td>
+              </tr>
+          <% } %>
+      </table>
+  </div>
+  <div class="section">
+    <h2>Electrolyte Test</h2>
+    <table>
+        <tr>
+            <th>Test</th>
+            <th>Result</th>
+            <th>Normal Range</th>
+        </tr>
+        <% if (users.sSodium) { %>
+            <tr>
+                <td>S. Sodium</td>
+                <td><%= users.sSodium %> meq/l</td>
+                <td>135-155 meq/l</td>
+            </tr>
+        <% } %>
+        <% if (users.sPotassium) { %>
+            <tr>
+                <td>S. Potassium</td>
+                <td><%= users.sPotassium %> meq/l</td>
+                <td>3.5-5.5 meq/l</td>
+            </tr>
+        <% } %>
+        <% if (users.sChloride) { %>
+            <tr>
+                <td>S. Chloride</td>
+                <td><%= users.sChloride %> U/L</td>
+                <td>98-110 U/L</td>
+            </tr>
+        <% } %>
+        <% if (users.sPhosphorous) { %>
+            <tr>
+                <td>S. Phosphorous</td>
+                <td><%= users.sPhosphorous %> mg%</td>
+                <td>2.5-4.8 mg%</td>
+            </tr>
+        <% } %>
+        <% if (users.serumCalcium) { %>
+            <tr>
+                <td>Serum Calcium</td>
+                <td><%= users.serumCalcium %> mg/dl</td>
+                <td>8.2-10.4 mg/dl</td>
+            </tr>
+        <% } %>
+        <% if (users.hba1c) { %>
+            <tr>
+                <td>HbA1c</td>
+                <td><%= users.hba1c %> %</td>
+                <td>2-7% %</td>
+            </tr>
+        <% } %>
+        <% if (users.amylase) { %>
+            <tr>
+                <td>Amylase</td>
+                <td><%= users.amylase %> U/L</td>
+                <td>30-110 U/L</td>
+            </tr>
+        <% } %>
+        <% if (users.ckMb) { %>
+            <tr>
+                <td>CK-MB</td>
+                <td><%= users.ckMb %>%</td>
+                <td>5-25% U/L</td>
+            </tr>
+        <% } %>
+    </table>
+</div>
+  
+
+        <!-- Add similar sections for other reports -->
+
+        <div class="section">
+           <h3> <% if (users.labAssistant) { %><p>Lab Assistant: <%= users.labAssistant %></p><% } %></h3>
+        </div>
+    </div>
+</body>
 </html>
