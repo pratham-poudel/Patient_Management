@@ -279,6 +279,7 @@ router.post("/submitLabReport", async function (req, res) {
       email: req.body.email,
       sex: req.body.sex,
       doctorName: doctor.fullName,
+      medicalName: doctor.medicalname,
       date: req.body.date ? new Date(req.body.date) : new Date(), // Ensure date is valid
       address: req.body.address, // Use address from req.body if available
       hb: req.body.hb_result,
