@@ -1,126 +1,83 @@
 const mongoose = require('mongoose');
-const plm=require('passport-local-mongoose');
 
-
+// Define the schema
 const labReportSchema = new mongoose.Schema({
-  patientName: {
-    type: String,
-    required: true,
-  },
-  email: {
-    type: String,
-    required: true,
-  },
-  doctor: {
-    type: mongoose.Schema.Types.ObjectId , ref :"User"
-  },
-  regtime: {
-    type: Date,
-    default: Date.now
-},
-  dname: {
-    type: String,
-    required: true,
-  },
-  medicalname: {
-    type: String,
-    required: true,
-  },
-  address: {
-    type: String,
-    required: true,
-  },
-  connumber: {
-    type: String,
-    required: true,
-  },
-  age: {
-    type: Number,
-    required: true,
-  },
-  gender: {
-    type: String,
-    enum: ['Male', 'Female', 'Other'],
-    required: true,
-  },
-  date: {
-    type: Date,
-    default: Date.now,
-  },
-    glucose: {
-      type: Number,
-    },
-    cholesterol: {
-      type: Number,
-    },
-    triglycerides: {
-      type: Number,
-    },
-    creatinine: {
-      type: Number,
-    },
-    urea: {
-      type: Number,
-    },
-      alt: {
-        type: Number,
-      },
-      ast: {
-        type: Number,
-      },
-      alkalinePhosphatase: {
-        type: Number,
-      },
-      totalBilirubin: {
-        type: Number,
-      },
+    patientName: { type: String, required: true },
+    email:{type:String},
+    age: { type: Number, required: true },
+    sex: { type: String, required: true },
+    doctorName: { type: String, required: true },
+    date: { type: Date, required: true },
+    address: { type: String, required: true },
+        hb: String,
+        tlc: String,
+        dlc: String,
+        poly: String,
+        lympho: String,
+        mono: String,
+        eosino: String,
+        esr: String,
+        pcv: String,
+        bleedingTime: String,
+        clottingTime: String,
+        pt: String,
+        inr: String,
+        plateletCount: String,
+        reticCount: String,
+        rbcCount: String,
+        mcv: String,
+        mch: String,
+        mchc: String,
+        crp: String,
+        raFactor: String,
+        hPylori: String,
+        hiv: String,
+        hbsAgTest: String,
+        hcv: String,
+        vdrl: String,
+        dengue: String,
+        mp: String,
+        troponin: String,
+        sTyphiO: String,
+        sTyphiH: String,
+        sParaTyphiAH: String,
+        sParaTyphiBH: String,
+        bloodSugarF: String,
+        bloodSugarPP: String,
+        bloodSugarR: String,
+        fasting: String,
+        firstHour: String,
+        secondHour: String,
+        thirdHour: String,
+        bloodUrea: String,
+        serumCreatinine: String,
+        serumUricAcid: String,
+        sCholesterol: String,
+        sTriglycerides: String,
+        vldlCholesterol: String,
+        hdlCholesterol: String,
+        ldlCholesterol: String,
+        sBilirubinTotal: String,
+        sBilirubinDirect: String,
+        sProteinsTotal: String,
+        sAlbumin: String,
+        ggtp: String,
+        sAlkalinePhos: String,
+        sgpt: String,
+        sgot: String,
+        sSodium: String,
+        sPotassium: String,
+        sChloride: String,
+        sPhosphorous: String,
+        serumCalcium: String,
+        hba1c: String,
+        amylase: String,
+        ckMb: String,
     
-      sodium: {
-        type: Number,
-      },
-      potassium: {
-        type: Number,
-      },
-      chloride: {
-        type: Number,
-      },
-    
-      totalProtein: {
-        type: Number,
-      },
-      albumin: {
-        type: Number,
-      },
-      globulin: {
-        type: Number,
-      },
-  
-
-      hdlCholesterol: {
-        type: Number,
-      },
-      ldlCholesterol: {
-        type: Number,
-      },
-      vldlCholesterol: {
-        type: Number,
-      },
-      hemoglobin: {
-        type: Number,
-      },
-      whiteBloodCells: {
-        type: Number,
-      },
-      plateletCount: {
-        type: Number,
-      },
-    },
-);
-labReportSchema.plugin(plm);
-labReportSchema.virtual('formatime').get(function () {
-  return this.regtime.toLocaleString(); // Adjust the format as needed
+    labAssistant: { type: String}
 });
 
+// Create the model
 const LabReport = mongoose.model('LabReport', labReportSchema);
 
 module.exports = LabReport;

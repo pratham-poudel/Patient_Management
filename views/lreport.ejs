@@ -1,143 +1,493 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Pathological Lab Report Form</title>
-  <link rel="stylesheet" href="/stylesheets/lab.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab Report Card</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid #000;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .section-title {
+            background-color: #e0e0e0;
+            font-weight: bold;
+            text-align: center;
+        }
+        input[type="text"], input[type="number"], input[type="date"] {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 5px;
+        }
+        @media screen and (max-width: 768px) {
+            table, thead, tbody, th, td, tr {
+                display: block;
+                width: 100%;
+            }
+            th, td {
+                box-sizing: border-box;
+                width: 100%;
+                display: flex;
+                justify-content: space-between;
+                padding: 10px;
+                border: none;
+            }
+            th {
+                background-color: transparent;
+                font-weight: bold;
+            }
+            .section-title {
+                margin-top: 20px;
+            }
+        }
+    </style>
 </head>
 <body>
- <div class="flash">
-  <% if (successMessage) { %>
-    <div class="alert alert-success">
-      <a href="/search"><%= successMessage %> </a>
-    </div>
-  <% } %>
-  
-  <% if (errorMessage) { %>
-    <div class="alert alert-danger">
-      <%= errorMessage %>
-    </div>
-  <% } %>
- </div>
-  
-
-  <form action="/submitLabReport" method="post">
-    <h1>Pathological Lab Report Form</h1>
-
-    <!-- Patient Information -->
-    <label for="patientName">Patient Name:</label>
-    <input type="text" id="patientName" name="patientName" required>
-
-    <label for="email">Email:</label>
-    <input type="email" id="email" name="email" required>
-
-    <label for="age">Age:</label>
-    <input type="text" id="age" name="age" required>
-
-    <label for="gender">Gender:</label>
-    <select id="gender" name="gender" required>
-      <option value="Male">Male</option>
-      <option value="Female">Female</option>
-      <option value="Other">Other</option>
-    </select>
-
-      <label for="glucose">Glucose:</label>
-      <input type="text" id="glucose" name="glucose" pattern="[0-9]+(\.[0-9]+)?">
-
-   
-      <label for="cholesterol">Cholesterol:</label>
-      <input type="text" id="cholesterol" name="cholesterol" pattern="[0-9]+(\.[0-9]+)?">
-   
-
-  
-      <label for="triglycerides">Triglycerides:</label>
-      <input type="text" id="triglycerides" name="triglycerides" pattern="[0-9]+(\.[0-9]+)?">
+  <div class="flash">
+    <% if (successMessage) { %>
+      <div class="alert alert-success">
+        <a href="/search"><%= successMessage %> </a>
+      </div>
+    <% } %>
     
+    <% if (errorMessage) { %>
+      <div class="alert alert-danger">
+        <%= errorMessage %>
+      </div>
+    <% } %>
+   </div>
 
-    
-    
-      <label for="creatinine">Creatinine:</label>
-      <input type="text" id="creatinine" name="creatinine" pattern="[0-9]+(\.[0-9]+)?">
-    
+    <h2>Lab Report Card</h2>
 
+    <form method="post" action="/submitLabReport">
+        <table>
+            <tr>
+                <td>Patient Name:</td>
+                <td><input type="text" name="patient_name"></td>
+                <td>Age:</td>
+                <td><input type="number" name="age"></td>
+                <td>Sex:</td>
+                <td><input type="text" name="sex"></td>
+                <td>Email</td>
+                <td><input type="text" name="email"></td>
+            </tr>
+            <tr>
+                <td>Doctor Name:</td>
+                <td><input type="text" name="doctor_name" value="<%=user.fullName%>"></td>
+                <td>Date:</td>
+                <td><input type="date" name="date" ></td>
+                <td>Address:</td>
+                <td><input type="text" name="address" value="<%=user.address%>"></td>
+            </tr>
+        </table>
 
-   
-      <label for="urea">Urea:</label>
-      <input type="text" id="urea" name="urea" pattern="[0-9]+(\.[0-9]+)?">
-    
+        <h3 class="section-title">Haematology Report</h3>
+        <table>
+            <tr>
+                <th>Investigation</th>
+                <th>Result</th>
+                <th>Normal Range</th>
+            </tr>
+            <tr>
+                <td>HB</td>
+                <td><input type="text" name="hb_result"></td>
+                <td>M: 13.5-16 gm/dl<br>F: 12-15.5 gm/dl</td>
+            </tr>
+            <tr>
+                <td>T.L.C</td>
+                <td><input type="text" name="tlc_result"></td>
+                <td>4000-11000/Cumm</td>
+            </tr>
+            <tr>
+                <td>D.L.C</td>
+                <td><input type="text" name="dlc_result"></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Poly</td>
+                <td><input type="text" name="poly_result"></td>
+                <td>40-75%</td>
+            </tr>
+            <tr>
+                <td>Lympho</td>
+                <td><input type="text" name="lympho_result"></td>
+                <td>20-45%</td>
+            </tr>
+            <tr>
+                <td>Mono</td>
+                <td><input type="text" name="mono_result"></td>
+                <td>2-10%</td>
+            </tr>
+            <tr>
+                <td>Eosino</td>
+                <td><input type="text" name="eosino_result"></td>
+                <td>1-6%</td>
+            </tr>
+            <tr>
+                <td>ESR (Wintrobes)</td>
+                <td><input type="text" name="esr_result"></td>
+                <td>M: 0-9 mm (1<sup>st</sup> Hr.)<br>F: 0-20 mm (1<sup>st</sup> Hr.)</td>
+            </tr>
+            <tr>
+                <td>PCV</td>
+                <td><input type="text" name="pcv_result"></td>
+                <td>M: 41-50%<br>F: 36-48%</td>
+            </tr>
+            <tr>
+                <td>Bleeding Time</td>
+                <td><input type="text" name="bleeding_time_result"></td>
+                <td>1-6 min</td>
+            </tr>
+            <tr>
+                <td>Clotting Time</td>
+                <td><input type="text" name="clotting_time_result"></td>
+                <td>6-10 min</td>
+            </tr>
+            <tr>
+                <td>PT</td>
+                <td><input type="text" name="pt_result"></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>INR</td>
+                <td><input type="text" name="inr_result"></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Platelet Count</td>
+                <td><input type="text" name="platelet_count_result"></td>
+                <td>150,000-450,000</td>
+            </tr>
+            <tr>
+                <td>Retic. Count</td>
+                <td><input type="text" name="retic_count_result"></td>
+                <td>0.2-2.0%</td>
+            </tr>
+            <tr>
+                <td>RBC Count</td>
+                <td><input type="text" name="rbc_count_result"></td>
+                <td>4.6-6.5 mill/cumm</td>
+            </tr>
+            <tr>
+                <td>MCV</td>
+                <td><input type="text" name="mcv_result"></td>
+                <td>83.0-101 fl</td>
+            </tr>
+            <tr>
+                <td>MCH</td>
+                <td><input type="text" name="mch_result"></td>
+                <td>27-32 pg</td>
+            </tr>
+            <tr>
+                <td>MCHC</td>
+                <td><input type="text" name="mchc_result"></td>
+                <td>33.0-36.0%</td>
+            </tr>
+        </table>
 
-    
-      
-        <label for="alt">ALT:</label>
-        <input type="text" id="alt" name="alt" pattern="[0-9]+(\.[0-9]+)?">
-     
-     
-      
-        <label for="ast">AST:</label>
-        <input type="text" id="ast" name="ast" pattern="[0-9]+(\.[0-9]+)?">
-     
-      
-        <label for="alkalinePhosphatase">Alkaline Phosphatase:</label>
-        <input type="text" id="alkalinePhosphatase" name="alkalinePhosphatase" pattern="[0-9]+(\.[0-9]+)?">
-      
-        <label for="totalBilirubin">Total Bilirubin:</label>
-        <input type="text" id="totalBilirubin" name="totalBilirubin" pattern="[0-9]+(\.[0-9]+)?">
- 
+        <h3 class="section-title">Serological Examination</h3>
+        <table>
+            <tr>
+                <td>CRP</td>
+                <td><input type="text" name="crp_result"></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>RA Factor</td>
+                <td><input type="text" name="ra_factor_result"></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>H. Pylori</td>
+                <td><input type="text" name="h_pylori_result"></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>HIV I & II</td>
+                <td><input type="text" name="hiv_result"></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>HBs Ag Test</td>
+                <td><input type="text" name="hbs_ag_test_result"></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>HCV</td>
+                <td><input type="text" name="hcv_result"></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>VDRL</td>
+                <td><input type="text" name="vdrl_result"></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Dengue IgM/NS1</td>
+                <td><input type="text" name="dengue_result"></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>MP</td>
+                <td><input type="text" name="mp_result"></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Troponin I</td>
+                <td><input type="text" name="troponin_result"></td>
+                <td></td>
+            </tr>
+            <tr>
+            </table>
+            <h3 class="section-title">Widal Test</h3>
+            <table>
+            <tr>
+                <td>S. Typhi 'O'</td>
+                <td><input type="text" name="s_typhi_o_result"></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>S. Typhi 'H'</td>
+                <td><input type="text" name="s_typhi_h_result"></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>S. Para Typhi 'AH'</td>
+                <td><input type="text" name="s_para_typhi_ah_result"></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>S. Para Typhi 'BH'</td>
+                <td><input type="text" name="s_para_typhi_bh_result"></td>
+                <td></td>
+            </tr>
+        </table>
 
-    <label for="sodium">Sodium:</label>
-    <input type="text" id="sodium" name="sodium" pattern="[0-9]+(\.[0-9]+)?">
-  
-  
-    <label for="potassium">Potassium:</label>
-    <input type="text" id="potassium" name="potassium" pattern="[0-9]+(\.[0-9]+)?">
- 
-  
+        <h3 class="section-title">Bio Chemistry Report</h3>
+        <table>
+            <tr>
+                <th>Investigation</th>
+                <th>Result</th>
+                <th>Normal Range</th>
+            </tr>
+            <tr>
+                <td>Blood Sugar (F)</td>
+                <td><input type="text" name="blood_sugar_f_result"></td>
+                <td>60-110 mg/dl</td>
+            </tr>
+            <tr>
+                <td>Blood Sugar (PP)</td>
+                <td><input type="text" name="blood_sugar_pp_result"></td>
+                <td>80-140 mg/dl</td>
+            </tr>
+            <tr>
+                <td>Blood Sugar (R)</td>
+                <td><input type="text" name="blood_sugar_r_result"></td>
+                <td>60-140 mg/dl</td>
+            </tr>
+        </table>
 
-    <label for="chloride">Chloride:</label>
-    <input type="text" id="chloride" name="chloride" pattern="[0-9]+(\.[0-9]+)?">
+        <h3 class="section-title">Glucose Tolerance Test</h3>
+        <table>
+            <tr>
+                <th>Plasma Glucose</th>
+                <th>Result</th>
+                <th>Normal Range</th>
+            </tr>
+            <tr>
+                <td>Fasting</td>
+                <td><input type="text" name="fasting_result"></td>
+                <td>&lt;105.0 mg/dl</td>
+            </tr>
+            <tr>
+                <td>1<sup>st</sup> Hour</td>
+                <td><input type="text" name="first_hour_result"></td>
+                <td>&lt;195.0 mg/dl</td>
+            </tr>
+            <tr>
+                <td>2<sup>nd</sup> Hour</td>
+                <td><input type="text" name="second_hour_result"></td>
+                <td>&lt;145.0 mg/dl</td>
+            </tr>
+            <tr>
+                <td>3<sup>rd</sup> Hour</td>
+                <td><input type="text" name="third_hour_result"></td>
+                <td></td>
+            </tr>
+        </table>
 
-   
-  
+        <h3 class="section-title">Renal Function Test</h3>
+        <table>
+            <tr>
+                <th>Investigation</th>
+                <th>Result</th>
+                <th>Normal Range</th>
+            </tr>
+            <tr>
+                <td>Blood Urea</td>
+                <td><input type="text" name="blood_urea_result"></td>
+                <td>15-45 mg/dl</td>
+            </tr>
+            <tr>
+                <td>Serum Creatinine</td>
+                <td><input type="text" name="serum_creatinine_result"></td>
+                <td>0.4-1.4 mg/dl</td>
+            </tr>
+            <tr>
+                <td>Serum Uric Acid</td>
+                <td><input type="text" name="serum_uric_acid_result"></td>
+                <td>2.4-7.0 mg/dl</td>
+            </tr>
+        </table>
 
-    <label for="totalProtein">Total Protein:</label>
-    <input type="text" id="totalProtein" name="totalProtein" pattern="[0-9]+(\.[0-9]+)?">
-  
-    <label for="albumin">Albumin:</label>
-    <input type="text" id="albumin" name="albumin" pattern="[0-9]+(\.[0-9]+)?">
- 
-    <label for="globulin">Globulin:</label>
-    <input type="text" id="globulin" name="globulin" pattern="[0-9]+(\.[0-9]+)?">
- 
+        <h3 class="section-title">Lipid Profile</h3>
+        <table>
+            <tr>
+                <th>Investigation</th>
+                <th>Result</th>
+                <th>Normal Range</th>
+            </tr>
+            <tr>
+                <td>S. Cholesterol</td>
+                <td><input type="text" name="s_cholesterol_result"></td>
+                <td>130-220 mg/dl</td>
+            </tr>
+            <tr>
+                <td>S. Triglycerides</td>
+                <td><input type="text" name="s_triglycerides_result"></td>
+                <td>150-160 mg/dl</td>
+            </tr>
+            <tr>
+                <td>VLDL Cholesterol</td>
+                <td><input type="text" name="vldl_cholesterol_result"></td>
+                <td>15-40 mg/dl</td>
+            </tr>
+            <tr>
+                <td>HDL Cholesterol</td>
+                <td><input type="text" name="hdl_cholesterol_result"></td>
+                <td>30-70 mg/dl</td>
+            </tr>
+            <tr>
+                <td>LDL Cholesterol</td>
+                <td><input type="text" name="ldl_cholesterol_result"></td>
+                <td></td>
+            </tr>
+        </table>
 
+        <h3 class="section-title">Liver Function Test</h3>
+        <table>
+            <tr>
+                <th>Investigation</th>
+                <th>Result</th>
+                <th>Normal Range</th>
+            </tr>
+            <tr>
+                <td>S. Bilirubin (Total)</td>
+                <td><input type="text" name="s_bilirubin_total_result"></td>
+                <td>0.4-1.0 mg/dl</td>
+            </tr>
+            <tr>
+                <td>S. Bilirubin (Direct)</td>
+                <td><input type="text" name="s_bilirubin_direct_result"></td>
+                <td>0.1-0.4 mg/dl</td>
+            </tr>
+            <tr>
+                <td>S. Proteins (Total)</td>
+                <td><input type="text" name="s_proteins_total_result"></td>
+                <td>6.0-8.5 gm/dl</td>
+            </tr>
+            <tr>
+                <td>S. Albumin</td>
+                <td><input type="text" name="s_albumin_result"></td>
+                <td>3.5-5.0 gm/dl</td>
+            </tr>
+            <tr>
+                <td>GGTP</td>
+                <td><input type="text" name="ggtp_result"></td>
+                <td>04-38 IU/L</td>
+            </tr>
+            <tr>
+                <td>S. Alkaline Phos.</td>
+                <td><input type="text" name="s_alkaline_phos_result"></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>SGPT</td>
+                <td><input type="text" name="sgpt_result"></td>
+                <td>5-37 IU/L</td>
+            </tr>
+            <tr>
+                <td>SGOT</td>
+                <td><input type="text" name="sgot_result"></td>
+                <td>3-45 IU/L</td>
+            </tr>
+        </table>
 
-
-    <label for="hdlCholesterol">HDL Cholesterol:</label>
-    <input type="text" id="hdlCholesterol" name="hdlCholesterol" pattern="[0-9]+(\.[0-9]+)?">
-  
-    <label for="ldlCholesterol">LDL Cholesterol:</label>
-    <input type="text" id="ldlCholesterol" name="ldlCholesterol" pattern="[0-9]+(\.[0-9]+)?">
- 
-  
-    <label for="vldlCholesterol">VLDL Cholesterol:</label>
-    <input type="text" id="vldlCholesterol" name="vldlCholesterol" pattern="[0-9]+(\.[0-9]+)?">
- 
-
-
-    <label for="hemoglobin">Hemoglobin:</label>
-    <input type="text" id="hemoglobin" name="hemoglobin" pattern="[0-9]+(\.[0-9]+)?">
- 
-
-    <label for="whiteBloodCells">White Blood Cells:</label>
-    <input type="text" id="whiteBloodCells" name="whiteBloodCells" pattern="[0-9]+(\.[0-9]+)?">
- 
-
-    <label for="plateletCount">Platelet Count:</label>
-    <input type="text" id="plateletCount" name="plateletCount" pattern="[0-9]+(\.[0-9]+)?">
- 
-
- 
-    <button type="submit">Submit</button>
-  </form>
-
-</body>
-</html>
+        <h3 class="section-title">Electrolyte Test</h3>
+        <table>
+            <tr>
+                <th>Investigation</th>
+                <th>Result</th>
+                <th>Normal Range</th>
+            </tr>
+            <tr>
+                <td>S. Sodium</td>
+                <td><input type="text" name="s_sodium_result"></td>
+                <td>135-155 meq/l</td>
+            </tr>
+            <tr>
+                <td>S. Potassium</td>
+                <td><input type="text" name="s_potassium_result"></td>
+                <td>3.5-5.5 meq/l</td>
+            </tr>
+            <tr>
+                <td>S. Chloride</td>
+                <td><input type="text" name="s_chloride_result"></td>
+                <td>90-110 meq/l</td>
+            </tr>
+            <tr>
+                <td>S. Phosphorous</td>
+                <td><input type="text" name="s_phosphorous_result"></td>
+                <td>2.5-4.8 gm%</td>
+            </tr>
+            <tr>
+                <td>Serum Calcium</td>
+                <td><input type="text" name="serum_calcium_result"></td>
+                <td>8.2-10.4 mg/dl</td>
+            </tr>
+            <tr>
+                <td>HbA1c</td>
+                <td><input type="text" name="hba1c_result"></td>
+                <td>2-7%</td</tr>
+                  <tr>
+                      <td>Amylase</td>
+                      <td><input type="text" name="amylase_result"></td>
+                      <td>30-110 u/l</td>
+                  </tr>
+                  <tr>
+                      <td>CK-MB</td>
+                      <td><input type="text" name="ck_mb_result"></td>
+                      <td>5-25%</td>
+                  </tr>
+              </table>
+          
+              <div>
+                  <label>Lab Assistant / Lab Technician:</label>
+                  <input type="text" name="lab_assistant">
+              </div>
+              <button type="submit">Submit</button>
+          </form></body>
+          </html>
