@@ -860,44 +860,60 @@ router.get("/llm", async function (req, res, next) {
 })
 router.post("/submitpatient", async function (req, res, next) {
   const regex = req.body.userId;
-  if (regex.length
-    < 24 || regex.length > 24) {
-    res.send("Invalid ID")
-  } else {
-    const user = await patient.findOne({ _id: regex });
-    if (user) {
-
-      res.redirect(`/submitpatient/${regex}`);
+  try{
+    if (regex.length
+      < 24 || regex.length > 24) {
+      res.send("Invalid ID")
     } else {
-
-      res.status(404).send("User not found");
+      const user = await patient.findOne({ _id: regex });
+      if (user) {
+  
+        res.redirect(`/submitpatient/${regex}`);
+      } else {
+  
+        res.status(404).send("User not found");
+      }
     }
   }
+  catch(err){
+    res.send(err.message)
+  }
+  
 
 
 });
 router.get("/submitpatient/:userId", async function (req, res, next) {
   const userId = req.params.userId;
-  // Fetch the user data or perform any other necessary operations
+  try {
+      // Fetch the user data or perform any other necessary operations
   const users = await patient.findOne({ _id: userId });
 
   // Render the patientpr template with the user data
   res.render("patientpr", { users });
+  } catch (error) {
+    res.send(error.message)
+  }
+
 });
 router.post("/submitreport", async function (req, res, next) {
   const regex = req.body.userId;
-  if (regex.length < 24 || regex.length > 24) {
-    res.send("Invalid ID")
-  } else {
-    const users = await LabReport.findOne({ _id: regex });
-    if (users) {
-      // Redirect to /submitpatient/userId
-      res.redirect(`/submitreport/${users._id}`);
+  try {
+    if (regex.length < 24 || regex.length > 24) {
+      res.send("Invalid ID")
     } else {
-      // Handle case when user is not found, you might want to render an error page or redirect to a different page
-      res.status(404).send("User not found");
+      const users = await LabReport.findOne({ _id: regex });
+      if (users) {
+        // Redirect to /submitpatient/userId
+        res.redirect(`/submitreport/${users._id}`);
+      } else {
+        // Handle case when user is not found, you might want to render an error page or redirect to a different page
+        res.status(404).send("User not found");
+      }
     }
+  } catch (error) {
+    res.send(error.message)
   }
+  
 
 
 
@@ -905,12 +921,17 @@ router.post("/submitreport", async function (req, res, next) {
 });
 router.get("/submitreport/:userId", async function (req, res, next) {
   const userId = req.params.userId;
-  // Fetch the user data or perform any other necessary operations
+  try {
+     // Fetch the user data or perform any other necessary operations
   const users = await LabReport.findOne({ _id: userId });
 
   // Render the patientpr template with the user data
   res.render("patientrp", { users });
 
+  } catch (error) {
+    res.send(error.message)
+  }
+ 
 
 });
 router.get("/daktars", async function (req, res, next) {
