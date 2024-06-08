@@ -226,7 +226,7 @@ function isLoggedIn(req, res, next) {
 
 router.get("/profile", isLoggedIn, async function (req, res, next) {
   const user = await userModel.findOne({ username: req.session.passport.user }).populate("patient patientlab appointment");
-  console.log(user)
+  
   res.render("profile", { user });
 });
 
@@ -500,7 +500,7 @@ router.get("/searchmedical", function (req, res, next) {
 });
 router.get("/daktar", async function (req, res, next) {
   doctors = await userModel.find()
-  console.log(doctors)
+
   res.render('daktars', { doctors })
 });
 
@@ -704,8 +704,7 @@ router.get("/toremove/:datass", isLoggedIn, async function (req, res, next) {
   
   `);
   const appointmentIdToRemove = new ObjectId(regex);
-  console.log(appointmentIdToRemove)
-  console.log(docs.appointment)
+  
   await userModel.updateOne(
     { username: req.session.passport.user },
     { $pull: { appointment: appointmentIdToRemove } }
@@ -743,7 +742,7 @@ router.get("/profiles/:id", isLoggedIn, async function (req, res, next) {
 
 router.get("/appointment", async function (req, res, next) {
   const users = await userModel.find()
-  console.log(users)
+
   res.render("appoint", {
     users: users,
     successMessage: req.flash("success"),
@@ -771,7 +770,7 @@ router.post("/appointments", async function (req, res, next) {
     doctor.appointment.push(appointment._id);
     await doctor.save();
 
-    console.log(doctor);
+
 
     await appointment.save();
 
@@ -848,7 +847,7 @@ router.get("/viewappoint", async function (req, res, next) {
   const doctor = await userModel.findOne({
     username: req.session.passport.user
   }).populate("appointment")
-  console.log(doctor)
+
 
   res.render("allappns", { doctor })
 })
@@ -924,9 +923,10 @@ router.get("/submitreport/:userId", async function (req, res, next) {
   try {
      // Fetch the user data or perform any other necessary operations
   const users = await LabReport.findOne({ _id: userId });
+  const doctor = await userModel.findOne({username: req.session.passport.user})
 
   // Render the patientpr template with the user data
-  res.render("patientrp", { users });
+  res.render("patientrp", { users,doctor });
 
   } catch (error) {
     res.send(error.message)
@@ -1058,12 +1058,11 @@ const allMedicines = [
 
 
 router.get('/suggestions', (req, res) => {
-  console.log('Received suggestion request');
+ 
   const input = req.query.input.toLowerCase();
 
   // Filter medicines that start with the input
   const suggestions = allMedicines.filter(medicine => medicine.toLowerCase().startsWith(input));
-  console.log('Suggestions:', suggestions);
   res.json(suggestions);
 });
 
