@@ -50,20 +50,56 @@
         padding: 10px; /* Adjust padding for printing */
     }
 }
+.sidema{
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap-reverse;
+    
+
+}
+.sidema p{
+    font-weight: bold;
+    margin-left: 10px;
+}
+.right-align {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        .right-align p {
+            font-weight: bold;
+            margin: 0;
+            padding: 5px 0;
+        }
 
 
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Chandrauta Hospital Pvt Ltd Lab Report</h1>
-        <% if (users.patientName) { %><p>Patient Name: <%= users.patientName %></p><% } %>
-        <% if (users.email) { %><p>Patient Email: <%= users.email %></p><% } %>
-        <% if (users.age) { %><p>Age: <%= users.age %> years</p><% } %>
-        <% if (users.sex) { %><p>Sex: <%= users.sex %></p><% } %>
-        <% if (users.doctorName) { %><p>Doctor Name: <%= users.doctorName %></p><% } %>
-        <% if (users.date) { %><p>Date: <%= users.date.toDateString() %></p><% } %>
-        <% if (users.address) { %><p>Address: <%= users.address %></p><% } %>
+    <div class="container" >
+        <h1 style="
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    ">Chandrouta Hospital Pvt Ltd </h1>
+     <h1 style="
+     display: flex;
+     justify-content: center;
+     align-items: center;
+ ">Lab Report </h1>
+   <div class="right-align">
+    <% if (users.date) { %><p>Date: <%= users.date.toDateString() %></p><% } %>
+    <% if (users.address) { %><p>Address: <%= users.address %></p><% } %>
+</div>
+<div class="sidema">
+    <% if (users.patientName) { %><p>Patient Name: <%= users.patientName %></p><% } %>
+    <% if (users.age) { %><p>Age: <%= users.age %> years</p><% } %>
+    <% if (users.sex) { %><p>Sex: <%= users.sex %></p><% } %>
+    <% if (users.doctorName) { %><p>Doctor Name: <%= users.doctorName %></p><% } %>
+</div>
+       
 
 
         
