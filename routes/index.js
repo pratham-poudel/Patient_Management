@@ -923,10 +923,10 @@ router.get("/submitreport/:userId", async function (req, res, next) {
   try {
      // Fetch the user data or perform any other necessary operations
   const users = await LabReport.findOne({ _id: userId });
-  const doctor = await userModel.findOne({username: req.session.passport.user})
+  
 
   // Render the patientpr template with the user data
-  res.render("patientrp", { users,doctor });
+  res.render("patientrp", { users });
 
   } catch (error) {
     res.send(error.message)
