@@ -182,6 +182,9 @@ router.post("/register", async function (req, res) {
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
+  res.render("welcome");
+});
+router.get("/adminmajau", function (req, res, next) {
   res.render("index");
 });
 
