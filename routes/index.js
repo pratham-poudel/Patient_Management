@@ -31,7 +31,7 @@ async function sendEmail(to, subject, html) {
   try {
     // Compose the email
     const mailOptions = {
-      from: 'ppoudel_be23@thapar.edu',
+      from: 'chandrautahospital01@gmail.com',
       to: to,
       subject: subject,
       html: html,
@@ -1067,6 +1067,81 @@ router.get('/suggestions', (req, res) => {
   // Filter medicines that start with the input
   const suggestions = allMedicines.filter(medicine => medicine.toLowerCase().startsWith(input));
   res.json(suggestions);
+});
+router.post("/contactus", async function (req, res, next) {
+  try {
+    console.log(req.body.name)
+    await sendEmail('chandrautahospital01@gmail.com', 'New From Contact Us', `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us Email</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        .email-container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            text-align: center;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+        .header h1 {
+            margin: 0;
+            color: #444;
+        }
+        .content {
+            padding: 20px 0;
+        }
+        .content p {
+            margin: 10px 0;
+            line-height: 1.6;
+        }
+        .content p span {
+            font-weight: bold;
+        }
+        .footer {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            font-size: 12px;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="header">
+            <h1>New Contact Us Message</h1>
+        </div>
+        <div class="content">
+            <p><span>Name:</span> ${req.body.name}</p>
+            <p><span>Email:</span> ${req.body.email}</p>
+            <p><span>Message:</span></p>
+            <p>${req.body.message}</p>
+        </div>
+        <div class="footer">
+            &copy; 2023 Chandrauta Hospital. All rights reserved.
+        </div>
+    </div>
+</body>
+</html>`);
+res.send("Your Message Is Received")
+  } catch (error) {
+    res.send(error.message)
+  }
 });
 
 

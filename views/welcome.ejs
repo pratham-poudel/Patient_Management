@@ -4,7 +4,29 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Welcome</title>
+  <style>
+    .carousercontainer{
+      height:400 ;
+      width:600;
+     
+    }
+    .footer-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .map-container {
+            width: 100%;
+            max-width: 600px; /* Adjust this to fit your design */
+            height: 300px; /* Adjust this to fit your design */
+            margin-top: 20px; /* Add some spacing above the map */
+        }
+  </style>
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.7/dist/full.min.css" rel="stylesheet" type="text/css" />
   <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet" />
 </head>
 <body>
 <div class="flex flex-col min-h-[100dvh]">
@@ -42,8 +64,8 @@
         <a class="text-sm font-medium hover:underline underline-offset-4" href="#">
           Doctors
         </a>
-        <a class="text-sm font-medium hover:underline underline-offset-4" href="#">
-          Contact
+        <a class="text-sm font-medium hover:underline underline-offset-4" href="llm">
+          View Lab Report
         </a>
         <a class="text-sm font-medium hover:underline underline-offset-4" href="adminmajau">
             Admin Center
@@ -76,130 +98,187 @@
               Book Appointment
             </a>
           </div>
-          <img
-            src="https://plus.unsplash.com/premium_photo-1664475477169-46b784084d4e?q=80&w=2072&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-            width="600"
-            height="400"
-            alt="Hospital"
-            class="mx-auto rounded-lg object-cover"
-            style="aspect-ratio: 600 / 400; object-fit: cover;"
-          />
+          <div class="carousercontainer">
+         
+
+<div id="default-carousel" class="relative w-full" data-carousel="slide">
+  <!-- Carousel wrapper -->
+  <div class="relative h-56 overflow-hidden rounded-lg md:h-96">
+       <!-- Item 1 -->
+      <div class="hidden duration-700 ease-in-out" data-carousel-item>
+          <img src="https://images.unsplash.com/photo-1551076805-e1869033e561?q=80&w=1032&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="...">
+      </div>
+      <!-- Item 2 -->
+      <div class="hidden duration-700 ease-in-out" data-carousel-item>
+          <img src="https://images.unsplash.com/photo-1512678080530-7760d81faba6?q=80&w=1174&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="...">
+      </div>
+      <!-- Item 3 -->
+      <div class="hidden duration-700 ease-in-out" data-carousel-item>
+          <img src="https://images.unsplash.com/photo-1504813184591-01572f98c85f?q=80&w=1171&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="...">
+      </div>
+      <!-- Item 4 -->
+      <div class="hidden duration-700 ease-in-out" data-carousel-item>
+          <img src="https://images.unsplash.com/photo-1551601651-05a4836d25c2?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NDB8fGhvc3BpdGFsJTIwMjQlMjBocnN8ZW58MHx8MHx8fDA%3D" class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="...">
+      </div>
+      <!-- Item 5 -->
+      <div class="hidden duration-700 ease-in-out" data-carousel-item>
+          <img src="https://images.unsplash.com/flagged/photo-1551049215-23fd6d2ac3f1?q=80&w=1176&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="...">
+      </div>
+  </div>
+  <!-- Slider indicators -->
+  <div class="absolute z-30 flex -translate-x-1/2 bottom-5 left-1/2 space-x-3 rtl:space-x-reverse">
+      <button type="button" class="w-3 h-3 rounded-full" aria-current="true" aria-label="Slide 1" data-carousel-slide-to="0"></button>
+      <button type="button" class="w-3 h-3 rounded-full" aria-current="false" aria-label="Slide 2" data-carousel-slide-to="1"></button>
+      <button type="button" class="w-3 h-3 rounded-full" aria-current="false" aria-label="Slide 3" data-carousel-slide-to="2"></button>
+      <button type="button" class="w-3 h-3 rounded-full" aria-current="false" aria-label="Slide 4" data-carousel-slide-to="3"></button>
+      <button type="button" class="w-3 h-3 rounded-full" aria-current="false" aria-label="Slide 5" data-carousel-slide-to="4"></button>
+  </div>
+  <!-- Slider controls -->
+  <button type="button" class="absolute top-0 start-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none" data-carousel-prev>
+      <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
+          <svg class="w-4 h-4 text-white dark:text-gray-800 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1 1 5l4 4"/>
+          </svg>
+          <span class="sr-only">Previous</span>
+      </span>
+  </button>
+  <button type="button" class="absolute top-0 end-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none" data-carousel-next>
+      <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
+          <svg class="w-4 h-4 text-white dark:text-gray-800 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
+          </svg>
+          <span class="sr-only">Next</span>
+      </span>
+  </button>
+</div>
+
         </div>
       </div>
     </section>
-    <section id="services" class="w-full py-12 md:py-24 lg:py-32">
-      <div class="container px-4 md:px-6">
+    <section class="w-full py-12 md:py-24 lg:py-32">
+      <div class="container px-4 md:px-6 flex flex-col items-center">
         <div class="space-y-4 text-center">
-          <h2 class="text-3xl font-bold tracking-tighter sm:text-4xl">Our Services</h2>
-          <p class="text-gray-500 dark:text-gray-400 md:text-xl/relaxed">
-            Chandrauta Hospital offers a wide range of medical services to meet the diverse needs of our patients.
-          </p>
+          <div class="space-y-2">
+            <h2 class="text-3xl font-bold tracking-tighter sm:text-5xl">Explore Our Facilities</h2>
+            <p class="max-w-[600px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+              Take a virtual tour of our state-of-the-art hospital and see the cutting-edge technology and modern
+              amenities we offer.
+            </p>
+          </div>
         </div>
-        <div class="grid gap-6 mt-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-          <div class="bg-white rounded-lg shadow-sm dark:bg-gray-950 dark:text-gray-50 dark:shadow-none">
-            <div class="p-6 space-y-2">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                class="h-8 w-8 text-primary"
-              >
-                <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path>
-                <path d="M3.22 12H9.5l.5-1 2 4.5 2-7 1.5 3.5h5.27"></path>
-              </svg>
-              <h3 class="text-xl font-semibold">Cardiology</h3>
-              <p class="text-gray-500 dark:text-gray-400">
-                Our cardiology department provides comprehensive care for all heart-related conditions.
+        <div class="facility">
+          
+
+<div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+  <div>
+      <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image.jpg" alt="">
+  </div>
+  <div>
+      <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-1.jpg" alt="">
+  </div>
+  <div>
+      <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-2.jpg" alt="">
+  </div>
+  <div>
+      <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-3.jpg" alt="">
+  </div>
+  <div>
+      <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-4.jpg" alt="">
+  </div>
+  <div>
+      <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-5.jpg" alt="">
+  </div>
+  <div>
+      <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-6.jpg" alt="">
+  </div>
+  <div>
+      <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-7.jpg" alt="">
+  </div>
+  <div>
+      <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-8.jpg" alt="">
+  </div>
+  <div>
+      <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-9.jpg" alt="">
+  </div>
+  <div>
+      <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-10.jpg" alt="">
+  </div>
+  <div>
+      <img class="h-auto max-w-full rounded-lg" src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-11.jpg" alt="">
+  </div>
+</div>
+
+        </div>
+       
+      </div>
+    </section>
+  
+    <section class="w-full py-12 md:py-24 lg:py-32">
+      <div class="container px-4 md:px-6 flex flex-col items-center">
+        <div class="space-y-4 text-center">
+          <div class="space-y-2">
+            <h2 class="text-3xl font-bold tracking-tighter sm:text-5xl">Our Medical Specialties</h2>
+            <p class="max-w-[600px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+              Our hospital is home to a team of highly skilled specialists who provide exceptional care in a wide
+              range of medical disciplines.
+            </p>
+          </div>
+        </div>
+        <div class="mx-auto grid max-w-5xl items-center gap-6 py-12 lg:grid-cols-3 lg:gap-12">
+          <div class="flex flex-col justify-center space-y-4">
+            <div class="grid gap-1">
+              <h3 class="text-xl font-bold">Cardiology</h3>
+              <p class="text-muted-foreground">
+                Our team of renowned cardiologists provide comprehensive care for all heart-related conditions.
               </p>
             </div>
           </div>
-          <div class="bg-white rounded-lg shadow-sm dark:bg-gray-950 dark:text-gray-50 dark:shadow-none">
-            <div class="p-6 space-y-2">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                class="h-8 w-8 text-primary"
-              >
-                <path d="M6 18h8"></path>
-                <path d="M3 22h18"></path>
-                <path d="M14 22a7 7 0 1 0 0-14h-1"></path>
-                <path d="M9 14h2"></path>
-                <path d="M9 12a2 2 0 0 1-2-2V6h6v4a2 2 0 0 1-2 2Z"></path>
-                <path d="M12 6V3a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v3"></path>
-              </svg>
-              <h3 class="text-xl font-semibold">Diagnostics</h3>
-              <p class="text-gray-500 dark:text-gray-400">
-                Our state-of-the-art diagnostic services ensure accurate and timely diagnosis.
+          <div class="flex flex-col justify-center space-y-4">
+            <div class="grid gap-1">
+              <h3 class="text-xl font-bold">Oncology</h3>
+              <p class="text-muted-foreground">
+                Our oncology department offers cutting-edge treatments and personalized care for patients with cancer.
               </p>
             </div>
           </div>
-          <div class="bg-white rounded-lg shadow-sm dark:bg-gray-950 dark:text-gray-50 dark:shadow-none">
-            <div class="p-6 space-y-2">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                class="h-8 w-8 text-primary"
-              >
-                <path d="M10 14a1 1 0 1 0-2 0 1 1 0 0 0 2 0zM22 14a1 1 0 1 0-2 0 1 1 0 0 0 2 0z"></path>
-                <path d="M8 14v7h8v-7a4 4 0 1 0-8 0Z"></path>
-                <path d="M12 6V5"></path>
-                <path d="M10 2h4"></path>
-              </svg>
-              <h3 class="text-xl font-semibold">Neurology</h3>
-              <p class="text-gray-500 dark:text-gray-400">
-                Our neurology department specializes in the diagnosis and treatment of neurological disorders.
+          <div class="flex flex-col justify-center space-y-4">
+            <div class="grid gap-1">
+              <h3 class="text-xl font-bold">Orthopedics</h3>
+              <p class="text-muted-foreground">
+                Our orthopedic specialists use the latest techniques to treat a wide range of musculoskeletal
+                conditions.
               </p>
             </div>
           </div>
-          <div class="bg-white rounded-lg shadow-sm dark:bg-gray-950 dark:text-gray-50 dark:shadow-none">
-            <div class="p-6 space-y-2">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                class="h-8 w-8 text-primary"
-              >
-                <path d="M18 5V2"></path>
-                <path d="M6 5V2"></path>
-                <path d="M2 7h20"></path>
-                <path d="M22 22H2V9h20v13Z"></path>
-                <path d="M16 13H8"></path>
-              </svg>
-              <h3 class="text-xl font-semibold">Surgery</h3>
-              <p class="text-gray-500 dark:text-gray-400">
-                Our surgical team is equipped to handle a wide range of surgical procedures with precision and care.
+          <div class="flex flex-col justify-center space-y-4">
+            <div class="grid gap-1">
+              <h3 class="text-xl font-bold">Neurology</h3>
+              <p class="text-muted-foreground">
+                Our neurology department provides comprehensive care for conditions affecting the brain, spine, and
+                nervous system.
+              </p>
+            </div>
+          </div>
+          <div class="flex flex-col justify-center space-y-4">
+            <div class="grid gap-1">
+              <h3 class="text-xl font-bold">Pediatrics</h3>
+              <p class="text-muted-foreground">
+                Our pediatric team specializes in providing compassionate care for children of all ages.
+              </p>
+            </div>
+          </div>
+          <div class="flex flex-col justify-center space-y-4">
+            <div class="grid gap-1">
+              <h3 class="text-xl font-bold">Women's Health</h3>
+              <p class="text-muted-foreground">
+                Our women's health experts offer comprehensive care for all stages of a woman's life.
               </p>
             </div>
           </div>
         </div>
       </div>
     </section>
+  
     <section id="doctors" class="w-full py-12 md:py-24 lg:py-32 bg-gray-100 dark:bg-gray-800">
       <div class="container px-4 md:px-6">
         <div class="space-y-4 text-center">
@@ -265,6 +344,7 @@
               <p class="text-gray-500 dark:text-gray-400">Radiologist</p>
             </div>
           </div>
+          
         </div>
       </div>
     </section>
@@ -277,7 +357,7 @@
           </p>
         </div>
         <div class="mt-8 flex justify-center">
-          <form action="#" method="POST" class="w-full max-w-lg bg-white rounded-lg shadow-md p-6 space-y-4">
+          <form action="/contactus" method="POST" class="w-full max-w-lg bg-white rounded-lg shadow-md p-6 space-y-4">
             <div>
               <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
               <input
@@ -319,10 +399,19 @@
     </section>
   </main>
   <footer class="bg-gray-800 text-white py-6">
-    <div class="container px-4 md:px-6 text-center">
-      <p>&copy; 2023 Chandrauta Hospital. All rights reserved.</p>
+    <div class="container px-4 md:px-6 text-center footer-container">
+        <p>&copy; 2023 Chandrauta Hospital. All rights reserved.</p>
+        <div class="map-container">
+          <div style="width: 100%"><iframe width="100%" height="300" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?width=100%25&amp;height=300&amp;hl=en&amp;q=27.650182,%2082.868819+(Chandrauta%20Hospital%20Pvt%20Ltd)&amp;t=h&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"><a href="https://www.gps.ie/">gps trackers</a></iframe></div>
+        </div>
     </div>
-  </footer>
+</footer>
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
 </body>
 </html>
+
+
+
+
+
