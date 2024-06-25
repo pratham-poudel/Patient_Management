@@ -1070,7 +1070,6 @@ router.get('/suggestions', (req, res) => {
 });
 router.post("/contactus", async function (req, res, next) {
   try {
-    console.log(req.body.name)
     await sendEmail('chandrautahospital01@gmail.com', 'New From Contact Us', `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1129,6 +1128,7 @@ router.post("/contactus", async function (req, res, next) {
         <div class="content">
             <p><span>Name:</span> ${req.body.name}</p>
             <p><span>Email:</span> ${req.body.email}</p>
+            <p><span>Phone Number:</span> ${req.body.number}</p>
             <p><span>Message:</span></p>
             <p>${req.body.message}</p>
         </div>
