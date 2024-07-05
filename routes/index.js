@@ -756,8 +756,9 @@ router.get("/profiles/:id", isLoggedIn, async function (req, res, next) {
   const doctor = await userModel.findOne({
     username: req.session.passport.user,
   });
+  const review= await run(`${users} this is the pathalogy report of a patient , analyze the report and give the overall interpretation of the report in one small paragraph.`)
 
-  res.render("report", { users, doctor });
+  res.render("report", { users, doctor,review });
 });
 
 router.get("/appointment", async function (req, res, next) {
