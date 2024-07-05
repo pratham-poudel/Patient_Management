@@ -71,6 +71,23 @@ const sendSMS = async (to, body) => {
   }
 };
 
+const { GoogleGenerativeAI } = require('@google/generative-ai');
+const apiKey = process.env.GOOGLE_API_KEY;
+const genAI = new GoogleGenerativeAI(apiKey);
+
+async function run(prompt) {
+  const model = genAI.getGenerativeModel({model:"gemini-pro"});
+  const result=await model.generateContent(prompt);
+  const response=await result.response;
+  const text=response.text();
+  return text;
+}
+
+
+
+
+
+
 
 
 
@@ -927,9 +944,10 @@ router.get("/submitreport/:userId", async function (req, res, next) {
      // Fetch the user data or perform any other necessary operations
   const users = await LabReport.findOne({ _id: userId });
   
-
+    const review= await run(`${users} this is the pathalogy report of a patient , analyze the report and give the overall interpretation of the report in one small paragraph.`)
   // Render the patientpr template with the user data
-  res.render("patientrp", { users });
+  // res.send(review);
+  res.render("patientrp", { users,review });
 
   } catch (error) {
     res.send(error.message)
