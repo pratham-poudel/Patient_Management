@@ -751,14 +751,18 @@ router.get("/toremove/:datass", isLoggedIn, async function (req, res, next) {
 
 
 router.get("/profiles/:id", isLoggedIn, async function (req, res, next) {
+  
   const regex = req.params.id;
   const users = await LabReport.findOne({ _id: regex });
-  const doctor = await userModel.findOne({
-    username: req.session.passport.user,
-  });
-  const review= await run(`${users} this is the pathalogy report of a patient , analyze the report and give the overall interpretation of the report in one small paragraph.`)
+ 
+  if(!users.interpretation){
+    const review= await run(`${users} this is the pathalogy report of a patient , analyze the report and give the overall interpretation of the report in one small paragraph.`);
+    users.interpretation=review;
+    await users.save();
+  }
+  
 
-  res.render("report", { users, doctor,review });
+  res.render("report", { users });
 });
 
 router.get("/appointment", async function (req, res, next) {
@@ -944,11 +948,17 @@ router.get("/submitreport/:userId", async function (req, res, next) {
   try {
      // Fetch the user data or perform any other necessary operations
   const users = await LabReport.findOne({ _id: userId });
-  
+  if(!users.interpretation){
     const review= await run(`${users} this is the pathalogy report of a patient , analyze the report and give the overall interpretation of the report in one small paragraph.`)
-  // Render the patientpr template with the user data
-  // res.send(review);
-  res.render("patientrp", { users,review });
+    // Render the patientpr template with the user data
+    // res.send(review);
+    users.interpretation=review;
+    await users.save();
+    }
+    res.render("patientrp", { users });
+  
+  
+  
 
   } catch (error) {
     res.send(error.message)
