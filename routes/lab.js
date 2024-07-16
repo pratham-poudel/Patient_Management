@@ -10,6 +10,7 @@ const labReportSchema = new mongoose.Schema({
     medicalName: { type: String, required: true },
     date: { type: Date, required: true },
     address: { type: String, required: true },
+    interpretation: { type: String},
         hb: String,
         tlc: String,
         dlc: String,
