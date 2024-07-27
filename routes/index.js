@@ -1283,7 +1283,7 @@ router.post("/approveMembership", async function(req, res, next) {
    
    if(user.email){
 
-    await sendEmail(user.email, 'Membership Succesfully Approved', `Now You Get All The Privileges of Our Hospital`);
+    await sendEmail(user.email, 'Membership Succesfully Approved', `Your Membership Request has been approved. You can now enjoy the benefits of being a member of our hospital. If you have any questions, feel free to contact us at 076-540531`);
    }
     res.send({ message: 'Membership approved successfully' });
   } catch (error) {
