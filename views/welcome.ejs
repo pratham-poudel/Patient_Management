@@ -10,6 +10,32 @@
       width:600;
      
     }
+    .faq-item {
+            border-bottom: 1px solid #ddd;
+            padding: 10px 0;
+        }
+        .faq-item h3 {
+            cursor: pointer;
+            margin: 0;
+            font-size: 1.2em;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .faq-item h3 svg {
+            transition: transform 0.2s;
+        }
+        .faq-item.open h3 svg {
+            transform: rotate(180deg);
+        }
+        .faq-answer {
+            display: none;
+            padding: 10px 0;
+            color: #555;
+        }
+        .faq-item.open .faq-answer {
+            display: block;
+        }
     .footer-container {
             display: flex;
             flex-direction: column;
@@ -52,7 +78,7 @@
           <path d="M18 12h2a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-9a2 2 0 0 1 2-2h2"></path>
           <path d="M18 22V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v18"></path>
         </svg>
-        <span class="font-semibold text-lg">Chandrauta Hospital</span>
+        <span class="font-semibold text-lg">Prakash Medical</span>
       </a>
       <nav class="hidden md:flex items-center gap-6">
         <a class="text-sm font-medium hover:underline underline-offset-4" href="#">
@@ -84,7 +110,7 @@
       <div class="container px-4 md:px-6">
         <div class="grid gap-8 md:grid-cols-2 lg:gap-16">
           <div class="space-y-4">
-            <h1 class="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Welcome to Chandrauta Hospital</h1>
+            <h1 class="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Welcome to Prakash Medical Pvt Ltd</h1>
             <p class="text-gray-500 dark:text-gray-400 md:text-xl/relaxed">
               We are a leading healthcare provider committed to delivering exceptional care to our patients. Our
               team of experienced medical professionals is dedicated to improving the health and well-being of our
@@ -155,6 +181,122 @@
         </div>
       </div>
     </section>
+    <div style="width: 80%; margin: auto; overflow: hidden; padding: 20px;">
+      <div style="background: #333; color: #fff; padding: 30px 0; border-bottom: 3px solid #0779e4;">
+          <h1 style="text-align: center; text-transform: uppercase; margin: 0; font-size: 2.5em;">
+              Unlock Exclusive Healthcare Benefits
+          </h1>
+      </div>
+      <div style="background: #fff; padding: 20px; margin-top: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+          <p style="text-align: center; font-size: 1.2em; color: #333;">
+              Join our hospital membership program and enjoy up to 10% off on essential medical services.
+          </p>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+              <div style="background: #f9f9f9; border-radius: 8px; padding: 20px;">
+                  <h3 style="display: flex; align-items: center; margin: 0;">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 10px; color: #0779e4;">
+                          <path d="M18 6 6 18"></path>
+                          <path d="m6 6 12 12"></path>
+                      </svg>
+                      10% off X-Ray Services
+                  </h3>
+                  <p style="color: #555;">Receive a 10% discount on all your X-Ray examinations.</p>
+              </div>
+              <div style="background: #f9f9f9; border-radius: 8px; padding: 20px;">
+                  <h3 style="display: flex; align-items: center; margin: 0;">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 10px; color: #0779e4;">
+                          <path d="M3 7V5a2 2 0 0 1 2-2h2"></path>
+                          <path d="M17 3h2a2 2 0 0 1 2 2v2"></path>
+                          <path d="M21 17v2a2 2 0 0 1-2 2h-2"></path>
+                          <path d="M7 21H5a2 2 0 0 1-2-2v-2"></path>
+                      </svg>
+                      10% off Ultrasound (USG) Services
+                  </h3>
+                  <p style="color: #555;">Enjoy a 10% discount on all your Ultrasound (USG) procedures.</p>
+              </div>
+              <div style="background: #f9f9f9; border-radius: 8px; padding: 20px;">
+                  <h3 style="display: flex; align-items: center; margin: 0;">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 10px; color: #0779e4;">
+                          <path d="M7.21 15 2.66 7.14a2 2 0 0 1 .13-2.2L4.4 2.8A2 2 0 0 1 6 2h12a2 2 0 0 1 1.6.8l1.6 2.14a2 2 0 0 1 .14 2.2L16.79 15"></path>
+                          <path d="M11 12 5.12 2.2"></path>
+                          <path d="m13 12 5.88-9.8"></path>
+                          <path d="M8 7h8"></path>
+                          <circle cx="12" cy="17" r="5"></circle>
+                          <path d="M12 18v-2h-.5"></path>
+                      </svg>
+                      5% off All Medicines
+                  </h3>
+                  <p style="color: #555;">Get a 5% discount on all your medication purchases.</p>
+              </div>
+              <div style="background: #f9f9f9; border-radius: 8px; padding: 20px;">
+                  <h3 style="display: flex; align-items: center; margin: 0;">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 10px; color: #0779e4;">
+                          <path d="M9 2v17.5A2.5 2.5 0 0 1 6.5 22v0A2.5 2.5 0 0 1 4 19.5V2"></path>
+                          <path d="M20 2v17.5a2.5 2.5 0 0 1-2.5 2.5v0a2.5 2.5 0 0 1-2.5-2.5V2"></path>
+                          <path d="M3 2h7"></path>
+                          <path d="M14 2h7"></path>
+                          <path d="M9 16H4"></path>
+                          <path d="M20 16h-5"></path>
+                      </svg>
+                      10% off All Lab Examinations
+                  </h3>
+                  <p style="color: #555;">Receive a 10% discount on all your laboratory tests and examinations.</p>
+              </div>
+          </div>
+          <div style="text-align: center; margin-top: 20px;">
+              <a href="addmember"><button style="background-color: #0779e4; color: #fff; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 1.2em;">
+                  Join Now
+              </button></a>
+          </div>
+          <div style="background: #f1f1f1; padding: 20px; border-radius: 8px; margin-top: 20px;">
+              <h2 style="font-size: 2em; margin-bottom: 20px;">Frequently Asked Questions</h2>
+              <div class="faq-item">
+                  <h3 onclick="toggleFaq(this)" style="cursor: pointer; margin: 0; font-size: 1.2em; display: flex; justify-content: space-between; align-items: center;">
+                      How do I sign up for the hospital membership program?
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <path d="m6 9 6 6 6-6"></path>
+                      </svg>
+                  </h3>
+                  <div class="faq-answer" style="display: none; padding: 10px 0; color: #555;">
+                      Signing up is easy! Just click the "Join Now" button above and fill out the registration form.
+                  </div>
+              </div>
+              <div class="faq-item">
+                  <h3 onclick="toggleFaq(this)" style="cursor: pointer; margin: 0; font-size: 1.2em; display: flex; justify-content: space-between; align-items: center;">
+                      What are the benefits of the membership program?
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <path d="m6 9 6 6 6-6"></path>
+                      </svg>
+                  </h3>
+                  <div class="faq-answer" style="display: none; padding: 10px 0; color: #555;">
+                      Members receive up to 10% off on X-Ray, Ultrasound, and lab services, plus 5% off on all medications.
+                  </div>
+              </div>
+              <div class="faq-item">
+                  <h3 onclick="toggleFaq(this)" style="cursor: pointer; margin: 0; font-size: 1.2em; display: flex; justify-content: space-between; align-items: center;">
+                      How long does the membership last?
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <path d="m6 9 6 6 6-6"></path>
+                      </svg>
+                  </h3>
+                  <div class="faq-answer" style="display: none; padding: 10px 0; color: #555;">
+                      The membership is valid for one year from the date of registration.
+                  </div>
+              </div>
+              <div class="faq-item">
+                  <h3 onclick="toggleFaq(this)" style="cursor: pointer; margin: 0; font-size: 1.2em; display: flex; justify-content: space-between; align-items: center;">
+                      Can I cancel my membership?
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <path d="m6 9 6 6 6-6"></path>
+                      </svg>
+                  </h3>
+                  <div class="faq-answer" style="display: none; padding: 10px 0; color: #555;">
+                      Yes, you can cancel your membership at any time by contacting our support team.
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
     <section class="w-full py-12 md:py-24 lg:py-32">
       <div class="container px-4 md:px-6 flex flex-col items-center">
         <div class="space-y-4 text-center">
@@ -413,6 +555,18 @@
 </footer>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+<script>
+  function toggleFaq(element) {
+      const faqItem = element.parentElement;
+      faqItem.classList.toggle('open');
+      const answer = faqItem.querySelector('.faq-answer');
+      if (faqItem.classList.contains('open')) {
+          answer.style.display = 'block';
+      } else {
+          answer.style.display = 'none';
+      }
+  }
+</script>
 </body>
 </html>
 

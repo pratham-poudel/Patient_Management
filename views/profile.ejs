@@ -30,9 +30,10 @@
         </button></a>
         <a href="/logout"><button>Log Out
         </button></a>
-        <% if (user._id.toString() === '65e605366fc67ab673c80ad4') { %>
+        <% if (user._id.toString() === '65c88c9428c98da31cbcc8dc') { %>
           <!-- Show the button if user is an admin -->
           <a href="/register"><button>Register New Doctor</button></a>
+          <a href="/addedmemberrequests"><button>Membership Request</button></a>
         <% } %>
         <a href="/daktar"><button>View All Doctors</button></a>
         
@@ -46,6 +47,7 @@
     <a href="/search"><button>Search Patients in Lab</button></a>
     <a href="/searchmedical"><button>Search Patients In Medical</button></a>
     <a href="/viewappoint"><button>View Your Appointments</button></a>
+    <a href="/viewmember"><button>Check Member</button></a>
    </div>
   </div>
   </div>
