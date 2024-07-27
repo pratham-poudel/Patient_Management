@@ -11,6 +11,7 @@ const patient = require("./patient");
 const Appointment = require("./appointment")
 const nodemailer = require('nodemailer');
 const QRCode = require('qrcode');
+const membership = require("./membership");
 require('dotenv').config();
 
 
@@ -1172,7 +1173,123 @@ res.send("Your Message Is Received")
     res.send(error.message)
   }
 });
+router.get("/addmember", async function (req, res, next) {
+  res.render("addmember")
+});
+router.post("/addmembership", async function (req, res, next) {
+  try {
+    const user = new membership({
+      name: req.body.name,
+      email: req.body.email,
+      phone: req.body.phone,
+      number: req.body.number,
+      address: req.body.address,
+      dob: req.body.dob,
+    });
+    await user.save(); // Save the user to the database
 
+    // if (user.email){
+    //   const emailTemplate = `
+    //   <!DOCTYPE html>
+    //   <html lang="en">
+    //   <head>
+    //       <meta charset="UTF-8">
+    //       <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    //       <title>Membership Confirmation</title>
+    //       <style>
+    //           body {
+    //               font-family: Arial, sans-serif;
+    //               background-color: #f4f4f4;
+    //               margin: 0;
+    //               padding: 20px;
+    //           }
+    //           .container {
+    //               max-width: 600px;
+    //               margin: auto;
+    //               background: #fff;
+    //               padding: 20px;
+    //               border-radius: 8px;
+    //               box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    //           }
+    //           h1 {
+    //               color: #333;
+    //               text-align: center;
+    //           }
+    //           p {
+    //               font-size: 1em;
+    //               color: #555;
+    //           }
+    //           .details {
+    //               margin: 20px 0;
+    //           }
+    //           .details p {
+    //               margin: 5px 0;
+    //           }
+    //           .footer {
+    //               text-align: center;
+    //               margin-top: 20px;
+    //               font-size: 0.9em;
+    //               color: #777;
+    //           }
+    //       </style>
+    //   </head>
+    //   <body>
+    //       <div class="container">
+    //           <h1>Membership Request Received</h1>
+    //           <p>Dear <strong>${user.name}</strong>,</p>
+    //           <p>Thank you for submitting your membership details. We have received your information and our representative will contact you shortly to confirm your membership.</p>
+    //           <div class="details">
+    //               <p><strong>Membership Details:</strong></p>
+    //               <p><strong>Name:</strong> ${user.name}</p>
+    //               <p><strong>Email:</strong> ${user.email}</p>
+    //               <p><strong>Phone Number:</strong> ${user.number}</p>
+    //               <p><strong>Address:</strong> ${user.address}</p>
+    //               <p><strong>Date of Birth:</strong> ${user.dob}</p>
+    //           </div>
+    //           <p>We look forward to having you as a member of our hospital. If you have any questions, feel free to contact us at 076-540531</p>
+    //           <div class="footer">
+    //               <p>&copy; 2024 Prakash Medical Pvt Ltd. All rights reserved.</p>
+    //           </div>
+    //       </div>
+    //   </body>
+    //   </html>
+    //   `;
+
+    //   await sendEmail(user.email, 'Your Membership Request is Received', emailTemplate);
+    // }
+
+    res.status(200).send('Membership request received.');
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+});
+router.get("/addedmemberrequests" , isLoggedIn,async function(req, res, next){
+  const users = await membership.find()
+  const unapprovedUsers = [];
+  users.forEach(user => {
+    if(!user.approved){
+      unapprovedUsers.push(user);
+    }
+  })
+  // res.send(unapprovedUsers)
+  res.render("addedmemberrequests", {unapprovedUsers})
+});
+router.post("/approveMembership", async function(req, res, next) {
+  try {
+    const userId = req.body.id;
+   const user = await membership.findOne({ _id: userId });
+   user.approved = true;
+    await user.save();
+   
+   if(user.email){
+
+    await sendEmail(user.email, 'Membership Succesfully Approved', `Now You Get All The Privileges of Our Hospital`);
+   }
+    res.send({ message: 'Membership approved successfully' });
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+});
 
 
 
