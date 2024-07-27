@@ -1297,10 +1297,18 @@ router.get("/member/:memberId", async function(req, res, next){
   try {
     const regex = req.params.memberId;
   const users = await membership.findOne({ phone: regex });
+ 
   if(!users){
     res.send("User Not Found")
   }else{
-    res.send(users);
+    if(users.approved){
+
+      res.send(users);
+    
+    }else{
+      res.send("User Not Approved Yet")
+    }
+    
   }
   
   } catch (error) {
