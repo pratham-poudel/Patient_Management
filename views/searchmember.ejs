@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Search Members</title>
+  <link rel="stylesheet" href="/stylesheets/style.css">
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #e9f7ff;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 30px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      background-color: #fff;
+      border-radius: 15px;
+    }
+
+    header {
+      text-align: center;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #007bff;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 2.5em;
+      color: #007bff;
+    }
+
+    .search-form {
+      margin: 20px 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .search-form input[type="text"] {
+      width: 100%;
+      padding: 15px;
+      margin-bottom: 20px;
+      border: 2px solid #007bff;
+      border-radius: 5px;
+      font-size: 1.1em;
+      transition: border-color 0.3s;
+    }
+
+    .search-form input[type="text"]:focus {
+      border-color: #0056b3;
+      outline: none;
+    }
+
+    .search-form button {
+      padding: 10px 30px;
+      font-size: 1.2em;
+      color: #fff;
+      background-color: #007bff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .search-form button:hover {
+      background-color: #0056b3;
+    }
+
+    .results {
+      margin-top: 20px;
+      width: 100%;
+    }
+
+    .result-item {
+      padding: 15px;
+      margin-bottom: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      background-color: #f9f9f9;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .result-item h3 {
+      margin: 0;
+      font-size: 1.3em;
+      color: #007bff;
+    }
+
+    .result-item p {
+      margin: 0;
+      font-size: 1em;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Search Members</h1>
+    </header>
+    
+    <main>
+      <div class="search-form">
+        <input type="text" id="phoneInput" placeholder="Enter member phone number">
+        <button onclick="searchMember()">Search</button>
+      </div>
+      
+      <div class="results" id="results">
+        <!-- Search results will be displayed here -->
+      </div>
+    </main>
+  </div>
+
+  <script>
+    async function searchMember() {
+      const phoneInput = document.getElementById('phoneInput').value.trim();
+      const resultsDiv = document.getElementById('results');
+      resultsDiv.innerHTML = '';
+
+      try {
+        const response = await fetch(`/member/${phoneInput}`);
+        const member = await response.json();
+
+        if (member) {
+          resultsDiv.innerHTML = `
+            <div class="result-item">
+              <h3>${member.name}</h3>
+              <p>Member ID: ${member.id}</p>
+            </div>
+          `;
+        } else {
+          resultsDiv.innerHTML = '<p>No member found with this phone number.</p>';
+        }
+      } catch (error) {
+        resultsDiv.innerHTML = '<p>An error occurred while searching for the member.</p>';
+      }
+    }
+  </script>
+</body>
+</html>

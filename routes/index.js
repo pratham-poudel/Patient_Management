@@ -1290,6 +1290,25 @@ router.post("/approveMembership", async function(req, res, next) {
     res.status(500).send(error.message);
   }
 });
+router.get("/viewmember",  function(req, res, next){
+  res.render("searchmember")
+});
+router.get("/member/:memberId", async function(req, res, next){
+  try {
+    const regex = req.params.memberId;
+  const users = await membership.findOne({ phone: regex });
+  if(!users){
+    res.send("User Not Found")
+  }else{
+    res.send(users);
+  }
+  
+  } catch (error) {
+    res.send(error.message)
+    
+  }
+  
+});
 
 
 
