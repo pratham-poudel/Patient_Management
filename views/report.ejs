@@ -680,7 +680,210 @@
     
   
   
-
+                                                <% if (users.colour || users.specificgravity || users.appearance || users.chemicalexamination || users.reaction || users.albumen || users.sugar || users.ketonebodies || users.blood || users.puscells || users.rbc || users.epcells || users.crystals || users.cast || users.others || users.pregnancytest) { %>
+                                                    <div class="section">
+                                                        <h3 class="section-title">Urine Analysis</h3>
+                                                        <table>
+                                                            <tr>
+                                                                <th>Investigation</th>
+                                                                <th>Result</th>
+                                                            </tr>
+                                                            <% if (users.colour) { %>
+                                                                <tr>
+                                                                    <td>Colour</td>
+                                                                    <td><%= users.colour %></td>
+                                                                </tr>
+                                                            <% } %>
+                                                            <% if (users.specificgravity) { %>
+                                                                <tr>
+                                                                    <td>Specific Gravity</td>
+                                                                    <td><%= users.specificgravity %></td>
+                                                                </tr>
+                                                            <% } %>
+                                                            <% if (users.appearance) { %>
+                                                                <tr>
+                                                                    <td>Appearance</td>
+                                                                    <td><%= users.appearance %></td>
+                                                                </tr>
+                                                            <% } %>
+                                                            <% if (users.chemicalexamination) { %>
+                                                                <tr>
+                                                                    <td>Chemical Examination</td>
+                                                                    <td><%= users.chemicalexamination %></td>
+                                                                </tr>
+                                                            <% } %>
+                                                            <% if (users.reaction) { %>
+                                                                <tr>
+                                                                    <td>Reaction</td>
+                                                                    <td><%= users.reaction %></td>
+                                                                </tr>
+                                                            <% } %>
+                                                            <% if (users.albumen) { %>
+                                                                <tr>
+                                                                    <td>Albumen</td>
+                                                                    <td><%= users.albumen %></td>
+                                                                </tr>
+                                                            <% } %>
+                                                            <% if (users.sugar) { %>
+                                                                <tr>
+                                                                    <td>Sugar</td>
+                                                                    <td><%= users.sugar %></td>
+                                                                </tr>
+                                                            <% } %>
+                                                            <% if (users.ketonebodies) { %>
+                                                                <tr>
+                                                                    <td>Ketone Bodies</td>
+                                                                    <td><%= users.ketonebodies %></td>
+                                                                </tr>
+                                                            <% } %>
+                                                            <% if (users.blood) { %>
+                                                                <tr>
+                                                                    <td>Blood</td>
+                                                                    <td><%= users.blood %></td>
+                                                                </tr>
+                                                            <% } %>
+                                                            <% if (users.puscells) { %>
+                                                                <tr>
+                                                                    <td>Pus Cells</td>
+                                                                    <td><%= users.puscells %></td>
+                                                                </tr>
+                                                            <% } %>
+                                                            <% if (users.rbc) { %>
+                                                                <tr>
+                                                                    <td>RBC</td>
+                                                                    <td><%= users.rbc %></td>
+                                                                </tr>
+                                                            <% } %>
+                                                            <% if (users.epcells) { %>
+                                                                <tr>
+                                                                    <td>EP Cells</td>
+                                                                    <td><%= users.epcells %></td>
+                                                                </tr>
+                                                            <% } %>
+                                                            <% if (users.crystals) { %>
+                                                                <tr>
+                                                                    <td>Crystals</td>
+                                                                    <td><%= users.crystals %></td>
+                                                                </tr>
+                                                            <% } %>
+                                                            <% if (users.cast) { %>
+                                                                <tr>
+                                                                    <td>Cast</td>
+                                                                    <td><%= users.cast %></td>
+                                                                </tr>
+                                                            <% } %>
+                                                            <% if (users.others) { %>
+                                                                <tr>
+                                                                    <td>Others</td>
+                                                                    <td><%= users.others %></td>
+                                                                </tr>
+                                                            <% } %>
+                                                            <% if (users.pregnancytest) { %>
+                                                                <tr>
+                                                                    <td>Pregnancy Test</td>
+                                                                    <td><%= users.pregnancytest %></td>
+                                                                </tr>
+                                                            <% } %>
+                                                        </table>
+                                                    </div>
+                                                <% } %>
+                                                <% if (users.colourofstool || users.consistancyofstool || users.mucousofstool || users.chemicalexaminationofstool || users.reactionofstool || users.reducingsubstanceofstool || users.occultbloodofstool || users.protozoalparasitesofblood || users.bloodofstool || users.puscellsofstool || users.rbcofstool || users.helmenthicparasitesofstool || users.othersofstool || users.noteofstool) { %>
+                                                    <div class="section">
+                                                        <h2>Stool Examination Report</h2>
+                                                        <table>
+                                                            <tr>
+                                                                <th>Investigation</th>
+                                                                <th>Result</th>
+                                                            </tr>
+                                                            <% if (users.colourofstool) { %>
+                                                                <tr>
+                                                                    <td>Colour</td>
+                                                                    <td><%= users.colourofstool %></td>
+                                                                </tr>
+                                                            <% } %>
+                                                            <% if (users.consistancyofstool) { %>
+                                                                <tr>
+                                                                    <td>Consistancy</td>
+                                                                    <td><%= users.consistancyofstool %></td>
+                                                                </tr>
+                                                            <% } %>
+                                                            <% if (users.mucousofstool) { %>
+                                                                <tr>
+                                                                    <td>Mucous</td>
+                                                                    <td><%= users.mucousofstool %></td>
+                                                                </tr>
+                                                            <% } %>
+                                                            <% if (users.chemicalexaminationofstool) { %>
+                                                                <tr>
+                                                                    <td>Chemical Examination</td>
+                                                                    <td><%= users.chemicalexaminationofstool %></td>
+                                                                </tr>
+                                                            <% } %>
+                                                            <% if (users.reactionofstool) { %>
+                                                                <tr>
+                                                                    <td>Reaction</td>
+                                                                    <td><%= users.reactionofstool %></td>
+                                                                </tr>
+                                                            <% } %>
+                                                            <% if (users.reducingsubstanceofstool) { %>
+                                                                <tr>
+                                                                    <td>Reducing Substance</td>
+                                                                    <td><%= users.reducingsubstanceofstool %></td>
+                                                                </tr>
+                                                            <% } %>
+                                                            <% if (users.occultbloodofstool) { %>
+                                                                <tr>
+                                                                    <td>Occult Blood</td>
+                                                                    <td><%= users.occultbloodofstool %></td>
+                                                                </tr>
+                                                            <% } %>
+                                                            <% if (users.protozoalparasitesofblood) { %>
+                                                                <tr>
+                                                                    <td>Protozoal Parasites</td>
+                                                                    <td><%= users.protozoalparasitesofblood %></td>
+                                                                </tr>
+                                                            <% } %>
+                                                            <% if (users.bloodofstool) { %>
+                                                                <tr>
+                                                                    <td>Blood</td>
+                                                                    <td><%= users.bloodofstool %></td>
+                                                                </tr>
+                                                            <% } %>
+                                                            <% if (users.puscellsofstool) { %>
+                                                                <tr>
+                                                                    <td>Pus Cells</td>
+                                                                    <td><%= users.puscellsofstool %> /HPF</td>
+                                                                </tr>
+                                                            <% } %>
+                                                            <% if (users.rbcofstool) { %>
+                                                                <tr>
+                                                                    <td>RBC</td>
+                                                                    <td><%= users.rbcofstool %> /HPF</td>
+                                                                </tr>
+                                                            <% } %>
+                                                            <% if (users.helmenthicparasitesofstool) { %>
+                                                                <tr>
+                                                                    <td>Helminthic Parasites</td>
+                                                                    <td><%= users.helmenthicparasitesofstool %></td>
+                                                                </tr>
+                                                            <% } %>
+                                                            <% if (users.othersofstool) { %>
+                                                                <tr>
+                                                                    <td>Others</td>
+                                                                    <td><%= users.othersofstool %></td>
+                                                                </tr>
+                                                            <% } %>
+                                                            <% if (users.noteofstool) { %>
+                                                                <tr>
+                                                                    <td>Note</td>
+                                                                    <td><%= users.noteofstool %></td>
+                                                                </tr>
+                                                            <% } %>
+                                                        </table>
+                                                    </div>
+                                                <% } %>
+                                                
+                                                
         <!-- Add similar sections for other reports -->
 
         <div class="section">
