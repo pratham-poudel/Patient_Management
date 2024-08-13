@@ -22,7 +22,7 @@
 
 .section h2, .section h3 {
     margin-bottom: 10px;
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid #000000;
     padding-bottom: 5px;
 }
 
@@ -34,22 +34,12 @@
 }
 
 .section th, .section td {
-    border: 1px solid #ccc;
+    border: 1px solid #000000;
     padding: 4px; /* Adjust padding */
     text-align: left;
 }
 
-@media print {
-    body {
-        font-size: 10px; /* Further reduce font size for printing */
-    }
-    
-    .container {
-        max-width: none; /* Remove max-width constraint for printing */
-        width: 100%; /* Ensure container takes full width when printed */
-        padding: 10px; /* Adjust padding for printing */
-    }
-}
+
 .sidema{
     display: flex;
     justify-content: space-evenly;
@@ -80,15 +70,17 @@
 <body>
     <div class="container" >
         <h1 style="
+        
         display: flex;
         justify-content: center;
         align-items: center;
     "><%=users.medicalName%> </h1>
-     <h1 style="
+     <h2 style="
+     font-family: monospace;
      display: flex;
      justify-content: center;
      align-items: center;
- ">Lab Report </h1>
+ ">Department of Pathology </h2>
    <div class="right-align">
     <% if (users.date) { %><p>Date: <%= users.date.toDateString() %></p><% } %>
     <% if (users.address) { %><p>Address: <%= users.address %></p><% } %>
@@ -97,13 +89,13 @@
     <% if (users.patientName) { %><p>Patient Name: <%= users.patientName %></p><% } %>
     <% if (users.age) { %><p>Age: <%= users.age %> years</p><% } %>
     <% if (users.sex) { %><p>Sex: <%= users.sex %></p><% } %>
-    <% if (users.doctorName) { %><p>Doctor Name: <%= users.doctorName %></p><% } %>
+    <% if (users.doctorName) { %><p>Referred By: Dr. <%= users.doctorName %></p><% } %>
 </div>
        
 
 
         
-        <% if (users.hb || users.tlc || users.dlc|| users.poly|| users.lympho || users.mono || users.eosino|| users.esr|| users.pcv|| users.bleedingTime|| users.clottingTime|| users.pt|| users.inr || users.plateletCount|| users.reticCount|| users.rbcCount|| users.mcv|| users.mch|| users.mchc ) { %>
+        <% if (users.hb || users.tlc || users.dlc|| users.poly|| users.lympho || users.mono || users.eosino|| users.esr|| users.pcv|| users.bleedingTime|| users.clottingTime|| users.pt|| users.inr || users.plateletCount|| users.reticCount|| users.rbcCount|| users.mcv|| users.mch|| users.mchc ||users.basophil ) { %>
             
             
             
@@ -126,7 +118,14 @@
                         <tr>
                             <td>TLC</td>
                             <td><%= users.tlc %> /Cumm</td>
-                            <td>400011000 /Cumm</td>
+                            <td>4000 - 11000 /Cumm</td>
+                        </tr>
+                    <% } %>
+                    <% if (users.basophil) { %>
+                        <tr>
+                            <td>Basophil</td>
+                            <td><%= users.basophil %> </td>
+                            <td> 0.5–1% of white blood cell count</td>
                         </tr>
                     <% } %>
                     <% if (users.dlc) { %>
@@ -887,7 +886,7 @@
         <!-- Add similar sections for other reports -->
 
         <div class="section">
-           <h3> <% if (users.labAssistant) { %><p>Lab Assistant: <%= users.labAssistant %></p><% } %></h3>
+           <h3> <% if (users.labAssistant) { %><p>Lab Technician: <%= users.labAssistant %></p><% } %></h3>
         </div>
         <h2>Overall Review</h2>
             <div class="review" style="font-family: Arial, sans-serif; background-color: #f9f9f9; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); max-width: 800px; margin: 20px auto;">
