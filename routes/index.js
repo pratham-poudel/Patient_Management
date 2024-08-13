@@ -77,10 +77,10 @@ const apiKey = process.env.GOOGLE_API_KEY;
 const genAI = new GoogleGenerativeAI(apiKey);
 
 async function run(prompt) {
-  const model = genAI.getGenerativeModel({model:"gemini-pro"});
-  const result=await model.generateContent(prompt);
-  const response=await result.response;
-  const text=response.text();
+  const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+  const result = await model.generateContent(prompt);
+  const response = await result.response;
+  const text = response.text();
   return text;
 }
 
@@ -247,7 +247,7 @@ function isLoggedIn(req, res, next) {
 
 router.get("/profile", isLoggedIn, async function (req, res, next) {
   const user = await userModel.findOne({ username: req.session.passport.user }).populate("patient patientlab appointment");
-  
+
   res.render("profile", { user });
 });
 
@@ -367,6 +367,37 @@ router.post("/submitLabReport", async function (req, res) {
       hba1c: req.body.hba1c_result,
       amylase: req.body.amylase_result,
       ckMb: req.body.ck_mb_result,
+      colour: req.body.colour,
+      specificgravity: req.body.specificgravity,
+      appearance: req.body.appearance,
+      chemicalexamination: req.body.chemicalexamination,
+      reaction: req.body.reaction,
+      albumen: req.body.albumen,
+      sugar: req.body.sugar,
+      ketonebodies: req.body.ketonebodies,
+      blood: req.body.blood,
+      puscells: req.body.puscells,
+      rbc: req.body.rbc,
+      epcells: req.body.epcells,
+      crystals: req.body.crystals,
+      cast: req.body.cast,
+      others: req.body.others,
+      pregnancytest: req.body.pregnancytest,
+      colourofstool: req.body.colourofstool,
+      consistancyofstool: req.body.consistancyofstool,
+      mucousofstool: req.body.mucousofstool,
+      chemicalexaminationofstool: req.body.chemicalexaminationofstool,
+      reactionofstool: req.body.reactionofstool,
+      reducingsubstanceofstool: req.body.reducingsubstanceofstool,
+      occultbloodofstool: req.body.occultbloodofstool,
+      protozoalparasitesofstool: req.body.protozoalparasitesofstool,
+      bloodofstool: req.body.bloodofstool,
+      puscellsofstool: req.body.puscellsofstool,
+      rbcofstool: req.body.rbcofstool,
+      helmenthicparasitesofstool: req.body.helmenthicparasitesofstool,
+      othersofstool: req.body.othersofstool,
+      noteofstool: req.body.noteofstool,
+
       labAssistant: req.body.lab_assistant,
     },);
 
@@ -725,7 +756,7 @@ router.get("/toremove/:datass", isLoggedIn, async function (req, res, next) {
   
   `);
   const appointmentIdToRemove = new ObjectId(regex);
-  
+
   await userModel.updateOne(
     { username: req.session.passport.user },
     { $pull: { appointment: appointmentIdToRemove } }
@@ -752,16 +783,16 @@ router.get("/toremove/:datass", isLoggedIn, async function (req, res, next) {
 
 
 router.get("/profiles/:id", isLoggedIn, async function (req, res, next) {
-  
+
   const regex = req.params.id;
   const users = await LabReport.findOne({ _id: regex });
- 
-  if(!users.interpretation){
-    const review= await run(`${users} this is the pathalogy report of a patient , analyze the report and give the overall interpretation of the report in one small paragraph.`);
-    users.interpretation=review;
+
+  if (!users.interpretation) {
+    const review = await run(`${users} this is the pathalogy report of a patient , analyze the report and give the overall interpretation of the non null data from the  report in one small paragraph.`);
+    users.interpretation = review;
     await users.save();
   }
-  
+
 
   res.render("report", { users });
 });
@@ -885,36 +916,36 @@ router.get("/llm", async function (req, res, next) {
 })
 router.post("/submitpatient", async function (req, res, next) {
   const regex = req.body.userId;
-  try{
+  try {
     if (regex.length
       < 24 || regex.length > 24) {
       res.send("Invalid ID")
     } else {
       const user = await patient.findOne({ _id: regex });
       if (user) {
-  
+
         res.redirect(`/submitpatient/${regex}`);
       } else {
-  
+
         res.status(404).send("User not found");
       }
     }
   }
-  catch(err){
+  catch (err) {
     res.send(err.message)
   }
-  
+
 
 
 });
 router.get("/submitpatient/:userId", async function (req, res, next) {
   const userId = req.params.userId;
   try {
-      // Fetch the user data or perform any other necessary operations
-  const users = await patient.findOne({ _id: userId });
+    // Fetch the user data or perform any other necessary operations
+    const users = await patient.findOne({ _id: userId });
 
-  // Render the patientpr template with the user data
-  res.render("patientpr", { users });
+    // Render the patientpr template with the user data
+    res.render("patientpr", { users });
   } catch (error) {
     res.send(error.message)
   }
@@ -938,7 +969,7 @@ router.post("/submitreport", async function (req, res, next) {
   } catch (error) {
     res.send(error.message)
   }
-  
+
 
 
 
@@ -947,24 +978,24 @@ router.post("/submitreport", async function (req, res, next) {
 router.get("/submitreport/:userId", async function (req, res, next) {
   const userId = req.params.userId;
   try {
-     // Fetch the user data or perform any other necessary operations
-  const users = await LabReport.findOne({ _id: userId });
-  if(!users.interpretation){
-    const review= await run(`${users} this is the pathalogy report of a patient , analyze the report and give the overall interpretation of the report in one small paragraph.`)
-    // Render the patientpr template with the user data
-    // res.send(review);
-    users.interpretation=review;
-    await users.save();
+    // Fetch the user data or perform any other necessary operations
+    const users = await LabReport.findOne({ _id: userId });
+    if (!users.interpretation) {
+      const review = await run(`${users} this is the pathalogy report of a patient , analyze the report and give the overall interpretation of the non null data from the report in one small paragraph.`)
+      // Render the patientpr template with the user data
+      // res.send(review);
+      users.interpretation = review;
+      await users.save();
     }
     res.render("patientrp", { users });
-  
-  
-  
+
+
+
 
   } catch (error) {
     res.send(error.message)
   }
- 
+
 
 });
 router.get("/daktars", async function (req, res, next) {
@@ -1091,7 +1122,7 @@ const allMedicines = [
 
 
 router.get('/suggestions', (req, res) => {
- 
+
   const input = req.query.input.toLowerCase();
 
   // Filter medicines that start with the input
@@ -1168,7 +1199,7 @@ router.post("/contactus", async function (req, res, next) {
     </div>
 </body>
 </html>`);
-res.send("Your Message Is Received")
+    res.send("Your Message Is Received")
   } catch (error) {
     res.send(error.message)
   }
@@ -1188,7 +1219,7 @@ router.post("/addmembership", async function (req, res, next) {
     });
     await user.save(); // Save the user to the database
 
-    if (user.email){
+    if (user.email) {
       const emailTemplate = `
       <!DOCTYPE html>
       <html lang="en">
@@ -1263,57 +1294,57 @@ router.post("/addmembership", async function (req, res, next) {
     res.status(500).send(error.message);
   }
 });
-router.get("/addedmemberrequests" , isLoggedIn,async function(req, res, next){
+router.get("/addedmemberrequests", isLoggedIn, async function (req, res, next) {
   const users = await membership.find()
   const unapprovedUsers = [];
   users.forEach(user => {
-    if(!user.approved){
+    if (!user.approved) {
       unapprovedUsers.push(user);
     }
   })
   // res.send(unapprovedUsers)
-  res.render("addedmemberrequests", {unapprovedUsers})
+  res.render("addedmemberrequests", { unapprovedUsers })
 });
-router.post("/approveMembership", async function(req, res, next) {
+router.post("/approveMembership", async function (req, res, next) {
   try {
     const userId = req.body.id;
-   const user = await membership.findOne({ _id: userId });
-   user.approved = true;
+    const user = await membership.findOne({ _id: userId });
+    user.approved = true;
     await user.save();
-   
-   if(user.email){
 
-    await sendEmail(user.email, 'Membership Succesfully Approved', `Your Membership Request has been approved. You can now enjoy the benefits of being a member of our hospital. If you have any questions, feel free to contact us at 076-540531`);
-   }
+    if (user.email) {
+
+      await sendEmail(user.email, 'Membership Succesfully Approved', `Your Membership Request has been approved. You can now enjoy the benefits of being a member of our hospital. If you have any questions, feel free to contact us at 076-540531`);
+    }
     res.send({ message: 'Membership approved successfully' });
   } catch (error) {
     res.status(500).send(error.message);
   }
 });
-router.get("/viewmember",  function(req, res, next){
+router.get("/viewmember", function (req, res, next) {
   res.render("searchmember")
 });
-router.get("/member/:memberId", async function(req, res, next){
+router.get("/member/:memberId", async function (req, res, next) {
   try {
     const regex = req.params.memberId;
-  const users = await membership.findOne({ phone: regex });
- 
-  if(!users){
-    res.send("User Not Found")
-  }else{
-    if(users.approved){
-      res.send(users);
-    }else{
-      res.send("User Not Approved Yet")
+    const users = await membership.findOne({ phone: regex });
+
+    if (!users) {
+      res.send("User Not Found")
+    } else {
+      if (users.approved) {
+        res.send(users);
+      } else {
+        res.send("User Not Approved Yet")
+      }
+
     }
-    
-  }
-  
+
   } catch (error) {
     res.send(error.message)
-    
+
   }
-  
+
 });
 
 
