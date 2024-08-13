@@ -80,12 +80,12 @@
                 <td>Age:</td>
                 <td><input type="number" name="age"></td>
                 <td>Sex:</td>
-                <td><input type="text" name="sex"></td>
+                <td><input type="text" name="sex" required></td>
                 <td>Email</td>
                 <td><input type="text" name="email"></td>
             </tr>
             <tr>
-                <td>Doctor Name:</td>
+                <td>Referred By:</td>
                 <td><input type="text" name="doctor_name" value="<%=user.fullName%>"></td>
                 <td>Date:</td>
                 <td><input type="date" name="date" ></td>
@@ -112,10 +112,16 @@
                 <td>4000-11000/Cumm</td>
             </tr>
             <tr>
+                <td>Basophil</td>
+                <td><input type="text" name="basophil_result"></td>
+                <td>.5% - 1%</td>
+            </tr>
+            <tr>
                 <td>D.L.C</td>
                 <td><input type="text" name="dlc_result"></td>
                 <td></td>
             </tr>
+           
             <tr>
                 <td>Poly</td>
                 <td><input type="text" name="poly_result"></td>

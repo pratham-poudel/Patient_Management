@@ -13,6 +13,7 @@ const labReportSchema = new mongoose.Schema({
     interpretation: { type: String },
     hb: String,
     tlc: String,
+    basophil: String,
     dlc: String,
     poly: String,
     lympho: String,

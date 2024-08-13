@@ -305,6 +305,7 @@ router.post("/submitLabReport", async function (req, res) {
       address: req.body.address, // Use address from req.body if available
       hb: req.body.hb_result,
       tlc: req.body.tlc_result,
+      basophil: req.body.basophil_result,
       dlc: req.body.dlc_result,
       poly: req.body.poly_result,
       lympho: req.body.lympho_result,
