@@ -40,57 +40,68 @@
 }
 
 
-.sidema{
-    display: flex;
-    justify-content: space-evenly;
-    flex-wrap: wrap-reverse;
-    
 
-}
-.sidema p{
-    font-weight: bold;
-    margin-left: 10px;
-}
-.right-align {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            width: 100%;
-            margin-bottom: 20px;
-        }
-        .right-align p {
+
+.right-align p {
             font-weight: bold;
             margin: 0;
             padding: 5px 0;
         }
+.header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: bold;
+    flex-wrap: wrap;
+}
+.lff{
+    h1, h2 {
+    margin: 0; /* Removes all margin */
+    padding: 0; /* Removes all padding */
+    line-height: 1.2; /* Adjusts the spacing between lines (optional) */
+}
+
+h1 {
+    font-size: 35px; /* Adjust font size to make it fit better */
+}
+
+h2 {
+    font-size: 16px;
+    text-decoration: underline;
+}
+}
+.rtt p{
+    margin: 0;
+    padding: 5px 0;
+}
+
 
 
     </style>
 </head>
 <body>
     <div class="container" >
-        <h1 style="
-        
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    "><%=users.medicalName%> </h1>
-     <h2 style="
-     font-family: monospace;
-     display: flex;
-     justify-content: center;
-     align-items: center;
- ">Department of Pathology </h2>
-   <div class="right-align">
-    <% if (users.date) { %><p>Date: <%= users.date.toDateString() %></p><% } %>
-    <% if (users.address) { %><p>Address: <%= users.address %></p><% } %>
-</div>
-<div class="sidema">
-    <% if (users.patientName) { %><p>Patient Name: <%= users.patientName %></p><% } %>
-    <% if (users.age) { %><p>Age: <%= users.age %> years</p><% } %>
-    <% if (users.sex) { %><p>Sex: <%= users.sex %></p><% } %>
-    <% if (users.doctorName) { %><p>Referred By: Dr. <%= users.doctorName %></p><% } %>
-</div>
+        <div class="header">
+            <div class="lff">
+                <h1><%=users.medicalName%> </h1>
+             <h2>Department of Pathology </h2>
+           <div class="right-align">
+            <% if (users.date) { %><p>Date: <%= users.date.toDateString() %></p><% } %>
+            <% if (users.address) { %><p>Address: <%= users.address %></p><% } %>
+        </div>
+            </div>
+            <div class="rtt">
+                <div class="sidema">
+                    <% if (users.patientName) { %><p>Patient Name: <%= users.patientName %></p><% } %>
+                    <% if (users.age) { %><p>Age: <%= users.age %> years</p><% } %>
+                    <% if (users.sex) { %><p>Sex: <%= users.sex %></p><% } %>
+                    <% if (users.doctorName) { %><p>Referred By: Dr. <%= users.doctorName %></p><% } %>
+                </div>
+            </div>
+          
+    
+        </div>
+       
        
 
 
@@ -888,12 +899,13 @@
         <div class="section">
            <h3> <% if (users.labAssistant) { %><p>Lab Technician: <%= users.labAssistant %></p><% } %></h3>
         </div>
-        <h2>Overall Review</h2>
-            <div class="review" style="font-family: Arial, sans-serif; background-color: #f9f9f9; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); max-width: 800px; margin: 20px auto;">
-                <% if (users.interpretation) { %>
-                    <p><%= users.interpretation %></p>
-                <% } %>
-            </div>
+        <h2 style="font-size: 16px; margin-bottom: 10px;">Overall Review</h2>
+<div class="review" >
+    <% if (users.interpretation) { %>
+        <p style="margin: 0; font-size: 10px;"><%= users.interpretation %></p> <!-- Removed extra margin from <p> -->
+    <% } %>
+</div>
+
     </div>
 </body>
 </html>
