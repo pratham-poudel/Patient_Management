@@ -1,16 +1,18 @@
 var express = require("express");
-const mongoose = require('mongoose');
+const jwt = require("jsonwebtoken");
+
 var router = express.Router();
 const userModel = require("./users");
 const upload = require("./multer");
 const passport = require("passport");
 const localStrategy = require("passport-local");
-const bcrypt = require("bcrypt");
+
 const LabReport = require("./lab"); // Import your LabReport model
 const patient = require("./patient");
 const Appointment = require("./appointment")
 const nodemailer = require('nodemailer');
-const QRCode = require('qrcode');
+
+
 const membership = require("./membership");
 require('dotenv').config();
 
@@ -134,7 +136,7 @@ router.post(
       return res.status(400).send("No files were uploaded");
     }
     const user = await userModel.findOne({
-      username: req.session.passport.user,
+      username: req.username,
     });
     user.nickname = req.body.nickname;
     user.bio = req.body.bio;
@@ -212,16 +214,29 @@ router.get("/login", function (req, res, next) {
 
 
 
-router.post(
-  "/login",
-  passport.authenticate("local", {
-    successRedirect: "/profile",
-    failureRedirect: "/",
-  }),
-  function (req, res) {
-    res.render("index");
-  }
-);
+
+  router.post("/login", async function (req, res) {
+    try {
+      const token = jwt.sign({ username: req.body.username }, process.env.JWT_SECRET, { expiresIn: '100y' }); // Set to a very long time if needed
+
+      const user = await userModel.findOne({ username: req.body.username });
+      res.cookie("doctoken", token);
+      if (user) {
+        if (user.username == req.body.username && user.password == req.body.password) {
+          res.redirect("/profile");
+        } else {
+          res.send("Invalid Credentials")
+        }
+      }
+
+
+    } catch (error) {
+      res.send(error)
+    }
+
+
+  });
+
 
 router.get("/register", function (req, res, next) {
   res.render("register");
@@ -230,23 +245,36 @@ router.get("/register", function (req, res, next) {
 router.get("/registerbyadmin", function (req, res, next) {
   res.render("registeradmin");
 });
-router.get("/logout", function (req, res, next) {
-  req.logout(function (err) {
-    if (err) {
-      return next(err);
-    }
-    res.redirect("/");
-  });
+router.get("/logout", isLoggedIn, function (req, res, next) {
+  res.clearCookie("doctoken");
+  res.redirect("/login");
 });
+
 function isLoggedIn(req, res, next) {
-  if (req.isAuthenticated()) {
-    return next();
+  try {
+    // Check if the token is present
+    if (req.cookies.doctoken) {
+      // Verify the JWT token
+      const decodedToken = jwt.verify(req.cookies.doctoken, process.env.JWT_SECRET);
+
+      // Assign username or payload to the request object
+      req.username = decodedToken.username; // Extract username or other payload
+
+      // Proceed to the next middleware or route handler
+      next();
+    } else {
+      // Redirect to login if token is not present
+      res.redirect("/login");
+    }
+  } catch (error) {
+    // If token is invalid or verification fails, redirect to login
+    res.redirect("/login");
   }
-  res.redirect("/");
 }
 
+
 router.get("/profile", isLoggedIn, async function (req, res, next) {
-  const user = await userModel.findOne({ username: req.session.passport.user }).populate("patient patientlab appointment");
+  const user = await userModel.findOne({ username: req.username }).populate("patient patientlab appointment");
 
   res.render("profile", { user });
 });
@@ -260,7 +288,7 @@ router.get("/change", function (req, res, next) {
 });
 
 router.post("/change", async function (req, res, next) {
-  const user = await userModel.findOne({ username: req.session.passport.user });
+  const user = await userModel.findOne({ username: req.username });
   if (req.body.newpassword != req.body.confirmnewpassword) {
     res.send("Error New Password was not confirmed due to typo");
   } else if (req.body.currentpassword != user.password) {
@@ -276,7 +304,7 @@ router.post("/change", async function (req, res, next) {
 });
 
 router.get("/lreport", async function (req, res, next) {
-  const user = await userModel.findOne({ username: req.session.passport.user });
+  const user = await userModel.findOne({ username: req.username });
   res.render("lreport", {
     successMessage: req.flash("success"),
     errorMessage: req.flash("error"),
@@ -286,7 +314,7 @@ router.get("/lreport", async function (req, res, next) {
 router.post("/submitLabReport", async function (req, res) {
   try {
     const doctor = await userModel.findOne({
-      username: req.session.passport.user,
+      username: req.username,
     });
 
     if (!doctor) {
@@ -464,7 +492,7 @@ router.get("/patient/:patientId", isLoggedIn, async function (req, res, next) {
   const regex = req.params.patientId;
   const users = await LabReport.findOne({ _id: regex });
   const doctor = await userModel.findOne({
-    username: req.session.passport.user,
+    username: req.username,
   });
 
   res.render("report", { users, doctor });
@@ -479,7 +507,7 @@ router.get("/patient", function (req, res, next) {
 
 router.post("/patient", async function (req, res) {
   const doctors = await userModel.findOne({
-    username: req.session.passport.user,
+    username: req.username,
   });
 
   const userdata = await new patient({
@@ -679,7 +707,7 @@ router.get("/toremove/:datass", isLoggedIn, async function (req, res, next) {
 
 
 
-  const docs = await userModel.findOne({ username: req.session.passport.user })
+  const docs = await userModel.findOne({ username: req.username })
   await sendEmail(patientss.email, `Thank You for Choosing ${docs.medicalname} for Your Recent Checkup`, `
   
   <!DOCTYPE html>
@@ -760,7 +788,7 @@ router.get("/toremove/:datass", isLoggedIn, async function (req, res, next) {
   const appointmentIdToRemove = new ObjectId(regex);
 
   await userModel.updateOne(
-    { username: req.session.passport.user },
+    { username: req.username },
     { $pull: { appointment: appointmentIdToRemove } }
   );
 
@@ -904,7 +932,7 @@ router.post("/appointments", async function (req, res, next) {
 
 router.get("/viewappoint", async function (req, res, next) {
   const doctor = await userModel.findOne({
-    username: req.session.passport.user
+    username: req.username
   }).populate("appointment")
 
 
