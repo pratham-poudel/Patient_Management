@@ -106,6 +106,7 @@ const labReportSchema = new mongoose.Schema({
     helmenthicparasitesofstool: String,
     othersofstool: String,
     noteofstool: String,
+    noteofwidaltest: String,
 
     labAssistant: { type: String }
 });

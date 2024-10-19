@@ -398,6 +398,7 @@ router.post("/submitLabReport", async function (req, res) {
       helmenthicparasitesofstool: req.body.helmenthicparasitesofstool,
       othersofstool: req.body.othersofstool,
       noteofstool: req.body.noteofstool,
+      noteofwidaltest: req.body.noteofwidaltest,
 
       labAssistant: req.body.lab_assistant,
     },);
