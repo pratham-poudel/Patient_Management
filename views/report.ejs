@@ -71,8 +71,8 @@ h2 {
 }
 }
 .rtt p{
-    margin: 0;
-    padding: 5px 0;
+    margin: 2px;
+    padding: 3px 0;
 }
 
 
@@ -362,29 +362,40 @@ h2 {
                             <tr>
                                 <th>Test</th>
                                 <th>Result</th>
+                                <th>Reference Value</th>
                             </tr>
                             <% if (users.sTyphiO) { %>
                                 <tr>
                                     <td>S. Typhi 'O'</td>
                                     <td><%= users.sTyphiO %></td>
+                                    <td>>1:80 (TITRE)</td>
                                 </tr>
                             <% } %>
                             <% if (users.sTyphiH) { %>
                                 <tr>
                                     <td>S. Typhi 'H'</td>
                                     <td><%= users.sTyphiH %></td>
+                                    <td>>1:160(TITRE)</td>
                                 </tr>
                             <% } %>
                             <% if (users.sParaTyphiAH) { %>
                                 <tr>
                                     <td>S. Para Typhi 'AH'</td>
                                     <td><%= users.sParaTyphiAH %></td>
+                                    <td>>1:320 (TITRE)</td>
                                 </tr>
                             <% } %>
                             <% if (users.sParaTyphiBH) { %>
                                 <tr>
                                     <td>S. Para Typhi 'BH'</td>
                                     <td><%= users.sParaTyphiBH %></td>
+                                    <td>>1:320 (TITRE)</td>
+                                </tr>
+                            <% } %>
+                            <% if (users.noteofwidaltest) { %>
+                                <tr>
+                                    <td>Note</td>
+                                    <td><%= users.noteofwidaltest %></td>
                                 </tr>
                             <% } %>
                         </table>
