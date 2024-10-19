@@ -303,7 +303,7 @@ router.post("/change", async function (req, res, next) {
   }
 });
 
-router.get("/lreport", async function (req, res, next) {
+router.get("/lreport",isLoggedIn ,async function (req, res, next) {
   const user = await userModel.findOne({ username: req.username });
   res.render("lreport", {
     successMessage: req.flash("success"),
@@ -311,7 +311,7 @@ router.get("/lreport", async function (req, res, next) {
     user
   });
 });
-router.post("/submitLabReport", async function (req, res) {
+router.post("/submitLabReport",isLoggedIn ,async function (req, res) {
   try {
     const doctor = await userModel.findOne({
       username: req.username,
