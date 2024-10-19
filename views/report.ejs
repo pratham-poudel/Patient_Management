@@ -132,13 +132,7 @@ h2 {
                             <td>4000 - 11000 /Cumm</td>
                         </tr>
                     <% } %>
-                    <% if (users.basophil) { %>
-                        <tr>
-                            <td>Basophil</td>
-                            <td><%= users.basophil %> </td>
-                            <td> 0.5–1% of white blood cell count</td>
-                        </tr>
-                    <% } %>
+                    
                     <% if (users.dlc) { %>
                         <tr>
                             <td>DLC</td>
@@ -172,6 +166,13 @@ h2 {
                             <td>EOSINO</td>
                             <td><%= users.eosino %>%</td>
                             <td>1-6%</td>
+                        </tr>
+                    <% } %>
+                    <% if (users.basophil) { %>
+                        <tr>
+                            <td>Basophil</td>
+                            <td><%= users.basophil %> </td>
+                            <td> 0.5–1% of white blood cell count</td>
                         </tr>
                     <% } %>
                     <% if (users.esr) { %>
