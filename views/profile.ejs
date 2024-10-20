@@ -1,102 +1,295 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <link rel="stylesheet" href="/stylesheets/profile.css">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Profile</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Profile</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <style>
+      :root {
+          --primary-color: #4a90e2;
+          --secondary-color: #f5a623;
+          --tertiary-color: #7ed321;
+          --background-color: #f0f4f8;
+          --text-color: #333;
+          --light-text-color: #666;
+          --shadow-color: rgba(0, 0, 0, 0.1);
+      }
+
+      * {
+          box-sizing: border-box;
+          margin: 0;
+          padding: 0;
+      }
+
+      body {
+          font-family: 'Poppins', sans-serif;
+          line-height: 1.6;
+          color: var(--text-color);
+          background-color: var(--background-color);
+      }
+
+      .container {
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 20px;
+      }
+
+      header {
+          background-color: white;
+          border-radius: 15px;
+          padding: 30px;
+          margin-bottom: 20px;
+          box-shadow: 0 4px 15px var(--shadow-color);
+          text-align: center;
+      }
+
+      .profile-info {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin-bottom: 20px;
+      }
+
+      .profile-pic {
+          width: 150px;
+          height: 150px;
+          border-radius: 50%;
+          object-fit: cover;
+          margin-right: 20px;
+          border: 3px solid var(--primary-color);
+      }
+
+      .doctor-details h1 {
+          font-size: 2.5em;
+          margin-bottom: 10px;
+          color: var(--primary-color);
+      }
+
+      .doctor-details p {
+          color: var(--light-text-color);
+          margin-bottom: 5px;
+          font-size: 1.1em;
+      }
+
+      .bio {
+          font-style: italic;
+          color: var(--light-text-color);
+          margin-bottom: 20px;
+          text-align: center;
+      }
+
+      .action-buttons, .function-buttons,a {
+        text-decoration: none;
+          display: flex;
+          flex-wrap: wrap;
+          gap: 15px;
+          justify-content: center;
+          margin-bottom: 20px;
+      }
+
+      .btn {
+          padding: 12px 30px;
+          border: none;
+          border-radius: 25px;
+          cursor: pointer;
+          font-size: 1em;
+          transition: all 0.3s ease;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          box-shadow: 0 2px 8px var(--shadow-color);
+      }
+
+      .btn i {
+          margin-right: 8px;
+      }
+
+      .btn.primary {
+          background-color: var(--primary-color);
+          color: white;
+      }
+
+      .btn.secondary {
+          background-color: var(--secondary-color);
+          color: white;
+      }
+
+      .btn.tertiary {
+          background-color: var(--tertiary-color);
+          color: white;
+      }
+
+      .btn.function {
+          background-color: white;
+          color: var(--primary-color);
+          border: 2px solid var(--primary-color);
+      }
+
+      .btn:hover {
+          transform: translateY(-3px);
+          box-shadow: 0 4px 12px var(--shadow-color);
+      }
+
+      .lab-reports {
+          background-color: white;
+          border-radius: 15px;
+          padding: 30px;
+          box-shadow: 0 4px 15px var(--shadow-color);
+      }
+
+      .lab-reports h2 {
+          margin-bottom: 20px;
+          color: var(--primary-color);
+          font-size: 1.8em;
+          text-align: center;
+      }
+
+      .lab-report {
+          border-bottom: 1px solid #eee;
+          padding: 15px 0;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+      }
+
+      .lab-report:last-child {
+          border-bottom: none;
+      }
+
+      .lab-report-info {
+          flex-grow: 1;
+      }
+
+      .lab-report-info h3 {
+          margin-bottom: 5px;
+      }
+
+      .lab-report-info p {
+          color: var(--light-text-color);
+          font-size: 0.9em;
+      }
+
+      .view-report {
+          background-color: var(--primary-color);
+          color: white;
+          padding: 8px 15px;
+          border-radius: 5px;
+          text-decoration: none;
+          font-size: 0.9em;
+          transition: background-color 0.3s ease;
+      }
+
+      .view-report:hover {
+          background-color: #357abf;
+      }
+
+      @media (max-width: 768px) {
+          .profile-info {
+              flex-direction: column;
+          }
+
+          .profile-pic {
+              margin-bottom: 20px;
+          }
+
+          .action-buttons, .function-buttons {
+              flex-direction: column;
+              width: 100%;
+          }
+
+          .btn {
+              width: 100%;
+          }
+      }
+    </style>
 </head>
 <body>
-  <div class="nav">
-    <span id="runningTime"></span>
-    <span id="currentDay"></span>
-  </div>
-  <div class="main">
-  <div class="top">
-    <div class="medi"><h3><%=user.medicalname%></h3></div>
-    <div class="prff">
-      <img src="/images/uploads/<%= user.profilePic %>" >
-        <h1><%= user.nickname %></h1>
-    </div>
-    <div class="infos">
-      <div class="welcome"><h1>Welcome <%= user.fullName %> </h1></div>
-      <div class="bio">
-        <p>"  <%= user.bio %> "</p>
-      </div>
-      <div class="buttons">
-     
-         
-        <a href="/edit"><button>Edit Profile
-        </button></a>
-        <a href="/logout"><button>Log Out
-        </button></a>
-        <% if (user._id.toString() === '65e605366fc67ab673c80ad4' ) { %>
-          <!-- Show the button if user is an admin -->
-          <a href="/register"><button>Register New Doctor</button></a>
-          <a href="/addedmemberrequests"><button>Membership Request</button></a>
-        <% } %>
-        <a href="/daktar"><button>View All Doctors</button></a>
+    <div class="container">
+        <header>
+            <div class="profile-info">
+                <img src="/images/uploads/<%= user.profilePic %>" alt="Doctor's profile picture" class="profile-pic">
+                <div class="doctor-details">
+                    <h1 id="doctorName">Dr. <%= user.fullName %></h1>
+                    <p id="username">@<%= user.nickname %></p>
+                    <p id="hospital"><%=user.medicalname%></p>
+                </div>
+            </div>
+            <div class="bio" id="doctorBio">
+              <%=user.bio%>
+            </div>
+        </header>
         
-      </div>
-    </div>
-  </div>
-  <div class="down">
-   <div class="rght">
-    <a href="/patient"><button>New Patient</button></a>
-    <a href="/lreport"><button>Create Lab Report</button></a>
-    <a href="/search"><button>Search Patients in Lab</button></a>
-    <a href="/searchmedical"><button>Search Patients In Medical</button></a>
-    <a href="/viewappoint"><button>View Your Appointments</button></a>
-    <a href="/viewmember"><button>Check Member</button></a> 
-   </div>
-  </div>
-  </div>
-  <div class="ptnt" style="    display: flex;
-  justify-content: space-between; margin: 50px 100px;">
-    <div class="lt">
-      <h2>Patients In Medical</h2>
-      <div class="dtls">
-        <% user.patient.forEach(function(elem){
-          %>
-          <h3><a href="#" data-id="<%= elem._id %>" class="jh"><%= elem.name %> </a><%= elem.formatime %>
-          </a> </h3>
-          <%
-  
-        })%>
-      </div>
+        <section class="action-buttons">
+            <a href="/edit"><button class="btn primary" id="editProfile"><i class="fas fa-edit"></i>Edit Profile</button></a>
+            <a href="/logout"><button class="btn secondary" id="logout"><i class="fas fa-sign-out-alt"></i>Logout</button></a>
+            <% if (user._id.toString() === '65e605366fc67ab673c80ad4' ) { %>
+              <a href="/register"><button class="btn tertiary" id="registerDoctor"><i class="fas fa-user-plus"></i>Register a Doctor</button></a>
+              <a href="/addedmemberrequests"><button class="btn tertiary" id="registerDoctor"><i class="fas fa-user-plus"></i>Membership Requests</button></a>
+            <% } %>
+            
+        </section>
+        
+        <section class="function-buttons">
+          <a href="/lreport"><button class="btn function"><i class="fas fa-file-medical-alt"></i>Create Lab Report</button></a>
+          <a href="/search"><button class="btn function"><i class="fas fa-search"></i>Search Lab Report</button></a>
+          <a href="/viewappoint"><button class="btn function"><i class="fas fa-calendar-alt"></i>View Your Appointments</button></a>
+          <a href="/viewmember"><button class="btn function"><i class="fas fa-users"></i>Check Member</button></a>
+      </section>
+      
+        
+        <section class="lab-reports">
+            <h2>Lab Reports</h2>
+            <div id="labReportsList">
+              <% user.patientlab.slice().reverse().forEach(function(elem){ 
+                %>
 
-    </div>
-    <div class="rt">
-      <h2>Patients in Lab</h2>
-      <div class="dtls">
-        <% user.patientlab.forEach(function(elem){
-          %>
-          <h3><a href="#" data-id="<%= elem._id %>" class="hj"><%= elem.patientName %></a><%= elem.formatime %>
-          </a> </h3>
-          <%
-  
-        })%>
-      </div>
-    </div>
-  </div>
-  <script>
-    click = document.querySelectorAll('.jh')
-    click.forEach(function(event){
-      event.addEventListener("click",function(elem){
-        elem.preventDefault()
-        id = event.dataset.id
-        window.location.href = `/profile/${id}`;
-      })
-    })
+                
 
-    click = document.querySelectorAll('.hj')
-    click.forEach(function(event){
-      event.addEventListener("click",function(elem){
-        elem.preventDefault()
-        id = event.dataset.id
-        window.location.href = `/profiles/${id}`;
-      })
-    })
-  </script>
+
+                <div class="lab-report-info">
+                  <h3><%= elem.patientName %></h3>
+                  <p><%= elem.date %></p>
+              </div>
+              <a href="/profiles/<%= elem._id %>" class="view-report" data-id="<%= elem._id %>">View Report</a>
+                <%
+        
+              })%>
+            </div>
+        </section>
+    </div>
+    
+    <script >
+      // Simulated lab reports data (replace this with actual data fetching logic)
+const labReports = [
+    { id: 1, patientName: "John Doe", date: "2023-05-15", type: "Blood Test" },
+    { id: 2, patientName: "Jane Smith", date: "2023-05-16", type: "X-Ray" },
+    { id: 3, patientName: "Alice Johnson", date: "2023-05-17", type: "MRI" },
+    { id: 4, patientName: "Bob Williams", date: "2023-05-18", type: "CT Scan" },
+    { id: 5, patientName: "Emma Brown", date: "2023-05-19", type: "Ultrasound" }
+];
+
+// Function to populate lab reports
+function populateLabReports() {
+    const labReportsList = document.getElementById('labReportsList');
+    labReportsList.innerHTML = '';
+
+    labReports.forEach(report => {
+        const reportElement = document.createElement('div');
+        reportElement.className = 'lab-report';
+        reportElement.innerHTML = `
+            <div class="lab-report-info">
+                <h3>${report.patientName}</h3>
+                <p>${report.type} - ${report.date}</p>
+            </div>
+            <a href="#" class="view-report" data-id="${report.id}">View Report</a>
+        `;
+        labReportsList.appendChild(reportElement);
+    });
+
+  }
+    </script>
 </body>
 </html>
