@@ -1,13 +1,13 @@
 const mongoose = require('mongoose');
 const plm=require('passport-local-mongoose');
 require('dotenv').config();
-// const mongoURI = process.env.MONGODB_URI;
-// mongoose.connect(mongoURI).then(() => {
-//   console.log('Connected to the database');
-// });
-mongoose.connect('mongodb://127.0.0.1:27017/ganapati').then(() => {
+const mongoURI = process.env.MONGODB_URI;
+mongoose.connect(mongoURI).then(() => {
   console.log('Connected to the database');
 });
+// mongoose.connect('mongodb://127.0.0.1:27017/ganapati').then(() => {
+//   console.log('Connected to the database');
+// });
 
 
 const userSchema = new mongoose.Schema({
