@@ -930,7 +930,7 @@ router.post("/appointments", async function (req, res, next) {
   }
 });
 
-router.get("/viewappoint", async function (req, res, next) {
+router.get("/viewappoint", isLoggedIn,async function (req, res, next) {
   const doctor = await userModel.findOne({
     username: req.username
   }).populate("appointment")
