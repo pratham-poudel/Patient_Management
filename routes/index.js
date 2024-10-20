@@ -828,15 +828,19 @@ router.get("/profiles/:id", isLoggedIn, async function (req, res, next) {
 });
 
 router.get("/appointment", async function (req, res, next) {
-  const users = await userModel.find()
+  const users = await userModel.find(
+    { fullName: { $ne: "Pratham Poudel" } }, // Exclude user with fullName "Pratham Poudel"
+    { fullName: 1, speciality: 1,profilePic:1 } // Include only fullName and speciality
+  );
 
   res.render("appoint", {
     users: users,
     successMessage: req.flash("success"),
     errorMessage: req.flash("error"),
   });
+});
 
-})
+
 
 router.post("/appointments", async function (req, res, next) {
   try {

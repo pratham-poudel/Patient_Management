@@ -1,35 +1,49 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Appointment Form</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f3f4f6;
             margin: 0;
             padding: 0;
             display: flex;
             justify-content: center;
-            align-items: center;
-            height: 100vh;
+            align-items: flex-start;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 600px;
+            width: 100%;
+            padding: 20px;
+            margin-top: 50px;
         }
 
         form {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            width: 400px;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            color: #333;
+            font-size: 24px;
+            text-align: center;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 10px;
         }
 
         label {
             display: block;
-            margin-top: 10px;
-            font-weight: bold;
+            margin-top: 15px;
+            font-weight: 600;
             color: #333;
         }
 
@@ -39,21 +53,24 @@
         textarea,
         select {
             width: 100%;
-            padding: 10px;
+            padding: 12px;
             margin-top: 5px;
             border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
+            border-radius: 6px;
+            font-size: 16px;
         }
 
         input[type="submit"] {
-            margin-top: 20px;
-            padding: 10px;
+            width: 100%;
+            padding: 12px;
+            margin-top: 30px;
             background-color: #4CAF50;
-            color: white;
+            color: #ffffff;
+            font-weight: bold;
             border: none;
-            border-radius: 4px;
+            border-radius: 6px;
             cursor: pointer;
+            transition: background-color 0.3s ease;
         }
 
         input[type="submit"]:hover {
@@ -64,120 +81,170 @@
             resize: vertical;
         }
 
-        .flash {
-            margin-bottom: 20px;
+        /* Custom Dropdown Styles */
+        .custom-select {
+            position: relative;
+            width: 100%;
+            margin-top: 5px;
         }
 
-        .alert {
-            padding: 15px;
-            margin-bottom: 20px;
-            border: 1px solid transparent;
-            border-radius: 4px;
+        .custom-select select {
+            display: none; /* Hide default select */
         }
 
-        .alert-success {
-            background-color: #dff0d8;
-            border-color: #d6e9c6;
-            color: #3c763d;
+        .select-selected {
+            background-color: #ffffff;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            position: relative;
         }
 
-        .alert-danger {
-            background-color: #f2dede;
-            border-color: #ebccd1;
-            color: #a94442;
+        .select-selected:after {
+            content: "";
+            position: absolute;
+            top: 14px;
+            right: 10px;
+            border: 6px solid transparent;
+            border-color: #333 transparent transparent transparent;
         }
 
-        /* New styles for the specialization div */
-        .specialization {
-            background-color: #4CAF50;
-            color: white;
-            padding: 20px;
-            border-radius: 8px;
-            margin-left: 20px;
-            flex-shrink: 0;
-            text-align: center;
+        .select-items {
+            position: absolute;
+            background-color: #ffffff;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            width: 100%;
+            z-index: 99;
+            max-height: 200px;
+            overflow-y: auto;
+            display: none;
         }
 
-        /* New styles for the doctors list div */
-        .doctors-list {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
-            margin-left: 20px;
-            flex-shrink: 0;
+        .select-items div {
+            padding: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
-        .doctors-list h3 {
-            color: #333;
-            margin-bottom: 10px;
+        .select-items div:hover {
+            background-color: #f0f0f0;
         }
 
-        .doctor-item {
-            margin-bottom: 8px;
+        .select-items img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+
+        .select-selected.active + .select-items {
+            display: block;
+        }
+
+        .doctor-selected {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .doctor-selected img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
         }
     </style>
 </head>
 
 <body>
-    <div class="flash">
-        <% if (successMessage) { %>
-        <div class="alert alert-success">
-            <a href="/profile"><%= successMessage %> </a>
-        </div>
-        <% } %>
+    <div class="container">
+        <!-- Appointment Form -->
+        <form action="/appointments" method="POST">
+            <h2>Book an Appointment</h2>
 
-        <% if (errorMessage) { %>
-        <div class="alert alert-danger">
-            <%= errorMessage %>
-        </div>
-        <% } %>
+            <!-- Flash Messages -->
+            <div class="flash">
+                <% if (successMessage) { %>
+                <div class="alert alert-success">
+                    <%= successMessage %>
+                </div>
+                <% } %>
+
+                <% if (errorMessage) { %>
+                <div class="alert alert-danger">
+                    <%= errorMessage %>
+                </div>
+                <% } %>
+            </div>
+
+            <!-- Form Fields -->
+            <label for="patientName">Patient Name:</label>
+            <input type="text" id="patientName" name="patientName" required>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="connumber">Contact Number:</label>
+            <input type="text" id="connumber" name="connumber" value="+91" required>
+
+            <!-- Doctor Selection Custom Dropdown -->
+            <label for="doctor">Select Doctor:</label>
+            <div class="custom-select">
+                <div class="select-selected">Select Doctor</div>
+                <div class="select-items">
+                    <% users.forEach(function (elem) { %>
+                    <div class="doctor-item" data-value="<%= elem.fullName %>">
+                        <img src="/images/uploads/<%= elem.profilePic %>" alt="Doctor <%= elem.fullName %>">
+                        <div>
+                            <strong>Dr. <%= elem.fullName %></strong><br>
+                            <span><%= elem.speciality %></span>
+                        </div>
+                    </div>
+                    <% }) %>
+                </div>
+                <input type="hidden" id="doctorName" name="doctorName" required>
+            </div>
+
+            <label for="severityLevel">Severity Level:</label>
+            <select id="severityLevel" name="severityLevel" required>
+                <option value="Low">Low</option>
+                <option value="Moderate">Moderate</option>
+                <option value="High">High</option>
+            </select>
+
+            <label for="appointmentDate">Appointment Date:</label>
+            <input type="datetime-local" id="appointmentDate" name="appointmentDate" required>
+
+            <label for="notes">Notes:</label>
+            <textarea id="notes" name="notes" rows="4"></textarea>
+
+            <input type="submit" value="Submit">
+        </form>
     </div>
-    <form action="/appointments" method="POST">
-        <label for="patientName">Patient Name:</label>
-        <input type="text" id="patientName" name="patientName" required>
 
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required>
+    <script>
+        // Custom dropdown logic
+        document.querySelector('.select-selected').addEventListener('click', function () {
+            this.classList.toggle('active');
+        });
 
-        <label for="connumber">Contact Number:</label>
-        <input type="text" id="connumber" name="connumber" value="+91" required>
-
-        <label for="doctorName">Doctor Name:</label>
-        <input type="text" id="doctorName" name="doctorName" required>
-
-        <label for="severityLevel">Severity Level:</label>
-        <select id="severityLevel" name="severityLevel">
-            <option value="Low">Low</option>
-            <option value="Moderate">Moderate</option>
-            <option value="High">High</option>
-        </select>
-
-        <label for="appointmentDate">Appointment Date:</label>
-        <input type="datetime-local" id="appointmentDate" name="appointmentDate" required>
-
-        <label for="notes">Notes:</label>
-        <textarea id="notes" name="notes"></textarea>
-
-        <input type="submit" value="Submit">
-    </form>
-
-    <!-- Doctor Specialization div -->
-    
-
-    <!-- Doctors List div -->
-    <div class="doctors-list">
-        <h3>Doctors List</h3>
-        <% users.forEach(function(elem){
-            %>
-            <div class="doctor-item"> Dr. <%=elem.fullName%> -<%=elem.speciality%></div>
-            <%
-
-        })%>
-        
-        
-        <!-- Add more doctor items as needed -->
-    </div>
+        document.querySelectorAll('.doctor-item').forEach(item => {
+            item.addEventListener('click', function () {
+                const selectedText = item.querySelector('strong').textContent;
+                const selectedImg = item.querySelector('img').src;
+                document.querySelector('.select-selected').innerHTML = `<div class="doctor-selected">
+                    <img src="${selectedImg}" alt="${selectedText}">
+                    <span>${selectedText}</span>
+                </div>`;
+                document.getElementById('doctorName').value = item.dataset.value;
+                document.querySelector('.select-items').style.display = 'none';
+                document.querySelector('.select-selected').classList.remove('active');
+            });
+        });
+    </script>
 </body>
 
 </html>
