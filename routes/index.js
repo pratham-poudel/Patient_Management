@@ -359,6 +359,7 @@ router.post("/submitLabReport",isLoggedIn ,async function (req, res) {
       hcv: req.body.hcv_result,
       vdrl: req.body.vdrl_result,
       dengue: req.body.dengue_result,
+      scrub:req.body.scrub,
       mp: req.body.mp_result,
       troponin: req.body.troponin_result,
       sTyphiO: req.body.s_typhi_o_result,
