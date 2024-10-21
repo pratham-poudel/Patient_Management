@@ -11,6 +11,7 @@ const LabReport = require("./lab"); // Import your LabReport model
 const patient = require("./patient");
 const Appointment = require("./appointment")
 const nodemailer = require('nodemailer');
+const Invoice = require("./saman");
 
 
 const membership = require("./membership");
@@ -158,14 +159,10 @@ router.post("/register", async function (req, res) {
     connumber: req.body.connumber,
     address: req.body.address,
   });
-
-  userModel
-    .register(userdata, req.body.password)
-    .then(function (registereduser) {
-      passport.authenticate("local")(req, res, function () {
-        res.redirect("/profile");
-      });
-    });
+ const token = await jwt.sign({ username: req.body.username }, process.env.JWT_SECRET, { expiresIn: '100y' }); // Set to a very long time if needed
+ res.cookie("doctoken", token);
+  await userdata.save();
+ 
   await sendEmail(userdata.email, 'Succesfully Registered', `
     <!DOCTYPE html>
 <html lang="en">
@@ -198,6 +195,7 @@ router.post("/register", async function (req, res) {
 </html>
 
     `);
+    res.redirect("/profile");
 });
 
 /* GET home page. */
@@ -275,8 +273,17 @@ function isLoggedIn(req, res, next) {
 
 router.get("/profile", isLoggedIn, async function (req, res, next) {
   const user = await userModel.findOne({ username: req.username }).populate("patient patientlab appointment");
+  if(user.type == "doctor"){
+    res.render("doctorprofile", { user });
+  }else if(user.type == "account"){
+    res.render("accountprofile", { user });
+  }else if(user.type == "admin"){
+    res.render("adminprofile", { user });
+  }else if(user.type == "superadmin"){
+    res.render("adminprofile", { user });
+  }
 
-  res.render("profile", { user });
+  
 });
 
 router.get("/edit", function (req, res, next) {
@@ -831,10 +838,12 @@ router.get("/profiles/:id", isLoggedIn, async function (req, res, next) {
 
 router.get("/appointment", async function (req, res, next) {
   const users = await userModel.find(
-    { fullName: { $ne: "Pratham Poudel" } }, // Exclude user with fullName "Pratham Poudel"
-    { fullName: 1, speciality: 1,profilePic:1 } // Include only fullName and speciality
+    { type: { $in: ["doctor", "superadmin"] } }, // Include users whose type is "doctor" or "superadmin"
+    { fullName: 1, speciality: 1, profilePic: 1 } // Include only fullName, speciality, and profilePic
   );
-
+  
+  
+  
   res.render("appoint", {
     users: users,
     successMessage: req.flash("success"),
@@ -1383,9 +1392,126 @@ router.get("/member/:memberId", async function (req, res, next) {
   }
 
 });
+router.get("/createInvoice",  function (req, res, next) {
+  res.render("createInvoice");
+});
+router.post('/submit-invoice', async (req, res) => {
+  try {
+    const { customer, items, totalPrice } = req.body;
 
+    // Create a new invoice instance
+    const newInvoice = new Invoice({
+      type:'Invoice',
+      customer: {
+        name: customer.name,
+        address: customer.address,
+        age: customer.age,
+        phone: customer.phone,
+      },
+      items: items.map(item => ({
+        name: item.name,
+        quantity: item.quantity,
+        price: item.price,
+        total: item.quantity * item.price,
+      })),
+      totalPrice: totalPrice,
+    });
 
+    // Save the invoice to the database
+    await newInvoice.save();
 
+    res.status(201).json({ message: 'Invoice submitted successfully', invoice: newInvoice._id });
+  } catch (error) {
+    res.status(500).json({ message: 'Failed to submit the invoice', details: error.message });
+  }
+});
+router.get("/printinvoice/:id",isLoggedIn ,async function (req, res, next) {
+  try {
+    const regex = req.params.id;
+    const invoice = await Invoice.findOne({ _id: regex });
+    const merchnat = await userModel.findOne({ username:req.username });
+
+    console.log(invoice);
+    res.render("printinvoice",{invoice,merchnat:merchnat.medicalname});
+  } catch (error) {
+    res.send(error.message)
+  }
+});
+router.get("/createExpenditure", function (req, res, next) {
+  res.render("createExpenditure");
+});
+router.post('/submit-expenditure', async (req, res) => {
+  try {
+    const { customer, items, totalPrice } = req.body;
+
+    // Create a new invoice instance
+    const newInvoice = new Invoice({
+      type:'Expenditure',
+      customer: {
+        name: customer.name,
+        address: customer.address,
+        age: customer.age,
+        phone: customer.phone,
+      },
+      items: items.map(item => ({
+        name: item.name,
+        quantity: item.quantity,
+        price: item.price,
+        total: item.quantity * item.price,
+      })),
+      totalPrice: totalPrice,
+    });
+
+    // Save the invoice to the database
+    await newInvoice.save();
+
+    res.status(201).json({ message: 'Invoice submitted successfully', invoice: newInvoice._id });
+  } catch (error) {
+    res.status(500).json({ message: 'Failed to submit the invoice', details: error.message });
+  }
+});
+router.get("/printexpenditure/:id",isLoggedIn ,async function (req, res, next) {
+  try {
+    const regex = req.params.id;
+    const invoice = await Invoice.findOne({ _id: regex });
+    const merchnat = await userModel.findOne({ username:req.username });
+
+    console.log(invoice);
+    res.render("printinvoice",{invoice,merchnat:merchnat.medicalname});
+  } catch (error) {
+    res.send(error.message)
+  }
+});
+router.get("/checkdaysheet", function (req, res, next) {
+  res.render("checkdaysheet");
+});
+router.get('/api/day-sheet', async (req, res) => {
+  const { startDate, endDate } = req.query;
+
+  try {
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    end.setHours(23, 59, 59, 999); // End of day
+
+    // Fetch invoices and expenditures within the date range
+    const invoices = await Invoice.find({
+      createdAt: {
+        $gte: start,
+        $lte: end,
+      }
+    });
+
+    // Calculate the total collection (only from invoices, not expenditures)
+    const totalCollection = invoices
+      .filter(invoice => invoice.type === 'Invoice')
+      .reduce((sum, invoice) => sum + invoice.totalPrice, 0);
+
+    res.json({ success: true, invoices, totalCollection });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: 'Error fetching day sheet.' });
+  }
+});
 
 
 module.exports = router;

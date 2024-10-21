@@ -51,6 +51,10 @@ const userSchema = new mongoose.Schema({
   speciality:{
     type:String,
   },
+  type:{
+    type:String,
+    default:"doctor"
+  },
   patient: [{
     type: mongoose.Schema.Types.ObjectId , ref :"Patient"
   }],
