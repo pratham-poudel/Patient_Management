@@ -273,14 +273,15 @@ function isLoggedIn(req, res, next) {
 
 router.get("/profile", isLoggedIn, async function (req, res, next) {
   const user = await userModel.findOne({ username: req.username }).populate("patient patientlab appointment");
+  const patientlab = await LabReport.find();
   if(user.type == "doctor"){
-    res.render("doctorprofile", { user });
+    res.render("doctorprofile", { user,patientlab });
   }else if(user.type == "account"){
     res.render("accountprofile", { user });
   }else if(user.type == "admin"){
-    res.render("adminprofile", { user });
+    res.render("adminprofile", { user,patientlab });
   }else if(user.type == "superadmin"){
-    res.render("adminprofile", { user });
+    res.render("adminprofile", { user,patientlab });
   }
 
   
