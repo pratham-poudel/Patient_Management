@@ -336,6 +336,12 @@ h2 {
                                 <td><%= users.dengue %></td>
                             </tr>
                         <% } %>
+                            <% if (users.scrub) { %>
+                            <tr>
+                                <td>Scrub Typhus</td>
+                                <td><%= users.scrub %></td>
+                            </tr>
+                        <% } %>
                         <% if (users.mp) { %>
                             <tr>
                                 <td>MP</td>
