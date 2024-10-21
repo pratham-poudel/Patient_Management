@@ -818,7 +818,8 @@ router.get("/profiles/:id", isLoggedIn, async function (req, res, next) {
   const users = await LabReport.findOne({ _id: regex });
 
   if (!users.interpretation) {
-    const review = await run(`${users} this is the pathalogy report of a patient , analyze the report and give the overall interpretation of the non null data from the  report in one small paragraph.`);
+    const review = await run(`${users} This is the pathology report of a patient. Please analyze the report based only on the non-null data provided. Do not assume or infer results for any missing or null data. Provide an overall interpretation of the available results in one concise paragraph.
+`);
     users.interpretation = review;
     await users.save();
   }
@@ -1015,7 +1016,8 @@ router.get("/submitreport/:userId", async function (req, res, next) {
     // Fetch the user data or perform any other necessary operations
     const users = await LabReport.findOne({ _id: userId });
     if (!users.interpretation) {
-      const review = await run(`${users} this is the pathalogy report of a patient , analyze the report and give the overall interpretation of the non null data from the report in one small paragraph.`)
+      const review = await run(`${users} This is the pathology report of a patient. Please analyze the report based only on the non-null data provided. Do not assume or infer results for any missing or null data. Provide an overall interpretation of the available results in one concise paragraph.
+`)
       // Render the patientpr template with the user data
       // res.send(review);
       users.interpretation = review;
