@@ -159,10 +159,10 @@ router.post("/register", async function (req, res) {
     connumber: req.body.connumber,
     address: req.body.address,
   });
- const token = await jwt.sign({ username: req.body.username }, process.env.JWT_SECRET, { expiresIn: '100y' }); // Set to a very long time if needed
- res.cookie("doctoken", token);
+  const token = await jwt.sign({ username: req.body.username }, process.env.JWT_SECRET, { expiresIn: '100y' }); // Set to a very long time if needed
+  res.cookie("doctoken", token);
   await userdata.save();
- 
+
   await sendEmail(userdata.email, 'Succesfully Registered', `
     <!DOCTYPE html>
 <html lang="en">
@@ -195,7 +195,7 @@ router.post("/register", async function (req, res) {
 </html>
 
     `);
-    res.redirect("/profile");
+  res.redirect("/profile");
 });
 
 /* GET home page. */
@@ -213,30 +213,30 @@ router.get("/login", function (req, res, next) {
 
 
 
-  router.post("/login", async function (req, res) {
-    try {
-      const token = jwt.sign({ username: req.body.username }, process.env.JWT_SECRET, { expiresIn: '100y' }); // Set to a very long time if needed
+router.post("/login", async function (req, res) {
+  try {
+    const token = jwt.sign({ username: req.body.username }, process.env.JWT_SECRET, { expiresIn: '100y' }); // Set to a very long time if needed
 
-      const user = await userModel.findOne({ username: req.body.username });
-      res.cookie("doctoken", token);
-      if (user) {
-        if (user.username == req.body.username && user.password == req.body.password) {
-          res.redirect("/profile");
-        } else {
-          res.send("Invalid Credentials")
-        }
+    const user = await userModel.findOne({ username: req.body.username });
+    res.cookie("doctoken", token);
+    if (user) {
+      if (user.username == req.body.username && user.password == req.body.password) {
+        res.redirect("/profile");
+      } else {
+        res.send("Invalid Credentials")
       }
-
-
-    } catch (error) {
-      res.send(error)
     }
 
 
-  });
+  } catch (error) {
+    res.send(error)
+  }
 
 
-router.get("/register", function (req, res, next) {
+});
+
+
+router.get("/register", isadminLoggedIn, function (req, res, next) {
   res.render("register");
 });
 
@@ -269,22 +269,43 @@ function isLoggedIn(req, res, next) {
     res.redirect("/login");
   }
 }
+async function isadminLoggedIn(req, res, next) {
+  try {
+    // Check if the token is present
+    if (req.cookies.doctoken) {
+      // Verify the JWT token
+      const decodedToken = jwt.verify(req.cookies.doctoken, process.env.JWT_SECRET);
+      const user = await userModel.findOne({ username: decodedToken.username });
+      if (user.type == "admin" || user.type == "superadmin") {
+        req.username = decodedToken.username; // Extract username or other payload
+
+        // Proceed to the next middleware or route handler
+        next();
+      } else {
+        res.send("You are not authorized to access this Route")
+      }
+    }
+  } catch (error) {
+    // If token is invalid or verification fails, redirect to login
+    res.redirect("/login");
+  }
+}
 
 
 router.get("/profile", isLoggedIn, async function (req, res, next) {
   const user = await userModel.findOne({ username: req.username }).populate("patient patientlab appointment");
   const patientlab = await LabReport.find();
-  if(user.type == "doctor"){
-    res.render("doctorprofile", { user,patientlab });
-  }else if(user.type == "account"){
+  if (user.type == "doctor") {
+    res.render("doctorprofile", { user, patientlab });
+  } else if (user.type == "account") {
     res.render("accountprofile", { user });
-  }else if(user.type == "admin"){
-    res.render("adminprofile", { user,patientlab });
-  }else if(user.type == "superadmin"){
-    res.render("adminprofile", { user,patientlab });
+  } else if (user.type == "admin") {
+    res.render("adminprofile", { user, patientlab });
+  } else if (user.type == "superadmin") {
+    res.render("adminprofile", { user, patientlab });
   }
 
-  
+
 });
 
 router.get("/edit", function (req, res, next) {
@@ -311,7 +332,7 @@ router.post("/change", async function (req, res, next) {
   }
 });
 
-router.get("/lreport",isLoggedIn ,async function (req, res, next) {
+router.get("/lreport", isLoggedIn, async function (req, res, next) {
   const user = await userModel.findOne({ username: req.username });
   res.render("lreport", {
     successMessage: req.flash("success"),
@@ -319,7 +340,7 @@ router.get("/lreport",isLoggedIn ,async function (req, res, next) {
     user
   });
 });
-router.post("/submitLabReport",isLoggedIn ,async function (req, res) {
+router.post("/submitLabReport", isLoggedIn, async function (req, res) {
   try {
     const doctor = await userModel.findOne({
       username: req.username,
@@ -367,7 +388,7 @@ router.post("/submitLabReport",isLoggedIn ,async function (req, res) {
       hcv: req.body.hcv_result,
       vdrl: req.body.vdrl_result,
       dengue: req.body.dengue_result,
-      scrub:req.body.scrub,
+      scrub: req.body.scrub,
       mp: req.body.mp_result,
       troponin: req.body.troponin_result,
       sTyphiO: req.body.s_typhi_o_result,
@@ -842,9 +863,9 @@ router.get("/appointment", async function (req, res, next) {
     { type: { $in: ["doctor", "superadmin"] } }, // Include users whose type is "doctor" or "superadmin"
     { fullName: 1, speciality: 1, profilePic: 1 } // Include only fullName, speciality, and profilePic
   );
-  
-  
-  
+
+
+
   res.render("appoint", {
     users: users,
     successMessage: req.flash("success"),
@@ -946,7 +967,7 @@ router.post("/appointments", async function (req, res, next) {
   }
 });
 
-router.get("/viewappoint", isLoggedIn,async function (req, res, next) {
+router.get("/viewappoint", isLoggedIn, async function (req, res, next) {
   const doctor = await userModel.findOne({
     username: req.username
   }).populate("appointment")
@@ -1393,7 +1414,7 @@ router.get("/member/:memberId", async function (req, res, next) {
   }
 
 });
-router.get("/createInvoice",  function (req, res, next) {
+router.get("/createInvoice", function (req, res, next) {
   res.render("createInvoice");
 });
 router.post('/submit-invoice', async (req, res) => {
@@ -1402,7 +1423,7 @@ router.post('/submit-invoice', async (req, res) => {
 
     // Create a new invoice instance
     const newInvoice = new Invoice({
-      type:'Invoice',
+      type: 'Invoice',
       customer: {
         name: customer.name,
         address: customer.address,
@@ -1426,14 +1447,14 @@ router.post('/submit-invoice', async (req, res) => {
     res.status(500).json({ message: 'Failed to submit the invoice', details: error.message });
   }
 });
-router.get("/printinvoice/:id",isLoggedIn ,async function (req, res, next) {
+router.get("/printinvoice/:id", isLoggedIn, async function (req, res, next) {
   try {
     const regex = req.params.id;
     const invoice = await Invoice.findOne({ _id: regex });
-    const merchnat = await userModel.findOne({ username:req.username });
+    const merchnat = await userModel.findOne({ username: req.username });
 
     console.log(invoice);
-    res.render("printinvoice",{invoice,merchnat:merchnat.medicalname});
+    res.render("printinvoice", { invoice, merchnat: merchnat.medicalname });
   } catch (error) {
     res.send(error.message)
   }
@@ -1447,7 +1468,7 @@ router.post('/submit-expenditure', async (req, res) => {
 
     // Create a new invoice instance
     const newInvoice = new Invoice({
-      type:'Expenditure',
+      type: 'Expenditure',
       customer: {
         name: customer.name,
         address: customer.address,
@@ -1471,14 +1492,14 @@ router.post('/submit-expenditure', async (req, res) => {
     res.status(500).json({ message: 'Failed to submit the invoice', details: error.message });
   }
 });
-router.get("/printexpenditure/:id",isLoggedIn ,async function (req, res, next) {
+router.get("/printexpenditure/:id", isLoggedIn, async function (req, res, next) {
   try {
     const regex = req.params.id;
     const invoice = await Invoice.findOne({ _id: regex });
-    const merchnat = await userModel.findOne({ username:req.username });
+    const merchnat = await userModel.findOne({ username: req.username });
 
     console.log(invoice);
-    res.render("printinvoice",{invoice,merchnat:merchnat.medicalname});
+    res.render("printinvoice", { invoice, merchnat: merchnat.medicalname });
   } catch (error) {
     res.send(error.message)
   }
@@ -1511,6 +1532,24 @@ router.get('/api/day-sheet', async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ success: false, message: 'Error fetching day sheet.' });
+  }
+});
+router.get("/search-bill", function (req, res, next) {
+  res.render("search-bill");
+});
+router.get('/api/search', async (req, res) => {
+  const { name } = req.query;
+
+  try {
+    // Perform a case-insensitive search for the customer's name
+    const bills = await Invoice.find({ 
+      'customer.name': { $regex: name, $options: 'i' } 
+    }).limit(10); // Limit the number of results for performance
+
+    res.json(bills); // Return the results as JSON
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Server error, please try again later' });
   }
 });
 

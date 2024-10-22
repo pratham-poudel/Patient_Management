@@ -89,9 +89,15 @@
       background-color: #f9f9f9;
       white-space: nowrap;
     }
+    .total-expenditure {
+  
+  color: red; /* Red color for total expenditure */
+  
+}
     .results-table .expenditure {
-      background-color: #ffdddd;
-    }
+  background-color: #ffdddd; /* Red background for expenditure rows */
+  color: red; /* Red text for expenditure rows */
+}
     .results-table td a {
       color: #007bff;
       text-decoration: none;
@@ -106,10 +112,20 @@
       background-color: #0056b3;
     }
     .total-collection {
-      font-size: 1.5rem;
+      font-size: 2rem;
       color: #28a745;
       text-align: center;
       margin-top: 20px;
+    }
+    .headerwala{
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 20px;
+    }
+    .total-reveneue{
+      color: black;
     }
 
     /* Responsive styling */
@@ -174,7 +190,6 @@
       
     </div>
   </div>
-
   <script>
     document.getElementById('searchBtn').addEventListener('click', async function() {
       const startDate = document.getElementById('startDate').value;
@@ -183,48 +198,63 @@
       const resultsBody = document.getElementById('resultsBody');
       const totalCollectionEl = document.getElementById('totalCollection');
       const dateRangeEl = document.getElementById('dateRange');
-
+  
       if (!startDate || !endDate) {
         alert("Please select both start and end dates.");
         return;
       }
-
+  
       // Reset previous results
       resultsBody.innerHTML = '';
       totalCollectionEl.innerHTML = '';
       resultsContainer.style.display = 'none';
-
+  
       try {
         // Backend API call to fetch data
         const response = await fetch(`/api/day-sheet?startDate=${startDate}&endDate=${endDate}`);
         const data = await response.json();
-
+  
         if (data.success) {
           const { invoices, totalCollection } = data;
-
+  
           if (invoices.length > 0) {
             dateRangeEl.textContent = `${startDate} to ${endDate}`;
             resultsContainer.style.display = 'block';
-
+  
+            let totalRevenue = 0;
+            let totalExpenditure = 0;
+  
             // Populate table with invoice/expenditure details
             invoices.forEach(invoice => {
               const row = document.createElement('tr');
               if (invoice.type === 'Expenditure') {
                 row.classList.add('expenditure');
+                totalExpenditure += invoice.totalPrice; // Sum expenditures
+              } else {
+                totalRevenue += invoice.totalPrice; // Sum revenue
               }
-
+  
               row.innerHTML = `
                 <td>${invoice.type}</td>
                 <td>${invoice.customer.name}</td>
                 <td>${invoice.totalPrice} NPR</td>
                 <td><a href="/printinvoice/${invoice._id}">Show Details</a></td>
               `;
-
+  
               resultsBody.appendChild(row);
             });
-
-            // Show total collection
-            totalCollectionEl.textContent = `Total Collection: ${totalCollection} NPR`;
+  
+            const netCollection = totalRevenue - totalExpenditure;
+  
+            // Show net collection (revenue - expenditure)
+            totalCollectionEl.innerHTML = `
+            <div class="headerwala">
+              <div class="total-reveneue">Total Revenue: ${totalRevenue} NPR</div>
+              <div class="total-expenditure">Total Expenditure: ${totalExpenditure} NPR</div>
+              <div>Net Collection: ${netCollection} NPR</div>
+              
+              <div>
+            `;
           } else {
             alert("No invoices or expenditures found for this date range.");
           }
@@ -234,6 +264,8 @@
       }
     });
   </script>
+  
+  
 
 </body>
 </html>

@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const AutoIncrement = require('mongoose-sequence')(mongoose);
 
 // Schema for individual invoice items
 const itemSchema = new mongoose.Schema({
@@ -24,11 +25,15 @@ const itemSchema = new mongoose.Schema({
 
 // Schema for the invoice
 const invoiceSchema = new mongoose.Schema({
-    type: {
-        type: String,
-        enum: ['Invoice', 'Expenditure'], // Only allow these two values
-        required: true,
-      },
+  type: {
+    type: String,
+    enum: ['Invoice', 'Expenditure'],
+    required: true,
+  },
+  billNo: {
+    type: Number,  // Bill number will be auto-incremented
+    unique: true,
+  },
   customer: {
     name: {
       type: String,
@@ -46,10 +51,10 @@ const invoiceSchema = new mongoose.Schema({
     phone: {
       type: String,
       required: true,
-      match: /^[0-9]{10}$/, // Ensures valid 10-digit phone number
+      match: /^[0-9]{10}$/,
     },
   },
-  items: [itemSchema], // Array of item schemas
+  items: [itemSchema],
   totalPrice: {
     type: Number,
     required: true,
@@ -60,6 +65,9 @@ const invoiceSchema = new mongoose.Schema({
     default: Date.now,
   },
 });
+
+// Apply auto-increment plugin to the billNo field
+invoiceSchema.plugin(AutoIncrement, { inc_field: 'billNo' });
 
 const Invoice = mongoose.model('Invoice', invoiceSchema);
 
