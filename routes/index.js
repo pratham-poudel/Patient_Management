@@ -1318,7 +1318,7 @@ router.get("/member/:memberId", async function (req, res, next) {
   }
 
 });
-router.get("/createInvoice", function (req, res, next) {
+router.get("/createInvoice", isLoggedIn,function (req, res, next) {
   res.render("createInvoice");
 });
 router.post('/submit-invoice', async (req, res) => {
@@ -1362,7 +1362,7 @@ router.get("/printinvoice/:id", isLoggedIn, async function (req, res, next) {
     res.send(error.message)
   }
 });
-router.get("/printinvoicefromuser/:id", isLoggedIn, async function (req, res, next) {
+router.get("/printinvoicefromuser/:id", async function (req, res, next) {
   try {
     const regex = req.params.id;
     const invoice = await Invoice.findOne({ _id: regex });
@@ -1373,7 +1373,7 @@ router.get("/printinvoicefromuser/:id", isLoggedIn, async function (req, res, ne
     res.send(error.message)
   }
 });
-router.get("/createExpenditure", function (req, res, next) {
+router.get("/createExpenditure",isLoggedIn, function (req, res, next) {
   res.render("createExpenditure");
 });
 router.post('/submit-expenditure', async (req, res) => {
