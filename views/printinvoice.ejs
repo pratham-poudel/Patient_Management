@@ -138,7 +138,11 @@
     <!-- Merchant Info -->
     <div class="header">
       <img class="logo" src="/images/logo.png" alt="Logo">
-      <h2><%= merchnat %></h2>
+      <% if (merchant) { %>
+        <h2><%= merchant %></h2>
+      <% } else { %>
+        <h2>प्रकाश मेडिकल प्रा .लि</h2>
+      <% } %>      
       <p>Reg No: 3800125133310 | PAN No: 610480441</p>
       <p>शिवराज-५  चन्द्रौटा कपिलवस्तु</p>
     </div>
@@ -185,7 +189,7 @@
     </div>
     
     <div class="qr-code">
-      <img src="https://api.qrserver.com/v1/create-qr-code/?size=50x50&data=https://prathampoudel.me" alt="QR Code">
+      <img src="https://api.qrserver.com/v1/create-qr-code/?size=50x50&data=https://prathampoudel.me/printinvoicefromuser/<%=invoice._id%>" alt="QR Code">
     </div>
 
     <!-- Footer -->
