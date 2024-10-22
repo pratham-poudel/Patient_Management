@@ -7,129 +7,133 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     body {
-      background-color: #f4f4f9;
+      background-color: #f1f5f9;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
-    .custom-border {
-      border: 2px solid #4a5568;
+    .container {
+      background-color: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      padding: 2rem;
+      max-width: 800px;
     }
-    .custom-btn {
-      background-color: #4a5568;
+    .header-title {
+      color: #2c3e50;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 700;
     }
-    .custom-btn:hover {
-      background-color: #2d3748;
+    .custom-input {
+      border: 1px solid #d1d5db;
+      padding: 0.75rem;
+      border-radius: 6px;
+      transition: border-color 0.2s ease;
     }
-    .invoice-header {
-      background-color: #4a5568;
-      color: #fff;
+    .custom-input:focus {
+      border-color: #1e40af;
+      outline: none;
+    }
+    .custom-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1.5rem;
+    }
+    .custom-table th {
+      background-color: #1e293b;
+      color: white;
+      padding: 0.75rem;
+      text-align: left;
+      text-transform: uppercase;
+      font-size: 0.875rem;
+    }
+    .custom-table td {
+      padding: 0.75rem;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    .custom-table tr:last-child td {
+      border-bottom: none;
+    }
+    .total-price {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #1f2937;
+    }
+    .submit-btn {
+      background-color: #2563eb;
+      color: white;
+      padding: 0.75rem;
+      border-radius: 6px;
+      transition: background-color 0.2s ease;
+    }
+    .submit-btn:hover {
+      background-color: #1d4ed8;
+    }
+    .delete-btn {
+      background-color: #ef4444;
+      color: white;
+      padding: 0.5rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+    .delete-btn:hover {
+      background-color: #dc2626;
     }
   </style>
 </head>
-<body class="font-serif">
-  <div class="container mx-auto py-10">
-    <div class="max-w-3xl mx-auto bg-white p-10 shadow-xl rounded-lg custom-border">
-      <h1 class="text-3xl font-bold mb-6 text-center">Create Invoice Slip</h1>
+<body>
+  <div class="container mx-auto my-10 p-10">
+    <h1 class="text-2xl header-title text-center mb-8">Create Invoice Slip</h1>
 
-      <!-- Customer Details Form -->
-      <div class="mb-8">
-        <h2 class="text-xl font-bold mb-4">Customer Details</h2>
-        <form id="customer-form" class="space-y-4">
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <input
-              type="text"
-              id="customer-name"
-              class="w-full p-3 border rounded-md focus:outline-none focus:border-indigo-500"
-              placeholder="Customer Name"
-              required
-            />
-            <input
-              type="text"
-              id="customer-address"
-              class="w-full p-3 border rounded-md focus:outline-none focus:border-indigo-500"
-              placeholder="Address"
-              required
-            />
-            <input
-              type="number"
-              id="customer-age"
-              class="w-full p-3 border rounded-md focus:outline-none focus:border-indigo-500"
-              placeholder="Age"
-              min="1"
-              required
-            />
-            <input
-              type="tel"
-              id="customer-phone"
-              class="w-full p-3 border rounded-md focus:outline-none focus:border-indigo-500"
-              placeholder="Phone Number"
-              pattern="[0-9]{10}"
-              required
-            />
-          </div>
-        </form>
-      </div>
-
-      <!-- Invoice Form -->
-      <div>
-        <h2 class="text-xl font-bold mb-4">Invoice Items</h2>
-        <form id="invoice-form" class="space-y-4">
-          <div class="flex space-x-4">
-            <input
-              type="text"
-              id="item-name"
-              class="w-full p-2 border rounded-md focus:outline-none focus:border-indigo-500"
-              placeholder="Item Name"
-              required
-            />
-            <input
-              type="number"
-              id="quantity"
-              class="w-full p-2 border rounded-md focus:outline-none focus:border-indigo-500"
-              placeholder="Quantity"
-              min="1"
-              required
-            />
-            <input
-              type="number"
-              id="price"
-              class="w-full p-2 border rounded-md focus:outline-none focus:border-indigo-500"
-              placeholder="Price"
-              step="0.01"
-              min="0"
-              required
-            />
-          </div>
-        </form>
-      </div>
-
-      <!-- Invoice Items Table -->
-      <div class="mt-6">
-        <table class="min-w-full bg-white border rounded-lg">
-          <thead>
-            <tr class="invoice-header">
-              <th class="py-2 px-4 text-left">Item</th>
-              <th class="py-2 px-4 text-left">Quantity</th>
-              <th class="py-2 px-4 text-left">Price</th>
-              <th class="py-2 px-4 text-left">Total</th>
-            </tr>
-          </thead>
-          <tbody id="invoice-items">
-            <!-- Items will be dynamically added here -->
-          </tbody>
-        </table>
-        <div class="flex justify-end mt-4">
-          <h3 class="text-xl font-bold">Total Price: ₹<span id="total-price">0.00</span></h3>
+    <!-- Customer Details Form -->
+    <div class="mb-10">
+      <h2 class="text-xl font-semibold mb-4">Customer Details</h2>
+      <form id="customer-form" class="space-y-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <input type="text" id="customer-name" class="custom-input w-full" placeholder="Customer Name" required />
+          <input type="text" id="customer-address" class="custom-input w-full" placeholder="Address" required />
+          <input type="number" id="customer-age" class="custom-input w-full" placeholder="Age" min="1" required />
+          <input type="tel" id="customer-phone" class="custom-input w-full" placeholder="Phone Number" pattern="[0-9]{10}" required />
         </div>
-      </div>
+      </form>
+    </div>
 
-      <!-- Submit Button -->
-      <div class="mt-6">
-        <button
-          id="submit-invoice"
-          class="w-full custom-btn text-white py-2 px-4 rounded-md hover:bg-indigo-700"
-        >
-          Submit Invoice
-        </button>
+    <!-- Invoice Form -->
+    <div>
+      <h2 class="text-xl font-semibold mb-4">Invoice Items</h2>
+      <form id="invoice-form" class="space-y-4">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <input type="text" id="item-name" class="custom-input w-full" placeholder="Item Name" required />
+          <input type="number" id="quantity" class="custom-input w-full" placeholder="Quantity" min="1" required />
+          <input type="number" id="price" class="custom-input w-full" placeholder="Price" step="0.01" min="0" required />
+        </div>
+      </form>
+    </div>
+
+    <!-- Invoice Items Table -->
+    <div class="mt-6">
+      <table class="custom-table">
+        <thead>
+          <tr>
+            <th>Item</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>Total</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="invoice-items">
+          <!-- Items will be dynamically added here -->
+        </tbody>
+      </table>
+      <div class="flex justify-end mt-4">
+        <h3 class="total-price">Total Price: ₹<span id="total-price">0.00</span></h3>
       </div>
+    </div>
+
+    <!-- Submit Button -->
+    <div class="mt-8">
+      <button id="submit-invoice" class="submit-btn w-full">Submit Invoice</button>
     </div>
   </div>
 
@@ -176,6 +180,9 @@
           <td class="py-2 px-4">${item.quantity}</td>
           <td class="py-2 px-4">₹${item.price.toFixed(2)}</td>
           <td class="py-2 px-4">₹${(item.quantity * item.price).toFixed(2)}</td>
+          <td class="py-2 px-4">
+            <button class="delete-btn" onclick="deleteItem(${index})">Delete</button>
+          </td>
         `;
         invoiceItemsTable.appendChild(row);
       });
@@ -214,6 +221,12 @@
       }
     }
 
+    // Delete item from invoice
+    function deleteItem(index) {
+      invoiceItems.splice(index, 1);
+      renderInvoiceItems();
+    }
+
     // Handle arrow keys to navigate through inputs
     document.addEventListener('keydown', function (event) {
       const activeElement = document.activeElement;
@@ -235,7 +248,7 @@
       }
     });
 
-    // Handle form submission (logic is unchanged from before)
+    // Handle invoice submission
     document.getElementById('submit-invoice').addEventListener('click', () => {
       const customerName = document.getElementById('customer-name').value;
       const customerAddress = document.getElementById('customer-address').value;
@@ -290,6 +303,6 @@
   });
 
     });
-  </script>
+ </script>
 </body>
 </html>
