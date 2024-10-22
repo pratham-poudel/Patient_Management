@@ -844,7 +844,8 @@ router.get("/toremove/:datass", isLoggedIn, async function (req, res, next) {
 
 
 router.get("/profiles/:id", isLoggedIn, async function (req, res, next) {
-
+  try {
+    
   const regex = req.params.id;
   const users = await LabReport.findOne({ _id: regex });
 
@@ -857,21 +858,31 @@ router.get("/profiles/:id", isLoggedIn, async function (req, res, next) {
 
 
   res.render("report", { users });
+  } catch (error) {
+    res.send(error.message)
+  }
+
 });
 
 router.get("/appointment", async function (req, res, next) {
-  const users = await userModel.find(
-    { type: { $in: ["doctor", "superadmin"] } }, // Include users whose type is "doctor" or "superadmin"
-    { fullName: 1, speciality: 1, profilePic: 1 } // Include only fullName, speciality, and profilePic
-  );
+  try {
+    const users = await userModel.find(
+      { type: { $in: ["doctor", "superadmin"] } }, // Include users whose type is "doctor" or "superadmin"
+      { fullName: 1, speciality: 1, profilePic: 1 } // Include only fullName, speciality, and profilePic
+    );
+  
+  
+  
+    res.render("appoint", {
+      users: users,
+      successMessage: req.flash("success"),
+      errorMessage: req.flash("error"),
+    });
+  } catch (error) {
+    res.send(error.message)
+    
+  }
 
-
-
-  res.render("appoint", {
-    users: users,
-    successMessage: req.flash("success"),
-    errorMessage: req.flash("error"),
-  });
 });
 
 
@@ -969,12 +980,18 @@ router.post("/appointments", async function (req, res, next) {
 });
 
 router.get("/viewappoint", isLoggedIn, async function (req, res, next) {
-  const doctor = await userModel.findOne({
-    username: req.username
-  }).populate("appointment")
-
-
-  res.render("allappns", { doctor })
+  try {
+    const doctor = await userModel.findOne({
+      username: req.username
+    }).populate("appointment")
+  
+  
+    res.render("allappns", { doctor })
+  } catch (error) {
+    res.send(error.message)
+    
+  }
+ 
 })
 router.get("/ptrpt", async function (req, res, next) {
   res.render("patientuserid")
@@ -1070,126 +1087,6 @@ router.get("/submitreport/:userId", async function (req, res, next) {
 router.get("/daktars", async function (req, res, next) {
   res.redirect('/daktar')
 })
-
-
-
-
-
-const allMedicines = [
-  'Acetaminophen',
-  'Aspirin',
-  'Ibuprofen',
-  'Lisinopril',
-  'Simvastatin',
-  'Levothyroxine',
-  'Metformin',
-  'Atorvastatin',
-  'Amlodipine',
-  'Omeprazole',
-  'Amoxicillin',
-  'Losartan',
-  'Gabapentin',
-  'Sertraline',
-  'Hydrochlorothiazide',
-  'Metoprolol',
-  'Escitalopram',
-  'Aspirin',
-  'Clopidogrel',
-  'Furosemide',
-  'Diazepam',
-  'Alprazolam',
-  'Fluoxetine',
-  'Citalopram',
-  'Pantoprazole',
-  'Ranitidine',
-  'Ciprofloxacin',
-  'Doxycycline',
-  'Hydrocodone/Acetaminophen',
-  'Oxycodone/Acetaminophen',
-  'Tramadol',
-  'Warfarin',
-  'Metoprolol',
-  'Albuterol',
-  'Fluticasone/Salmeterol',
-  'Montelukast',
-  'Insulin (Various Types)',
-  'Atenolol',
-  'Risperidone',
-  'Aripiprazole',
-  'Duloxetine',
-  'Venlafaxine',
-  'Lorazepam',
-  'Clonazepam',
-  'Carvedilol',
-  'Valsartan',
-  'Pioglitazone',
-  'Sitagliptin',
-  'Esomeprazole',
-  'Dexamethasone',
-  'Ezetimibe',
-  'Celecoxib',
-  'Naproxen',
-  'Metoclopramide',
-  'Methylphenidate',
-  'Lansoprazole',
-  'Meloxicam',
-  'Hydralazine',
-  'Phenytoin',
-  'Divalproex',
-  'Levetiracetam',
-  'Olanzapine',
-  'Quetiapine',
-  'Ipratropium/Albuterol',
-  'Budesonide/Formoterol',
-  'Latanoprost',
-  'Tiotropium',
-  'Ropinirole',
-  'Pregabalin',
-  'Fluconazole',
-  'Amiodarone',
-  'Digoxin',
-  'Nitroglycerin',
-  'Hydromorphone',
-  'Morphine',
-  'Lisinopril/Hydrochlorothiazide',
-  'Sildenafil',
-  'Tadalafil',
-  'Finasteride',
-  'Levonorgestrel/Ethinyl Estradiol',
-  'Drospirenone/Ethinyl Estradiol',
-  'Cyclobenzaprine',
-  'Alendronate',
-  'Raloxifene',
-  'Latuda',
-  'Lurasidone',
-  'Metronidazole',
-  'Hydroxychloroquine',
-  'Prednisone',
-  'Methylprednisolone',
-  'Acyclovir',
-  'Valacyclovir',
-  'Cephalexin',
-  'Amoxicillin/Clavulanate',
-  'Ceftriaxone',
-  'Cefuroxime',
-  'Famotidine',
-  'Ondansetron',
-  'Metoclopramide',
-  'Sumatriptan',
-  'Naproxen',
-  'Ketorolac',
-  'Mometasone',
-  'Desloratadine',
-  'Loratadine',
-  'Oxcarbazepine',
-  'Nortriptyline',
-  'Zolpidem',
-  'Zopiclone',
-  'Amitriptyline',
-
-];
-
-
 router.get('/suggestions', (req, res) => {
 
   const input = req.query.input.toLowerCase();
@@ -1364,15 +1261,21 @@ router.post("/addmembership", async function (req, res, next) {
   }
 });
 router.get("/addedmemberrequests", isLoggedIn, async function (req, res, next) {
-  const users = await membership.find()
-  const unapprovedUsers = [];
-  users.forEach(user => {
-    if (!user.approved) {
-      unapprovedUsers.push(user);
-    }
-  })
-  // res.send(unapprovedUsers)
-  res.render("addedmemberrequests", { unapprovedUsers })
+  try {
+    const users = await membership.find()
+    const unapprovedUsers = [];
+    users.forEach(user => {
+      if (!user.approved) {
+        unapprovedUsers.push(user);
+      }
+    })
+    // res.send(unapprovedUsers)
+    res.render("addedmemberrequests", { unapprovedUsers })
+  } catch (error) {
+    res.send(error.message)
+    
+  }
+ 
 });
 router.post("/approveMembership", async function (req, res, next) {
   try {
