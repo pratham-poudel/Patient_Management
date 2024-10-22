@@ -31,6 +31,7 @@ const labReportSchema = new mongoose.Schema({
     mcv: String,
     mch: String,
     mchc: String,
+    bloodgroup: String,
     crp: String,
     raFactor: String,
     hPylori: String,

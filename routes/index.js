@@ -380,6 +380,7 @@ router.post("/submitLabReport", isLoggedIn, async function (req, res) {
       mcv: req.body.mcv_result,
       mch: req.body.mch_result,
       mchc: req.body.mchc_result,
+      bloodgroup: req.body.blood_group_result,
       crp: req.body.crp_result,
       raFactor: req.body.ra_factor_result,
       hPylori: req.body.h_pylori_result,
@@ -1451,10 +1452,20 @@ router.get("/printinvoice/:id", isLoggedIn, async function (req, res, next) {
   try {
     const regex = req.params.id;
     const invoice = await Invoice.findOne({ _id: regex });
-    const merchnat = await userModel.findOne({ username: req.username });
-
+    const merchant = await userModel.findOne({ username: req.username });
     console.log(invoice);
-    res.render("printinvoice", { invoice, merchnat: merchnat.medicalname });
+    res.render("printinvoice", { invoice, merchant: merchant.medicalname });
+  } catch (error) {
+    res.send(error.message)
+  }
+});
+router.get("/printinvoicefromuser/:id", isLoggedIn, async function (req, res, next) {
+  try {
+    const regex = req.params.id;
+    const invoice = await Invoice.findOne({ _id: regex });
+    const merchant = invoice.merchant || null;
+    console.log(invoice);
+    res.render("printinvoice", {invoice, merchant});
   } catch (error) {
     res.send(error.message)
   }
