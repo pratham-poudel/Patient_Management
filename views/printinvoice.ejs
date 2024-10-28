@@ -156,6 +156,7 @@
     <div class="customer-info">
       <p><strong>Bill No:</strong> <%= invoice.billNo %></p>
       <p><strong>Customer Name:</strong> <%= invoice.customer.name %></p>
+      <p><strong>Age:<%=invoice.customer.age%></strong></p>
       <p><strong>Address:</strong> <%= invoice.customer.address %></p>
       <p><strong>Phone:</strong> <%= invoice.customer.phone %></p>
       <p><strong>Date:</strong> <%= new Date(invoice.createdAt).toLocaleDateString() %></p>
