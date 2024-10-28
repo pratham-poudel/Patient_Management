@@ -21,25 +21,27 @@ require('dotenv').config();
 passport.use(new localStrategy(userModel.authenticate()));
 
 
+
+// Update the transporter to use your cPanel email settings
 const transporter = nodemailer.createTransport({
-  service: 'gmail',
+  host: 'mail.hamromanager.xyz', // Your cPanel outgoing server
+  port: 465, // SMTP port for SSL
+  secure: true, // Use SSL for port 465
   auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASSWORD,
+    user: 'prakashmedical@hamromanager.xyz', // Your cPanel email
+    pass: 'Deepa123@#$', // Your cPanel email password (use environment variable for security)
   },
 });
 
 // Define a function to send email
 async function sendEmail(to, subject, html) {
-
   try {
     // Compose the email
     const mailOptions = {
-      from: 'chandrautahospital01@gmail.com',
+      from: 'prakashmedical@hamromanager.xyz', // Use your cPanel email
       to: to,
       subject: subject,
       html: html,
-
     };
 
     // Send the email
@@ -50,30 +52,6 @@ async function sendEmail(to, subject, html) {
   }
 }
 
-
-
-//for sms
-const accountSid = 'ACf2658e168878eda357afd9d3bd1485d5';
-const authToken = '95fb9f479ca40c675fd2c7986a1775a1';
-const twilioPhoneNumber = '+16593997115';
-
-const client = require('twilio')(accountSid, authToken);
-
-const sendSMS = async (to, body) => {
-  try {
-    const message = await client.messages.create({
-      body: body,
-      from: twilioPhoneNumber,
-      to: to
-    });
-
-    console.log(`SMS sent. SID: ${message.sid}`);
-    return true;
-  } catch (error) {
-    console.error(`Error sending SMS: ${error.message}`);
-    return false;
-  }
-};
 
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 const apiKey = process.env.GOOGLE_API_KEY;
@@ -184,11 +162,11 @@ router.post("/register", async function (req, res) {
 
     <p style="color: #666666;">Please keep your login credentials secure. You can log in by visiting our website:</p>
 
-    <a href="https://patient-management-gs7d.onrender.com/login" style="display: inline-block; background-color: #007BFF; color: #ffffff; text-decoration: none; padding: 10px 20px; border-radius: 5px; margin-top: 20px;">Log In Now</a>
+    <a href="https://hamromanager.xyz/login" style="display: inline-block; background-color: #007BFF; color: #ffffff; text-decoration: none; padding: 10px 20px; border-radius: 5px; margin-top: 20px;">Log In Now</a>
 
     <p style="color: #666666; margin-top: 20px;">Thank you for choosing our hospital. We look forward to providing you with excellent service.</p>
 
-    <p style="color: #333333; font-weight: bold; margin-top: 20px;">Best Regards,<br>[Chandrauta Hospital] Team</p>
+    <p style="color: #333333; font-weight: bold; margin-top: 20px;">Best Regards,<br>[Prakash Medical] Team</p>
   </div>
 
 </body>
@@ -467,7 +445,7 @@ router.post("/submitLabReport", isLoggedIn, async function (req, res) {
     await doctor.save();
     await labReport.save();
 
-    const qrCodeData = `https://patient-management-gs7d.onrender.com/submitreport/${labReport._id}`;
+    const qrCodeData = `https://hamromanager.xyz/submitreport/${labReport._id}`;
 
     // Send email notification
     await sendEmail(
@@ -490,7 +468,7 @@ router.post("/submitLabReport", isLoggedIn, async function (req, res) {
             <a href="${qrCodeData}" style="display: inline-block; background-color: #007BFF; color: #ffffff; text-decoration: none; padding: 10px 20px; border-radius: 5px; margin-top: 20px;">रिपोर्ट हेर्न क्लिक गर्नुहोस्</a>
             <p style="color: #666666; margin-top: 20px;">
             तपाईंको गोप्य चिकित्सा जानकारी सुरक्षित रूपमा पहुँच गर्नको लागि यो अद्वितीय पहिचानकर्ता महत्त्वपूर्ण छ। कृपया यसलाई गोप्य राख्नुहोस् र अरू कसैसँग साझा नगर्नुहोस्। तपाईंको गोपनीयता र सुरक्षा हाम्रो लागि अत्यन्तै महत्त्वपूर्ण छ।</p>
-            <p style="color: #333333; font-weight: bold; margin-top: 20px;">Best Regards,<br>Chandrauta Hospital Team<br>गुणस्तरीय स्वस्थ्य सेवा हाम्रो प्रतिबद्धता !!</p>
+            <p style="color: #333333; font-weight: bold; margin-top: 20px;">Best Regards,<br>Prakash Medical Team<br>गुणस्तरीय स्वस्थ्य सेवा हाम्रो प्रतिबद्धता !!</p>
           </div>
         </body>
         </html>
@@ -560,7 +538,7 @@ router.post("/patient", async function (req, res) {
     await userdata.save();
 
     // Generate QR code
-    const qrCodeData = `https://patient-management-gs7d.onrender.com/submitpatient/${userdata._id}`;
+    const qrCodeData = `https://hamromanager.xyz/submitpatient/${userdata._id}`;
 
 
     // Send email with QR code
@@ -588,7 +566,7 @@ router.post("/patient", async function (req, res) {
 
     <p style="color: #666666; margin-top: 20px;">This unique identifier is crucial for securely accessing your confidential medical information. Kindly keep it confidential and do not share it with anyone else. Your privacy and security are of the utmost importance to us.</p>
 
-    <p style="color: #333333; font-weight: bold; margin-top: 20px;">Best Regards,<br>Chandrauta Hospital Team<br>गुणस्तरीय स्वस्थ्य सेवा हाम्रो प्रतिबद्धता !!</p>
+    <p style="color: #333333; font-weight: bold; margin-top: 20px;">Best Regards,<br>Prakash Medical Team<br>गुणस्तरीय स्वस्थ्य सेवा हाम्रो प्रतिबद्धता !!</p>
     
   </div>
 
@@ -679,7 +657,7 @@ router.get("/appnt/:data", isLoggedIn, async function (req, res, next) {
   
       <p style="color: #666666;">If you have any questions or need further assistance, feel free to contact us at ${users.email}.</p>
   
-      <p style="color: #333333; font-weight: bold; margin-top: 20px;">Best Regards,<br>Chandrauta Hospital Team<br>गुणस्तरीय स्वस्थ्य सेवा हाम्रो प्रतिबद्धता !!</p>
+      <p style="color: #333333; font-weight: bold; margin-top: 20px;">Best Regards,<br>Prakash Medical Team<br>गुणस्तरीय स्वस्थ्य सेवा हाम्रो प्रतिबद्धता !!</p>
     </div>
   
   </body>
@@ -719,7 +697,7 @@ router.get("/appnts/:datas", isLoggedIn, async function (req, res, next) {
   
       <p style="color: #333333; font-weight: bold; margin-top: 20px;">We appreciate your understanding and look forward to serving you better in the future.</p>
   
-      <p style="color: #333333; font-weight: bold;">Best Regards,<br>Chandrauta Hospital Team<br>गुणस्तरीय स्वस्थ्य सेवा हाम्रो प्रतिबद्धता !!</p>
+      <p style="color: #333333; font-weight: bold;">Best Regards,<br>Prakash Medical Team<br>गुणस्तरीय स्वस्थ्य सेवा हाम्रो प्रतिबद्धता !!</p>
     </div>
   
   </body>
@@ -1160,7 +1138,7 @@ router.post("/contactus", async function (req, res, next) {
             <p>${req.body.message}</p>
         </div>
         <div class="footer">
-            &copy; 2023 Chandrauta Hospital. All rights reserved.
+            &copy; 2023 Prakash Medical. All rights reserved.
         </div>
     </div>
 </body>

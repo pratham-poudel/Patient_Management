@@ -1,574 +1,591 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Welcome</title>
-  <style>
-    .carousercontainer{
-      height:400 ;
-      width:600;
-     
-    }
-    .faq-item {
-            border-bottom: 1px solid #ddd;
-            padding: 10px 0;
-        }
-        .faq-item h3 {
-            cursor: pointer;
-            margin: 0;
-            font-size: 1.2em;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .faq-item h3 svg {
-            transition: transform 0.2s;
-        }
-        .faq-item.open h3 svg {
-            transform: rotate(180deg);
-        }
-        .faq-answer {
-            display: none;
-            padding: 10px 0;
-            color: #555;
-        }
-        .faq-item.open .faq-answer {
-            display: block;
-        }
-    .footer-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .map-container {
-            width: 100%;
-            max-width: 600px; /* Adjust this to fit your design */
-            height: 300px; /* Adjust this to fit your design */
-            margin-top: 20px; /* Add some spacing above the map */
-        }
-  </style>
-  <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.7/dist/full.min.css" rel="stylesheet" type="text/css" />
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet" />
-</head>
-<body>
-<div class="flex flex-col min-h-[100dvh]">
-  <header class="bg-white shadow-sm dark:bg-gray-950">
-    <div class="container px-4 md:px-6 flex items-center justify-between h-16">
-      <a class="flex items-center gap-2" href="#">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          class="h-6 w-6"
-        >
-          <path d="M12 6v4"></path>
-          <path d="M14 14h-4"></path>
-          <path d="M14 18h-4"></path>
-          <path d="M14 8h-4"></path>
-          <path d="M18 12h2a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-9a2 2 0 0 1 2-2h2"></path>
-          <path d="M18 22V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v18"></path>
-        </svg>
-        <span class="font-semibold text-lg">Prakash Medical</span>
-      </a>
-      <nav class="hidden md:flex items-center gap-6">
-        <a class="text-sm font-medium hover:underline underline-offset-4" href="#">
-          About
-        </a>
-        <a class="text-sm font-medium hover:underline underline-offset-4" href="#">
-          Services
-        </a>
-        <a class="text-sm font-medium hover:underline underline-offset-4" href="#">
-          Doctors
-        </a>
-        <a class="text-sm font-medium hover:underline underline-offset-4" href="llm">
-          View Lab Report
-        </a>
-        <a class="text-sm font-medium hover:underline underline-offset-4" href="adminmajau">
-            Admin Center
-          </a>
-      </nav>
-      <a
-      href="/appointment"
-        class="inline-flex h-10 items-center justify-center rounded-md bg-black px-6 text-sm font-medium text-white shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary disabled:pointer-events-none disabled:opacity-50"
-      >
-        Book Appointment
-      </a>
-    </div>
-  </header>
-  <main class="flex-1">
-    <section id="about" class="w-full py-12 md:py-24 lg:py-32 bg-gray-100 dark:bg-gray-800">
-      <div class="container px-4 md:px-6">
-        <div class="grid gap-8 md:grid-cols-2 lg:gap-16">
-          <div class="space-y-4">
-            <h1 class="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Welcome to Prakash Medical Pvt Ltd</h1>
-            <p class="text-gray-500 dark:text-gray-400 md:text-xl/relaxed">
-              We are a leading healthcare provider committed to delivering exceptional care to our patients. Our
-              team of experienced medical professionals is dedicated to improving the health and well-being of our
-              community.
-            </p>
-            <a
-            href="/appointment"
-              class="inline-flex h-10 items-center justify-center rounded-md bg-black px-6 text-sm font-medium text-white shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary disabled:pointer-events-none disabled:opacity-50"
-              
-            >
-              Book Appointment
-            </a>
-          </div>
-          <div class="carousercontainer">
-         
-
-<div id="default-carousel" class="relative w-full" data-carousel="slide">
-  <!-- Carousel wrapper -->
-  <div class="relative h-56 overflow-hidden rounded-lg md:h-96">
-       <!-- Item 1 -->
-      <div class="hidden duration-700 ease-in-out" data-carousel-item>
-          <img src="https://images.unsplash.com/photo-1551076805-e1869033e561?q=80&w=1032&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="...">
-      </div>
-      <!-- Item 2 -->
-      <div class="hidden duration-700 ease-in-out" data-carousel-item>
-          <img src="https://images.unsplash.com/photo-1512678080530-7760d81faba6?q=80&w=1174&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="...">
-      </div>
-      <!-- Item 3 -->
-      <div class="hidden duration-700 ease-in-out" data-carousel-item>
-          <img src="https://images.unsplash.com/photo-1504813184591-01572f98c85f?q=80&w=1171&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="...">
-      </div>
-      <!-- Item 4 -->
-      <div class="hidden duration-700 ease-in-out" data-carousel-item>
-          <img src="https://images.unsplash.com/photo-1551601651-05a4836d25c2?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NDB8fGhvc3BpdGFsJTIwMjQlMjBocnN8ZW58MHx8MHx8fDA%3D" class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="...">
-      </div>
-      <!-- Item 5 -->
-      <div class="hidden duration-700 ease-in-out" data-carousel-item>
-          <img src="https://images.unsplash.com/flagged/photo-1551049215-23fd6d2ac3f1?q=80&w=1176&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="...">
-      </div>
-  </div>
-  <!-- Slider indicators -->
-  <div class="absolute z-30 flex -translate-x-1/2 bottom-5 left-1/2 space-x-3 rtl:space-x-reverse">
-      <button type="button" class="w-3 h-3 rounded-full" aria-current="true" aria-label="Slide 1" data-carousel-slide-to="0"></button>
-      <button type="button" class="w-3 h-3 rounded-full" aria-current="false" aria-label="Slide 2" data-carousel-slide-to="1"></button>
-      <button type="button" class="w-3 h-3 rounded-full" aria-current="false" aria-label="Slide 3" data-carousel-slide-to="2"></button>
-      <button type="button" class="w-3 h-3 rounded-full" aria-current="false" aria-label="Slide 4" data-carousel-slide-to="3"></button>
-      <button type="button" class="w-3 h-3 rounded-full" aria-current="false" aria-label="Slide 5" data-carousel-slide-to="4"></button>
-  </div>
-  <!-- Slider controls -->
-  <button type="button" class="absolute top-0 start-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none" data-carousel-prev>
-      <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
-          <svg class="w-4 h-4 text-white dark:text-gray-800 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1 1 5l4 4"/>
-          </svg>
-          <span class="sr-only">Previous</span>
-      </span>
-  </button>
-  <button type="button" class="absolute top-0 end-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none" data-carousel-next>
-      <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
-          <svg class="w-4 h-4 text-white dark:text-gray-800 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
-          </svg>
-          <span class="sr-only">Next</span>
-      </span>
-  </button>
-</div>
-
-        </div>
-      </div>
-    </section>
-    <div style="width: 80%; margin: auto; overflow: hidden; padding: 20px;">
-      <div style="background: #333; color: #fff; padding: 30px 0; border-bottom: 3px solid #0779e4;">
-          <h1 style="text-align: center; text-transform: uppercase; margin: 0; font-size: 2.5em;">
-              Unlock Exclusive Healthcare Benefits
-          </h1>
-      </div>
-      <div style="background: #fff; padding: 20px; margin-top: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
-          <p style="text-align: center; font-size: 1.2em; color: #333;">
-              Join our hospital membership program and enjoy up to 10% off on essential medical services.
-          </p>
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-              <div style="background: #f9f9f9; border-radius: 8px; padding: 20px;">
-                  <h3 style="display: flex; align-items: center; margin: 0;">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 10px; color: #0779e4;">
-                          <path d="M18 6 6 18"></path>
-                          <path d="m6 6 12 12"></path>
-                      </svg>
-                      10% off X-Ray Services
-                  </h3>
-                  <p style="color: #555;">Receive a 10% discount on all your X-Ray examinations.</p>
-              </div>
-              <div style="background: #f9f9f9; border-radius: 8px; padding: 20px;">
-                  <h3 style="display: flex; align-items: center; margin: 0;">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 10px; color: #0779e4;">
-                          <path d="M3 7V5a2 2 0 0 1 2-2h2"></path>
-                          <path d="M17 3h2a2 2 0 0 1 2 2v2"></path>
-                          <path d="M21 17v2a2 2 0 0 1-2 2h-2"></path>
-                          <path d="M7 21H5a2 2 0 0 1-2-2v-2"></path>
-                      </svg>
-                      10% off Ultrasound (USG) Services
-                  </h3>
-                  <p style="color: #555;">Enjoy a 10% discount on all your Ultrasound (USG) procedures.</p>
-              </div>
-              <div style="background: #f9f9f9; border-radius: 8px; padding: 20px;">
-                  <h3 style="display: flex; align-items: center; margin: 0;">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 10px; color: #0779e4;">
-                          <path d="M7.21 15 2.66 7.14a2 2 0 0 1 .13-2.2L4.4 2.8A2 2 0 0 1 6 2h12a2 2 0 0 1 1.6.8l1.6 2.14a2 2 0 0 1 .14 2.2L16.79 15"></path>
-                          <path d="M11 12 5.12 2.2"></path>
-                          <path d="m13 12 5.88-9.8"></path>
-                          <path d="M8 7h8"></path>
-                          <circle cx="12" cy="17" r="5"></circle>
-                          <path d="M12 18v-2h-.5"></path>
-                      </svg>
-                      5% off All Medicines
-                  </h3>
-                  <p style="color: #555;">Get a 5% discount on all your medication purchases.</p>
-              </div>
-              <div style="background: #f9f9f9; border-radius: 8px; padding: 20px;">
-                  <h3 style="display: flex; align-items: center; margin: 0;">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 10px; color: #0779e4;">
-                          <path d="M9 2v17.5A2.5 2.5 0 0 1 6.5 22v0A2.5 2.5 0 0 1 4 19.5V2"></path>
-                          <path d="M20 2v17.5a2.5 2.5 0 0 1-2.5 2.5v0a2.5 2.5 0 0 1-2.5-2.5V2"></path>
-                          <path d="M3 2h7"></path>
-                          <path d="M14 2h7"></path>
-                          <path d="M9 16H4"></path>
-                          <path d="M20 16h-5"></path>
-                      </svg>
-                      10% off All Lab Examinations
-                  </h3>
-                  <p style="color: #555;">Receive a 10% discount on all your laboratory tests and examinations.</p>
-              </div>
-          </div>
-          <div style="text-align: center; margin-top: 20px;">
-              <a href="addmember"><button style="background-color: #0779e4; color: #fff; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 1.2em;">
-                  Join Now
-              </button></a>
-          </div>
-          <div style="background: #f1f1f1; padding: 20px; border-radius: 8px; margin-top: 20px;">
-              <h2 style="font-size: 2em; margin-bottom: 20px;">Frequently Asked Questions</h2>
-              <div class="faq-item">
-                  <h3 onclick="toggleFaq(this)" style="cursor: pointer; margin: 0; font-size: 1.2em; display: flex; justify-content: space-between; align-items: center;">
-                      How do I sign up for the hospital membership program?
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                          <path d="m6 9 6 6 6-6"></path>
-                      </svg>
-                  </h3>
-                  <div class="faq-answer" style="display: none; padding: 10px 0; color: #555;">
-                      Signing up is easy! Just click the "Join Now" button above and fill out the registration form.
-                  </div>
-              </div>
-              <div class="faq-item">
-                  <h3 onclick="toggleFaq(this)" style="cursor: pointer; margin: 0; font-size: 1.2em; display: flex; justify-content: space-between; align-items: center;">
-                      What are the benefits of the membership program?
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                          <path d="m6 9 6 6 6-6"></path>
-                      </svg>
-                  </h3>
-                  <div class="faq-answer" style="display: none; padding: 10px 0; color: #555;">
-                      Members receive up to 10% off on X-Ray, Ultrasound, and lab services, plus 5% off on all medications.
-                  </div>
-              </div>
-              <div class="faq-item">
-                  <h3 onclick="toggleFaq(this)" style="cursor: pointer; margin: 0; font-size: 1.2em; display: flex; justify-content: space-between; align-items: center;">
-                      How long does the membership last?
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                          <path d="m6 9 6 6 6-6"></path>
-                      </svg>
-                  </h3>
-                  <div class="faq-answer" style="display: none; padding: 10px 0; color: #555;">
-                      The membership is valid for one year from the date of registration.
-                  </div>
-              </div>
-              <div class="faq-item">
-                  <h3 onclick="toggleFaq(this)" style="cursor: pointer; margin: 0; font-size: 1.2em; display: flex; justify-content: space-between; align-items: center;">
-                      Can I cancel my membership?
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                          <path d="m6 9 6 6 6-6"></path>
-                      </svg>
-                  </h3>
-                  <div class="faq-answer" style="display: none; padding: 10px 0; color: #555;">
-                      Yes, you can cancel your membership at any time by contacting our support team.
-                  </div>
-              </div>
-          </div>
-      </div>
-  </div>
-    <section class="w-full py-12 md:py-24 lg:py-32">
-      <div class="container px-4 md:px-6 flex flex-col items-center">
-        <div class="space-y-4 text-center">
-          <div class="space-y-2">
-            <h2 class="text-3xl font-bold tracking-tighter sm:text-5xl">Explore Our Facilities</h2>
-            <p class="max-w-[600px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-              Take a virtual tour of our state-of-the-art hospital and see the cutting-edge technology and modern
-              amenities we offer.
-            </p>
-          </div>
-        </div>
-        <div class="facility">
-          
-
-<div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-  <div>
-      <img class="h-auto max-w-full rounded-lg" src="https://ik.imagekit.io/prathampoudel/Image_Hospital/IMG_2849.HEIC?updatedAt=1721840829057" alt="">
-  </div>
-  <div>
-      <img class="h-auto max-w-full rounded-lg" src="https://ik.imagekit.io/prathampoudel/Image_Hospital/IMG_2873.HEIC?updatedAt=1721840828578" alt="">
-  </div>
-  <div>
-      <img class="h-auto max-w-full rounded-lg" src="https://ik.imagekit.io/prathampoudel/Image_Hospital/IMG_2847.HEIC?updatedAt=1721840828053" alt="">
-  </div>
-  <div>
-      <img class="h-auto max-w-full rounded-lg" src="https://ik.imagekit.io/prathampoudel/Image_Hospital/IMG_2876.HEIC?updatedAt=1721840828722" alt="">
-  </div>
-  <div>
-      <img class="h-auto max-w-full rounded-lg" src="https://ik.imagekit.io/prathampoudel/Image_Hospital/IMG_2934.HEIC?updatedAt=1721840833599" alt="">
-  </div>
-  <div>
-      <img class="h-auto max-w-full rounded-lg" src="https://ik.imagekit.io/prathampoudel/Image_Hospital/IMG_2852.HEIC?updatedAt=1721840829204" alt="">
-  </div>
-  <div>
-      <img class="h-auto max-w-full rounded-lg" src="https://ik.imagekit.io/prathampoudel/Image_Hospital/IMG_2891.HEIC?updatedAt=1721840834360" alt="">
-  </div>
-  <div>
-      <img class="h-auto max-w-full rounded-lg" src="https://scontent.fktm1-1.fna.fbcdn.net/v/t1.15752-9/451135758_1249045666474254_8348025246066522148_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=9f807c&_nc_ohc=Z0MGb_ctlfMQ7kNvgEUGjXL&_nc_ht=scontent.fktm1-1.fna&oh=03_Q7cD1QFPNF7btDrK31x12DbEIlWqj0ZnFxEptdM0ShEwD9UG1Q&oe=66C88ECA" alt="">
-  </div>
-  <div>
-      <img class="h-auto max-w-full rounded-lg" src="https://ik.imagekit.io/prathampoudel/Image_Hospital/IMG_2900.HEIC?updatedAt=1721840834072" alt="">
-  </div>
-  <div>
-      <img class="h-auto max-w-full rounded-lg" src="https://scontent.fktm1-1.fna.fbcdn.net/v/t1.15752-9/450415458_467903509189780_7088333910706339323_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=9f807c&_nc_ohc=s07yS4wFXQ8Q7kNvgG2nJlO&_nc_ht=scontent.fktm1-1.fna&oh=03_Q7cD1QHjRZpyi1L8-qtApPsAQjOUKVaaftA8ezYE7XI3FIiYoQ&oe=66C895E0" alt="">
-  </div>
-  <div>
-      <img class="h-auto max-w-full rounded-lg" src="https://scontent.fktm1-1.fna.fbcdn.net/v/t1.15752-9/450868452_464279706520209_5548672998739572384_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=9f807c&_nc_ohc=S9XwTpllB_QQ7kNvgFVwEKE&_nc_ht=scontent.fktm1-1.fna&oh=03_Q7cD1QFBChnI8qzk2XxnYgITFYRju_jtUd-Sn-LI_j2XTXIGbA&oe=66C8BE9C" alt="">
-  </div>
-  <!-- <div>
-      <img class="h-auto max-w-full rounded-lg" src="https://scontent.fktm1-1.fna.fbcdn.net/v/t1.15752-9/450563456_1014127813781371_1518454735195387987_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=9f807c&_nc_ohc=c7fA1w3xd_IQ7kNvgHOMlLi&_nc_ht=scontent.fktm1-1.fna&oh=03_Q7cD1QHSWsPp0Ti3DDtvxkjDPigEDShvpzTPQATvsH61p9Q2_w&oe=66A2888F" alt="">
-  </div> -->
-</div>
-
-        </div>
-       
-      </div>
-    </section>
-  
-    <section class="w-full py-12 md:py-24 lg:py-32">
-      <div class="container px-4 md:px-6 flex flex-col items-center">
-        <div class="space-y-4 text-center">
-          <div class="space-y-2">
-            <h2 class="text-3xl font-bold tracking-tighter sm:text-5xl">Our Medical Specialties</h2>
-            <p class="max-w-[600px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-              Our hospital is home to a team of highly skilled specialists who provide exceptional care in a wide
-              range of medical disciplines.
-            </p>
-          </div>
-        </div>
-        <div class="mx-auto grid max-w-5xl items-center gap-6 py-12 lg:grid-cols-3 lg:gap-12">
-          <div class="flex flex-col justify-center space-y-4">
-            <div class="grid gap-1">
-              <h3 class="text-xl font-bold">Cardiology</h3>
-              <p class="text-muted-foreground">
-                Our team of renowned cardiologists provide comprehensive care for all heart-related conditions.
-              </p>
-            </div>
-          </div>
-          <div class="flex flex-col justify-center space-y-4">
-            <div class="grid gap-1">
-              <h3 class="text-xl font-bold">Oncology</h3>
-              <p class="text-muted-foreground">
-                Our oncology department offers cutting-edge treatments and personalized care for patients with cancer.
-              </p>
-            </div>
-          </div>
-          <div class="flex flex-col justify-center space-y-4">
-            <div class="grid gap-1">
-              <h3 class="text-xl font-bold">Orthopedics</h3>
-              <p class="text-muted-foreground">
-                Our orthopedic specialists use the latest techniques to treat a wide range of musculoskeletal
-                conditions.
-              </p>
-            </div>
-          </div>
-          <div class="flex flex-col justify-center space-y-4">
-            <div class="grid gap-1">
-              <h3 class="text-xl font-bold">Neurology</h3>
-              <p class="text-muted-foreground">
-                Our neurology department provides comprehensive care for conditions affecting the brain, spine, and
-                nervous system.
-              </p>
-            </div>
-          </div>
-          <div class="flex flex-col justify-center space-y-4">
-            <div class="grid gap-1">
-              <h3 class="text-xl font-bold">Pediatrics</h3>
-              <p class="text-muted-foreground">
-                Our pediatric team specializes in providing compassionate care for children of all ages.
-              </p>
-            </div>
-          </div>
-          <div class="flex flex-col justify-center space-y-4">
-            <div class="grid gap-1">
-              <h3 class="text-xl font-bold">Women's Health</h3>
-              <p class="text-muted-foreground">
-                Our women's health experts offer comprehensive care for all stages of a woman's life.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  
-    <section id="doctors" class="w-full py-12 md:py-24 lg:py-32 bg-gray-100 dark:bg-gray-800">
-      <div class="container px-4 md:px-6">
-        <div class="space-y-4 text-center">
-          <h2 class="text-3xl font-bold tracking-tighter sm:text-4xl">Our Doctors</h2>
-          <p class="text-gray-500 dark:text-gray-400 md:text-xl/relaxed">
-            Meet our team of highly skilled and experienced doctors dedicated to providing the best care possible.
-          </p>
-        </div>
-        <div class="grid gap-6 mt-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4" style="
-        display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-left: 10%;
-    ">
-          <div class="bg-white rounded-lg shadow-sm dark:bg-gray-950 dark:text-gray-50 dark:shadow-none">
-            <img
-              src="/images/pragya.jpg"
-              width="400"
-              height="500"
-              alt="Doctor"
-              class="mx-auto rounded-t-lg object-cover"
-              style="aspect-ratio: 400 / 500; object-fit: cover;"
-            />
-            <div class="p-6 space-y-2">
-              <h3 class="text-xl font-semibold">Dr. Pragya Poudel</h3>
-              <p class="text-gray-500 dark:text-gray-400">BAMS</p>
-            </div>
-          </div>
-          <div class="bg-white rounded-lg shadow-sm dark:bg-gray-950 dark:text-gray-50 dark:shadow-none">
-            <img
-              src="/images/prakash.jpg"
-              width="400"
-              height="500"
-              alt="Doctor"
-              class="mx-auto rounded-t-lg object-cover"
-              style="aspect-ratio: 400 / 500; object-fit: cover;"
-            />
-            <div class="p-6 space-y-2">
-              <h3 class="text-xl font-semibold">Dr. Prakash Poudel</h3>
-              <p class="text-gray-500 dark:text-gray-400">MD Homeopathy</p>
-            </div>
-          </div>
-          <div class="bg-white rounded-lg shadow-sm dark:bg-gray-950 dark:text-gray-50 dark:shadow-none">
-            <img
-              src="/images/dron.jpg"
-              width="400"
-              height="500"
-              alt="Doctor"
-              class="mx-auto rounded-t-lg object-cover"
-              style="aspect-ratio: 400 / 500; object-fit: cover;"
-            />
-            <div class="p-6 space-y-2">
-              <h3 class="text-xl font-semibold">Dr. Dron Karki</h3>
-              <p class="text-gray-500 dark:text-gray-400">MBBS</p>
-            </div>
-          </div>
-          
-          
-        </div>
-      </div>
-    </section>
-    <section id="contact" class="w-full py-12 md:py-24 lg:py-32">
-      <div class="container px-4 md:px-6">
-        <div class="space-y-4 text-center">
-          <h2 class="text-3xl font-bold tracking-tighter sm:text-4xl">Contact Us</h2>
-          <p class="text-gray-500 dark:text-gray-400 md:text-xl/relaxed">
-            If you have any questions or need assistance, please feel free to contact us. We're here to help.
-          </p>
-        </div>
-        <div class="mt-8 flex justify-center">
-          <form action="/contactus" method="POST" class="w-full max-w-lg bg-white rounded-lg shadow-md p-6 space-y-4">
-            <div>
-              <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
-              <input
-                type="text"
-                required
-                name="name"
-                id="name"
-                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-              />
-            </div>
-            <div>
-              <label for="Phone Number" class="block text-sm font-medium text-gray-700">Phone Number</label>
-              <input
-                type="text"
-                required
-                name="number"
-                id="number"
-                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-              />
-            </div>
-            <div>
-              <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-              <input
-                type="email"
-                name="email"
-                required
-                id="email"
-                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-              />
-            </div>
-            <div>
-              <label for="message" class="block text-sm font-medium text-gray-700">Message</label>
-              <textarea
-                name="message"
-                required
-                id="message"
-                rows="4"
-                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-              ></textarea>
-            </div>
-            <div>
-              <button
-                type="submit"
-                class="inline-flex h-10 items-center justify-center rounded-md bg-black px-6 text-sm font-medium text-white shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary disabled:pointer-events-none disabled:opacity-50"
-              >
-                Submit
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </section>
-  </main>
-  <footer class="bg-gray-800 text-white py-6">
-    <div class="container px-4 md:px-6 text-center footer-container">
-        <p>&copy; 2023 Prakash Medical. All rights reserved.</p>
-        <div class="map-container">
-          <div style="width: 100%"><iframe width="100%" height="300" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?width=100%25&amp;height=300&amp;hl=en&amp;q=27.650182,%2082.868819+(Chandrauta%20Hospital%20Pvt%20Ltd)&amp;t=h&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"><a href="https://www.gps.ie/">gps trackers</a></iframe></div>
-        </div>
-    </div>
-</footer>
-</div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
-<script>
-  function toggleFaq(element) {
-      const faqItem = element.parentElement;
-      faqItem.classList.toggle('open');
-      const answer = faqItem.querySelector('.faq-answer');
-      if (faqItem.classList.contains('open')) {
-          answer.style.display = 'block';
-      } else {
-          answer.style.display = 'none';
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome</title>
+    <style>
+      .carousercontainer{
+        height:400 ;
+        width:600;
+      
       }
-  }
-</script>
-</body>
-</html>
+      .faq-item {
+              border-bottom: 1px solid #ddd;
+              padding: 10px 0;
+          }
+          .faq-item h3 {
+              cursor: pointer;
+              margin: 0;
+              font-size: 1.2em;
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+          }
+          .faq-item h3 svg {
+              transition: transform 0.2s;
+          }
+          .faq-item.open h3 svg {
+              transform: rotate(180deg);
+          }
+          .faq-answer {
+              display: none;
+              padding: 10px 0;
+              color: #555;
+          }
+          .faq-item.open .faq-answer {
+              display: block;
+          }
+      .footer-container {
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              justify-content: center;
+          }
+
+          .map-container {
+              width: 100%;
+              max-width: 600px; /* Adjust this to fit your design */
+              height: 300px; /* Adjust this to fit your design */
+              margin-top: 20px; /* Add some spacing above the map */
+          }
+    </style>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.7/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet" />
+  </head>
+  <body>
+    <div id="notice" class="fixed inset-0 bg-gray-900 bg-opacity-75 z-50 flex items-center justify-center">
+      <div class="bg-white p-4 rounded-lg max-w-4xl w-full mx-4 sm:mx-8 md:mx-16 text-center shadow-lg relative">
+          <!-- Notice Image -->
+          <img src="/images/impnotices.png" alt="Notice Image" class="w-full h-auto max-h-[90vh] rounded-lg mb-4 object-cover">
+          
+          <!-- Close Button (X) -->
+          <button onclick="closeNotice()" class="absolute top-2 right-2 text-gray-600 hover:text-gray-800 text-2xl font-bold transition">
+              &times;
+          </button>
+      </div>
+  </div>
+  
+  
+  
+  <div class="flex flex-col min-h-[100dvh]">
+    <header class="bg-white shadow-sm dark:bg-gray-950">
+      <div class="container px-4 md:px-6 flex items-center justify-between h-16">
+        <a class="flex items-center gap-2" href="#">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="h-6 w-6"
+          >
+            <path d="M12 6v4"></path>
+            <path d="M14 14h-4"></path>
+            <path d="M14 18h-4"></path>
+            <path d="M14 8h-4"></path>
+            <path d="M18 12h2a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-9a2 2 0 0 1 2-2h2"></path>
+            <path d="M18 22V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v18"></path>
+          </svg>
+          <span class="font-semibold text-lg">Prakash Medical</span>
+        </a>
+        <nav class="hidden md:flex items-center gap-6">
+          <a class="text-sm font-medium hover:underline underline-offset-4" href="#">
+            About
+          </a>
+          <a class="text-sm font-medium hover:underline underline-offset-4" href="#">
+            Services
+          </a>
+          <a class="text-sm font-medium hover:underline underline-offset-4" href="#">
+            Doctors
+          </a>
+          <a class="text-sm font-medium hover:underline underline-offset-4" href="llm">
+            View Lab Report
+          </a>
+          <a class="text-sm font-medium hover:underline underline-offset-4" href="adminmajau">
+              Admin Center
+            </a>
+        </nav>
+        <a
+        href="/appointment"
+          class="inline-flex h-10 items-center justify-center rounded-md bg-black px-6 text-sm font-medium text-white shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary disabled:pointer-events-none disabled:opacity-50"
+        >
+          Book Appointment
+        </a>
+      </div>
+    </header>
+    <main class="flex-1">
+      <section id="about" class="w-full py-12 md:py-24 lg:py-32 bg-gray-100 dark:bg-gray-800">
+        <div class="container px-4 md:px-6">
+          <div class="grid gap-8 md:grid-cols-2 lg:gap-16">
+            <div class="space-y-4">
+              <h1 class="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Welcome to Prakash Medical Pvt Ltd</h1>
+              <p class="text-gray-500 dark:text-gray-400 md:text-xl/relaxed">
+                We are a leading healthcare provider committed to delivering exceptional care to our patients. Our
+                team of experienced medical professionals is dedicated to improving the health and well-being of our
+                community.
+              </p>
+              <a
+              href="/appointment"
+                class="inline-flex h-10 items-center justify-center rounded-md bg-black px-6 text-sm font-medium text-white shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary disabled:pointer-events-none disabled:opacity-50"
+                
+              >
+                Book Appointment
+              </a>
+            </div>
+            <div class="carousercontainer">
+          
+
+  <div id="default-carousel" class="relative w-full" data-carousel="slide">
+    <!-- Carousel wrapper -->
+    <div class="relative h-56 overflow-hidden rounded-lg md:h-96">
+        <!-- Item 1 -->
+        <div class="hidden duration-700 ease-in-out" data-carousel-item>
+            <img src="https://images.unsplash.com/photo-1551076805-e1869033e561?q=80&w=1032&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="...">
+        </div>
+        <!-- Item 2 -->
+        <div class="hidden duration-700 ease-in-out" data-carousel-item>
+            <img src="https://images.unsplash.com/photo-1512678080530-7760d81faba6?q=80&w=1174&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="...">
+        </div>
+        <!-- Item 3 -->
+        <div class="hidden duration-700 ease-in-out" data-carousel-item>
+            <img src="https://images.unsplash.com/photo-1504813184591-01572f98c85f?q=80&w=1171&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="...">
+        </div>
+        <!-- Item 4 -->
+        <div class="hidden duration-700 ease-in-out" data-carousel-item>
+            <img src="https://images.unsplash.com/photo-1551601651-05a4836d25c2?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NDB8fGhvc3BpdGFsJTIwMjQlMjBocnN8ZW58MHx8MHx8fDA%3D" class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="...">
+        </div>
+        <!-- Item 5 -->
+        <div class="hidden duration-700 ease-in-out" data-carousel-item>
+            <img src="https://images.unsplash.com/flagged/photo-1551049215-23fd6d2ac3f1?q=80&w=1176&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="...">
+        </div>
+    </div>
+    <!-- Slider indicators -->
+    <div class="absolute z-30 flex -translate-x-1/2 bottom-5 left-1/2 space-x-3 rtl:space-x-reverse">
+        <button type="button" class="w-3 h-3 rounded-full" aria-current="true" aria-label="Slide 1" data-carousel-slide-to="0"></button>
+        <button type="button" class="w-3 h-3 rounded-full" aria-current="false" aria-label="Slide 2" data-carousel-slide-to="1"></button>
+        <button type="button" class="w-3 h-3 rounded-full" aria-current="false" aria-label="Slide 3" data-carousel-slide-to="2"></button>
+        <button type="button" class="w-3 h-3 rounded-full" aria-current="false" aria-label="Slide 4" data-carousel-slide-to="3"></button>
+        <button type="button" class="w-3 h-3 rounded-full" aria-current="false" aria-label="Slide 5" data-carousel-slide-to="4"></button>
+    </div>
+    <!-- Slider controls -->
+    <button type="button" class="absolute top-0 start-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none" data-carousel-prev>
+        <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
+            <svg class="w-4 h-4 text-white dark:text-gray-800 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1 1 5l4 4"/>
+            </svg>
+            <span class="sr-only">Previous</span>
+        </span>
+    </button>
+    <button type="button" class="absolute top-0 end-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none" data-carousel-next>
+        <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
+            <svg class="w-4 h-4 text-white dark:text-gray-800 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
+            </svg>
+            <span class="sr-only">Next</span>
+        </span>
+    </button>
+  </div>
+
+          </div>
+        </div>
+      </section>
+      <div style="width: 80%; margin: auto; overflow: hidden; padding: 20px;">
+        <div style="background: #333; color: #fff; padding: 30px 0; border-bottom: 3px solid #0779e4;">
+            <h1 style="text-align: center; text-transform: uppercase; margin: 0; font-size: 2.5em;">
+                Unlock Exclusive Healthcare Benefits
+            </h1>
+        </div>
+        <div style="background: #fff; padding: 20px; margin-top: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+            <p style="text-align: center; font-size: 1.2em; color: #333;">
+                Join our hospital membership program and enjoy up to 10% off on essential medical services.
+            </p>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div style="background: #f9f9f9; border-radius: 8px; padding: 20px;">
+                    <h3 style="display: flex; align-items: center; margin: 0;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 10px; color: #0779e4;">
+                            <path d="M18 6 6 18"></path>
+                            <path d="m6 6 12 12"></path>
+                        </svg>
+                        10% off X-Ray Services
+                    </h3>
+                    <p style="color: #555;">Receive a 10% discount on all your X-Ray examinations.</p>
+                </div>
+                <div style="background: #f9f9f9; border-radius: 8px; padding: 20px;">
+                    <h3 style="display: flex; align-items: center; margin: 0;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 10px; color: #0779e4;">
+                            <path d="M3 7V5a2 2 0 0 1 2-2h2"></path>
+                            <path d="M17 3h2a2 2 0 0 1 2 2v2"></path>
+                            <path d="M21 17v2a2 2 0 0 1-2 2h-2"></path>
+                            <path d="M7 21H5a2 2 0 0 1-2-2v-2"></path>
+                        </svg>
+                        10% off Ultrasound (USG) Services
+                    </h3>
+                    <p style="color: #555;">Enjoy a 10% discount on all your Ultrasound (USG) procedures.</p>
+                </div>
+                <div style="background: #f9f9f9; border-radius: 8px; padding: 20px;">
+                    <h3 style="display: flex; align-items: center; margin: 0;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 10px; color: #0779e4;">
+                            <path d="M7.21 15 2.66 7.14a2 2 0 0 1 .13-2.2L4.4 2.8A2 2 0 0 1 6 2h12a2 2 0 0 1 1.6.8l1.6 2.14a2 2 0 0 1 .14 2.2L16.79 15"></path>
+                            <path d="M11 12 5.12 2.2"></path>
+                            <path d="m13 12 5.88-9.8"></path>
+                            <path d="M8 7h8"></path>
+                            <circle cx="12" cy="17" r="5"></circle>
+                            <path d="M12 18v-2h-.5"></path>
+                        </svg>
+                        5% off All Medicines
+                    </h3>
+                    <p style="color: #555;">Get a 5% discount on all your medication purchases.</p>
+                </div>
+                <div style="background: #f9f9f9; border-radius: 8px; padding: 20px;">
+                    <h3 style="display: flex; align-items: center; margin: 0;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 10px; color: #0779e4;">
+                            <path d="M9 2v17.5A2.5 2.5 0 0 1 6.5 22v0A2.5 2.5 0 0 1 4 19.5V2"></path>
+                            <path d="M20 2v17.5a2.5 2.5 0 0 1-2.5 2.5v0a2.5 2.5 0 0 1-2.5-2.5V2"></path>
+                            <path d="M3 2h7"></path>
+                            <path d="M14 2h7"></path>
+                            <path d="M9 16H4"></path>
+                            <path d="M20 16h-5"></path>
+                        </svg>
+                        10% off All Lab Examinations
+                    </h3>
+                    <p style="color: #555;">Receive a 10% discount on all your laboratory tests and examinations.</p>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 20px;">
+                <a href="addmember"><button style="background-color: #0779e4; color: #fff; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 1.2em;">
+                    Join Now
+                </button></a>
+            </div>
+            <div style="background: #f1f1f1; padding: 20px; border-radius: 8px; margin-top: 20px;">
+                <h2 style="font-size: 2em; margin-bottom: 20px;">Frequently Asked Questions</h2>
+                <div class="faq-item">
+                    <h3 onclick="toggleFaq(this)" style="cursor: pointer; margin: 0; font-size: 1.2em; display: flex; justify-content: space-between; align-items: center;">
+                        How do I sign up for the hospital membership program?
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="m6 9 6 6 6-6"></path>
+                        </svg>
+                    </h3>
+                    <div class="faq-answer" style="display: none; padding: 10px 0; color: #555;">
+                        Signing up is easy! Just click the "Join Now" button above and fill out the registration form.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <h3 onclick="toggleFaq(this)" style="cursor: pointer; margin: 0; font-size: 1.2em; display: flex; justify-content: space-between; align-items: center;">
+                        What are the benefits of the membership program?
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="m6 9 6 6 6-6"></path>
+                        </svg>
+                    </h3>
+                    <div class="faq-answer" style="display: none; padding: 10px 0; color: #555;">
+                        Members receive up to 10% off on X-Ray, Ultrasound, and lab services, plus 5% off on all medications.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <h3 onclick="toggleFaq(this)" style="cursor: pointer; margin: 0; font-size: 1.2em; display: flex; justify-content: space-between; align-items: center;">
+                        How long does the membership last?
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="m6 9 6 6 6-6"></path>
+                        </svg>
+                    </h3>
+                    <div class="faq-answer" style="display: none; padding: 10px 0; color: #555;">
+                        The membership is valid for one year from the date of registration.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <h3 onclick="toggleFaq(this)" style="cursor: pointer; margin: 0; font-size: 1.2em; display: flex; justify-content: space-between; align-items: center;">
+                        Can I cancel my membership?
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="m6 9 6 6 6-6"></path>
+                        </svg>
+                    </h3>
+                    <div class="faq-answer" style="display: none; padding: 10px 0; color: #555;">
+                        Yes, you can cancel your membership at any time by contacting our support team.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+      <section class="w-full py-12 md:py-24 lg:py-32">
+        <div class="container px-4 md:px-6 flex flex-col items-center">
+          <div class="space-y-4 text-center">
+            <div class="space-y-2">
+              <h2 class="text-3xl font-bold tracking-tighter sm:text-5xl">Explore Our Facilities</h2>
+              <p class="max-w-[600px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+                Take a virtual tour of our state-of-the-art hospital and see the cutting-edge technology and modern
+                amenities we offer.
+              </p>
+            </div>
+          </div>
+          <div class="facility">
+            
+
+  <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+    <div>
+        <img class="h-auto max-w-full rounded-lg" src="https://ik.imagekit.io/prathampoudel/Image_Hospital/IMG_2849.HEIC?updatedAt=1721840829057" alt="">
+    </div>
+    <div>
+        <img class="h-auto max-w-full rounded-lg" src="https://ik.imagekit.io/prathampoudel/Image_Hospital/IMG_2873.HEIC?updatedAt=1721840828578" alt="">
+    </div>
+    <div>
+        <img class="h-auto max-w-full rounded-lg" src="https://ik.imagekit.io/prathampoudel/Image_Hospital/IMG_2847.HEIC?updatedAt=1721840828053" alt="">
+    </div>
+    <div>
+        <img class="h-auto max-w-full rounded-lg" src="https://ik.imagekit.io/prathampoudel/Image_Hospital/IMG_2876.HEIC?updatedAt=1721840828722" alt="">
+    </div>
+    <div>
+        <img class="h-auto max-w-full rounded-lg" src="https://ik.imagekit.io/prathampoudel/Image_Hospital/IMG_2934.HEIC?updatedAt=1721840833599" alt="">
+    </div>
+    <div>
+        <img class="h-auto max-w-full rounded-lg" src="https://ik.imagekit.io/prathampoudel/Image_Hospital/IMG_2852.HEIC?updatedAt=1721840829204" alt="">
+    </div>
+    <div>
+        <img class="h-auto max-w-full rounded-lg" src="https://ik.imagekit.io/prathampoudel/Image_Hospital/IMG_2891.HEIC?updatedAt=1721840834360" alt="">
+    </div>
+    <div>
+        <img class="h-auto max-w-full rounded-lg" src="https://scontent.fktm1-1.fna.fbcdn.net/v/t1.15752-9/451135758_1249045666474254_8348025246066522148_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=9f807c&_nc_ohc=Z0MGb_ctlfMQ7kNvgEUGjXL&_nc_ht=scontent.fktm1-1.fna&oh=03_Q7cD1QFPNF7btDrK31x12DbEIlWqj0ZnFxEptdM0ShEwD9UG1Q&oe=66C88ECA" alt="">
+    </div>
+    <div>
+        <img class="h-auto max-w-full rounded-lg" src="https://ik.imagekit.io/prathampoudel/Image_Hospital/IMG_2900.HEIC?updatedAt=1721840834072" alt="">
+    </div>
+    <div>
+        <img class="h-auto max-w-full rounded-lg" src="https://scontent.fktm1-1.fna.fbcdn.net/v/t1.15752-9/450415458_467903509189780_7088333910706339323_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=9f807c&_nc_ohc=s07yS4wFXQ8Q7kNvgG2nJlO&_nc_ht=scontent.fktm1-1.fna&oh=03_Q7cD1QHjRZpyi1L8-qtApPsAQjOUKVaaftA8ezYE7XI3FIiYoQ&oe=66C895E0" alt="">
+    </div>
+    <div>
+        <img class="h-auto max-w-full rounded-lg" src="https://scontent.fktm1-1.fna.fbcdn.net/v/t1.15752-9/450868452_464279706520209_5548672998739572384_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=9f807c&_nc_ohc=S9XwTpllB_QQ7kNvgFVwEKE&_nc_ht=scontent.fktm1-1.fna&oh=03_Q7cD1QFBChnI8qzk2XxnYgITFYRju_jtUd-Sn-LI_j2XTXIGbA&oe=66C8BE9C" alt="">
+    </div>
+    <!-- <div>
+        <img class="h-auto max-w-full rounded-lg" src="https://scontent.fktm1-1.fna.fbcdn.net/v/t1.15752-9/450563456_1014127813781371_1518454735195387987_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=9f807c&_nc_ohc=c7fA1w3xd_IQ7kNvgHOMlLi&_nc_ht=scontent.fktm1-1.fna&oh=03_Q7cD1QHSWsPp0Ti3DDtvxkjDPigEDShvpzTPQATvsH61p9Q2_w&oe=66A2888F" alt="">
+    </div> -->
+  </div>
+
+          </div>
+        
+        </div>
+      </section>
+    
+      <section class="w-full py-12 md:py-24 lg:py-32">
+        <div class="container px-4 md:px-6 flex flex-col items-center">
+          <div class="space-y-4 text-center">
+            <div class="space-y-2">
+              <h2 class="text-3xl font-bold tracking-tighter sm:text-5xl">Our Medical Specialties</h2>
+              <p class="max-w-[600px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+                Our hospital is home to a team of highly skilled specialists who provide exceptional care in a wide
+                range of medical disciplines.
+              </p>
+            </div>
+          </div>
+          <div class="mx-auto grid max-w-5xl items-center gap-6 py-12 lg:grid-cols-3 lg:gap-12">
+            <div class="flex flex-col justify-center space-y-4">
+              <div class="grid gap-1">
+                <h3 class="text-xl font-bold">Cardiology</h3>
+                <p class="text-muted-foreground">
+                  Our team of renowned cardiologists provide comprehensive care for all heart-related conditions.
+                </p>
+              </div>
+            </div>
+            <div class="flex flex-col justify-center space-y-4">
+              <div class="grid gap-1">
+                <h3 class="text-xl font-bold">Oncology</h3>
+                <p class="text-muted-foreground">
+                  Our oncology department offers cutting-edge treatments and personalized care for patients with cancer.
+                </p>
+              </div>
+            </div>
+            <div class="flex flex-col justify-center space-y-4">
+              <div class="grid gap-1">
+                <h3 class="text-xl font-bold">Orthopedics</h3>
+                <p class="text-muted-foreground">
+                  Our orthopedic specialists use the latest techniques to treat a wide range of musculoskeletal
+                  conditions.
+                </p>
+              </div>
+            </div>
+            <div class="flex flex-col justify-center space-y-4">
+              <div class="grid gap-1">
+                <h3 class="text-xl font-bold">Neurology</h3>
+                <p class="text-muted-foreground">
+                  Our neurology department provides comprehensive care for conditions affecting the brain, spine, and
+                  nervous system.
+                </p>
+              </div>
+            </div>
+            <div class="flex flex-col justify-center space-y-4">
+              <div class="grid gap-1">
+                <h3 class="text-xl font-bold">Pediatrics</h3>
+                <p class="text-muted-foreground">
+                  Our pediatric team specializes in providing compassionate care for children of all ages.
+                </p>
+              </div>
+            </div>
+            <div class="flex flex-col justify-center space-y-4">
+              <div class="grid gap-1">
+                <h3 class="text-xl font-bold">Women's Health</h3>
+                <p class="text-muted-foreground">
+                  Our women's health experts offer comprehensive care for all stages of a woman's life.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    
+      <section id="doctors" class="w-full py-12 md:py-24 lg:py-32 bg-gray-100 dark:bg-gray-800">
+        <div class="container px-4 md:px-6">
+          <div class="space-y-4 text-center">
+            <h2 class="text-3xl font-bold tracking-tighter sm:text-4xl">Our Doctors</h2>
+            <p class="text-gray-500 dark:text-gray-400 md:text-xl/relaxed">
+              Meet our team of highly skilled and experienced doctors dedicated to providing the best care possible.
+            </p>
+          </div>
+          <div class="grid gap-6 mt-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4" style="
+          display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-left: 10%;
+      ">
+            <div class="bg-white rounded-lg shadow-sm dark:bg-gray-950 dark:text-gray-50 dark:shadow-none">
+              <img
+                src="/images/pragya.jpg"
+                width="400"
+                height="500"
+                alt="Doctor"
+                class="mx-auto rounded-t-lg object-cover"
+                style="aspect-ratio: 400 / 500; object-fit: cover;"
+              />
+              <div class="p-6 space-y-2">
+                <h3 class="text-xl font-semibold">Dr. Pragya Poudel</h3>
+                <p class="text-gray-500 dark:text-gray-400">BAMS</p>
+              </div>
+            </div>
+            <div class="bg-white rounded-lg shadow-sm dark:bg-gray-950 dark:text-gray-50 dark:shadow-none">
+              <img
+                src="/images/prakash.jpg"
+                width="400"
+                height="500"
+                alt="Doctor"
+                class="mx-auto rounded-t-lg object-cover"
+                style="aspect-ratio: 400 / 500; object-fit: cover;"
+              />
+              <div class="p-6 space-y-2">
+                <h3 class="text-xl font-semibold">Dr. Prakash Poudel</h3>
+                <p class="text-gray-500 dark:text-gray-400">MD Homeopathy</p>
+              </div>
+            </div>
+            <div class="bg-white rounded-lg shadow-sm dark:bg-gray-950 dark:text-gray-50 dark:shadow-none">
+              <img
+                src="/images/dron.jpg"
+                width="400"
+                height="500"
+                alt="Doctor"
+                class="mx-auto rounded-t-lg object-cover"
+                style="aspect-ratio: 400 / 500; object-fit: cover;"
+              />
+              <div class="p-6 space-y-2">
+                <h3 class="text-xl font-semibold">Dr. Dron Karki</h3>
+                <p class="text-gray-500 dark:text-gray-400">MBBS</p>
+              </div>
+            </div>
+            
+            
+          </div>
+        </div>
+      </section>
+      <section id="contact" class="w-full py-12 md:py-24 lg:py-32">
+        <div class="container px-4 md:px-6">
+          <div class="space-y-4 text-center">
+            <h2 class="text-3xl font-bold tracking-tighter sm:text-4xl">Contact Us</h2>
+            <p class="text-gray-500 dark:text-gray-400 md:text-xl/relaxed">
+              If you have any questions or need assistance, please feel free to contact us. We're here to help.
+            </p>
+          </div>
+          <div class="mt-8 flex justify-center">
+            <form action="/contactus" method="POST" class="w-full max-w-lg bg-white rounded-lg shadow-md p-6 space-y-4">
+              <div>
+                <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
+                <input
+                  type="text"
+                  required
+                  name="name"
+                  id="name"
+                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                />
+              </div>
+              <div>
+                <label for="Phone Number" class="block text-sm font-medium text-gray-700">Phone Number</label>
+                <input
+                  type="text"
+                  required
+                  name="number"
+                  id="number"
+                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                />
+              </div>
+              <div>
+                <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                <input
+                  type="email"
+                  name="email"
+                  required
+                  id="email"
+                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                />
+              </div>
+              <div>
+                <label for="message" class="block text-sm font-medium text-gray-700">Message</label>
+                <textarea
+                  name="message"
+                  required
+                  id="message"
+                  rows="4"
+                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                ></textarea>
+              </div>
+              <div>
+                <button
+                  type="submit"
+                  class="inline-flex h-10 items-center justify-center rounded-md bg-black px-6 text-sm font-medium text-white shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary disabled:pointer-events-none disabled:opacity-50"
+                >
+                  Submit
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer class="bg-gray-800 text-white py-6">
+      <div class="container px-4 md:px-6 text-center footer-container">
+          <p>&copy; 2023 Prakash Medical. All rights reserved.</p>
+          <div class="map-container">
+            <div style="width: 100%"><iframe width="100%" height="300" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?width=100%25&amp;height=300&amp;hl=en&amp;q=27.650182,%2082.868819+(Chandrauta%20Hospital%20Pvt%20Ltd)&amp;t=h&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"><a href="https://www.gps.ie/">gps trackers</a></iframe></div>
+          </div>
+      </div>
+  </footer>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+  <script>
+     function closeNotice() {
+            document.getElementById('notice').style.display = 'none';
+        }
+    function toggleFaq(element) {
+        const faqItem = element.parentElement;
+        faqItem.classList.toggle('open');
+        const answer = faqItem.querySelector('.faq-answer');
+        if (faqItem.classList.contains('open')) {
+            answer.style.display = 'block';
+        } else {
+            answer.style.display = 'none';
+        }
+    }
+  </script>
+  </body>
+  </html>
 
 
 
