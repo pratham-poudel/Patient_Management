@@ -27,8 +27,9 @@ const OpenAI = require("openai");
 
 const openai = new OpenAI({
     baseURL: "https://api.deepseek.com",
-    apiKey: 'DEEPSEEK_API_KEY_REMOVED', // Use environment variable for security
+    apiKey: process.env.DEEPSEEK_API_KEY,
 });
+const { interpretReport } = require("./labInterpreter");
 
 
 
@@ -76,31 +77,10 @@ async function sendSMS(to, body) {
 
 
 
-async function run(prompt) {
-  try {
-    console.log("Prompt:", prompt);
-    const response = await openai.chat.completions.create({
-      model: "deepseek-chat",
-      messages: [
-        { 
-          role: "system", 
-          content: `You will be like a Lab technician who will give overall report interpretation. 
-          This is the pathology report of a patient. Please analyze the report based only on the non-null data provided. 
-          Do not assume or infer results for any missing or null data. Provide an overall interpretation of the available results in one concise paragraph ` 
-        },
-        { role: "user", content: String(prompt) } // Ensure content is a string
-      ],
-    });
-
-    if (response.choices && response.choices.length > 0) {
-      return response.choices[0].message.content.trim();
-    } else {
-      return "No valid response received.";
-    }
-  } catch (error) {
-    console.error("Intent analysis error:", error.response?.data || error.message);
-    return "Error processing the report. Please try again.";
-  }
+// Generates the pathologist's comment for a LabReport. Returns null on failure
+// so a failed call is never saved as the interpretation (see routes/labInterpreter.js).
+async function run(report) {
+  return interpretReport(openai, report);
 }
 
 
@@ -406,6 +386,11 @@ router.post("/submitLabReport", isLoggedIn, async function (req, res) {
       hba1c: req.body.hba1c_result,
       amylase: req.body.amylase_result,
       ckMb: req.body.ck_mb_result,
+      ft3: req.body.ft3_result,
+      ft4: req.body.ft4_result,
+      tsh: req.body.tsh_result,
+      vitaminB12: req.body.vitamin_b12_result,
+      vitaminD: req.body.vitamin_d_result,
       colour: req.body.colour,
       specificgravity: req.body.specificgravity,
       appearance: req.body.appearance,
@@ -845,24 +830,10 @@ router.get("/profiles/:id", async function (req, res, next) {
       return res.render("report", { users });
     }
 
-    // Convert Mongoose document to a plain object
-    const usersData = users.toObject(); 
-
-    // Extract non-empty lab test results
-    const reportData = Object.entries(usersData)
-      .filter(([key, value]) => key !== "_id" && value !== "" && value !== null) // Remove empty values
-      .map(([key, value]) => `${key}: ${value}`) // Convert to readable format
-      .join("\n");
-
-    console.log("📝 Final prompt to AI:", reportData); // Debugging log
-
-    if (reportData.trim().length > 0) { // Ensure we don't send an empty string
-      const review = await run(reportData);
-
-      if (review && review !== "No valid response received." && review !== "Error processing the report. Please try again.") {
-        users.interpretation = review;
-        await users.save();
-      }
+    const review = await run(users);
+    if (review) {
+      users.interpretation = review;
+      await users.save();
     }
 
     res.render("report", { users });
@@ -1079,9 +1050,11 @@ router.get("/submitreport/:userId", async function (req, res, next) {
     // Fetch the user data or perform any other necessary operations
     const users = await LabReport.findOne({ _id: userId });
     if (!users.interpretation) {
-      const review = await run(users)
-      users.interpretation = review;
-      await users.save();
+      const review = await run(users);
+      if (review) {
+        users.interpretation = review;
+        await users.save();
+      }
     }
     res.render("patientrp", { users });
 
