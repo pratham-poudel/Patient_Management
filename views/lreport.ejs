@@ -4,11 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lab Report Card</title>
+    <link rel="stylesheet" href="https://unpkg.com/nprogress/nprogress.css">
+<script src="https://unpkg.com/nprogress/nprogress.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
         }
+        #nprogress .bar {
+    height: 10px; /* Adjust this value to make it thicker */
+    background: rgb(0, 255, 195); /* Optional: change color */
+}
+#nprogress .spinner {
+    display: none; /* Hide spinner if you only want the bar */
+}
+
+
         table {
             width: 100%;
             border-collapse: collapse;
@@ -72,7 +83,7 @@
 
     <h2>Lab Report Card</h2>
 
-    <form method="post" action="/submitLabReport">
+    <form method="post" action="/submitLabReport" id="labReportForm">
         <table>
             <tr>
                 <td>Patient Name:</td>
@@ -83,6 +94,8 @@
                 <td><input type="text" name="sex" required></td>
                 <td>Email</td>
                 <td><input type="text" name="email"></td>
+                <td>Phone</td>
+                <td><input type="number" name="phone"></td>
             </tr>
             <tr>
                 <td>Referred By:</td>
@@ -691,5 +704,21 @@
                   <input type="text" name="lab_assistant" required>
               </div>
               <button type="submit">Submit</button>
-          </form></body>
+          </form>
+          <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const form = document.getElementById('labReportForm'); // Assuming your form has this ID
+        
+                form.addEventListener('submit', function() {
+                    NProgress.start(); // Start the loading bar
+                });
+        
+                // Stop the loading bar on window load, after backend processes and reloads page
+                window.addEventListener('load', function() {
+                    NProgress.done();
+                });
+            });
+        </script>
+        </body>
+
           </html>

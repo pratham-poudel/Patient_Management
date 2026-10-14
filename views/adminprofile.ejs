@@ -7,6 +7,9 @@
     
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://unpkg.com/nprogress/nprogress.css">
+<script src="https://unpkg.com/nprogress/nprogress.js"></script>
+
     <style>
       :root {
           --primary-color: #4a90e2;
@@ -121,6 +124,10 @@
           background-color: var(--tertiary-color);
           color: white;
       }
+      #nprogress .bar {
+    height: 5px; /* Adjust this for width */
+    background: #0bffbe; /* Change to match your primary color */
+}
 
       .btn.function {
           background-color: white;
@@ -248,7 +255,7 @@
               <a href="/register"><button class="btn tertiary" id="registerDoctor"><i class="fas fa-user-plus"></i>Register a Doctor</button></a>
               <a href="/addedmemberrequests"><button class="btn tertiary" id="registerDoctor"><i class="fas fa-user-plus"></i>Membership Requests</button></a>
               <a href="/checkdaysheet"><button class="btn secondary" id="logout"><i class="fas fa-sign-out-alt"></i>Check Day Sheet</button></a>
-            
+              <a href="/showRegisteredpatients"><button class="btn secondary" id="logout"><i class="fas fa-sign-out-alt"></i>Check Daily Patient</button></a>
         </section>
         
         <section class="function-buttons">
@@ -258,8 +265,11 @@
           <a href="/createInvoice"><button class="btn function"><i class="fas fa-file-medical-alt"></i>Create Invoice</button></a>
           <a href="/createExpenditure"><button class="btn function"><i class="fas fa-search"></i>Create Expenditure</button></a>
           <a href="/search-bill"><button class="btn function"><i class="fas fa-calendar-alt"></i>Search Bill</button></a>
-          
           <a href="/viewmember"><button class="btn function"><i class="fas fa-users"></i>Check Member</button></a>
+          <a href="/createproduct"><button class="btn function"><i class="fas fa-users"></i>Create Product</button></a>
+          <a href="/inventory"><button class="btn function"><i class="fas fa-users"></i>Show Inventory</button></a>
+          <a href="/partymanagement"><button class="btn function"><i class="fas fa-users"></i>Manage Party</button></a>
+          
       </section>
       
       
@@ -267,7 +277,7 @@
         <section class="lab-reports">
             <h2>Lab Reports</h2>
             <div id="labReportsList">
-              <% patientlab.reverse().forEach(function(elem){ 
+              <% patientlab.forEach(function(elem){ 
                 %>
 
                 
@@ -286,14 +296,34 @@
     </div>
     
     <script >
-      // Simulated lab reports data (replace this with actual data fetching logic)
-const labReports = [
-    { id: 1, patientName: "John Doe", date: "2023-05-15", type: "Blood Test" },
-    { id: 2, patientName: "Jane Smith", date: "2023-05-16", type: "X-Ray" },
-    { id: 3, patientName: "Alice Johnson", date: "2023-05-17", type: "MRI" },
-    { id: 4, patientName: "Bob Williams", date: "2023-05-18", type: "CT Scan" },
-    { id: 5, patientName: "Emma Brown", date: "2023-05-19", type: "Ultrasound" }
-];
+          let userActionTriggered = false;
+
+// Start NProgress on form submission
+const form = document.querySelector('form');
+if (form) {
+    form.addEventListener('submit', function () {
+        NProgress.start();
+        userActionTriggered = true;
+    });
+}
+
+// Start NProgress on link and button clicks
+const clickableElements = document.querySelectorAll('a, button');
+clickableElements.forEach(element => {
+    element.addEventListener('click', function () {
+        NProgress.start();
+        userActionTriggered = true;
+    });
+});
+
+// Stop NProgress when the page fully loads, only if started by user action
+window.addEventListener('load', function () {
+    if (userActionTriggered) {
+        NProgress.done();
+        userActionTriggered = false;  // Reset flag after load
+    }
+});
+
 
 // Function to populate lab reports
 function populateLabReports() {

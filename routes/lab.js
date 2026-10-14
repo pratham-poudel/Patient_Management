@@ -6,6 +6,7 @@ const labReportSchema = new mongoose.Schema({
     email: { type: String },
     age: { type: Number, required: true },
     sex: { type: String, required: true },
+    phone:{ type: Number},
     doctorName: { type: String, required: true },
     medicalName: { type: String, required: true },
     date: { type: Date, required: true },

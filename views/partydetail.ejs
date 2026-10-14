@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Party Detail</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+</head>
+
+<body class="bg-gray-100">
+
+    <div class="container mx-auto p-6">
+        <h1 class="text-3xl font-bold text-center mb-6"><%= pass.sellerId %></h1>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+            <!-- Total Products Box -->
+            <div class="bg-white p-6 rounded-lg shadow-lg">
+                <h2 class="text-xl font-semibold">Total Number of Products</h2>
+                <p class="text-3xl font-bold text-blue-600 mt-4"><%= pass.totalQuantity %></p>
+            </div>
+                                    
+            <!-- Total Assets Box -->
+            <div class="bg-white p-6 rounded-lg shadow-lg">
+                <h2 class="text-xl font-semibold">Total Assets</h2>
+                <p class="text-3xl font-bold text-blue-600 mt-4">₹<%= pass.totalSellPrice.toFixed(2) %></p>
+            </div>
+
+            <!-- Total Pay Amount Box -->
+            <div class="bg-white p-6 rounded-lg shadow-lg">
+                <h2 class="text-xl font-semibold">Total Pay Amount</h2>
+                <p class="text-3xl font-bold text-blue-600 mt-4">₹<%= pass.totalBuyPrice.toFixed(2) %></p>
+            </div>
+        </div>
+
+        <!-- Top 5 Products by Stock Quantity Chart -->
+        <div class="bg-white p-6 rounded-lg shadow-lg mb-6">
+            <h2 class="text-xl font-semibold mb-4">Top 5 Products by Stock Quantity</h2>
+            <div id="topProductsChart"></div>
+        </div>
+
+        <!-- Inventory Value Distribution Chart -->
+        <div class="bg-white p-6 rounded-lg shadow-lg mb-6">
+            <h2 class="text-xl font-semibold mb-4">Inventory Value Distribution</h2>
+            <div id="inventoryValueChart"></div>
+        </div>
+
+        <!-- Product Search and List Section -->
+        <div class="bg-white p-6 rounded-lg shadow-lg" id="productListContainer">
+            <h2 class="text-xl font-semibold mb-4">Products List</h2>
+
+            <!-- Search Input Field -->
+            <input type="text" id="searchInput" placeholder="Search products..." class="w-full p-3 border border-gray-300 rounded-md mb-4">
+
+            <!-- Loading Animation -->
+            <div id="loadingSpinner" class="flex justify-center items-center py-6">
+                <div class="loader border-t-4 border-blue-600 rounded-full w-12 h-12 animate-spin"></div>
+            </div>
+
+            <!-- Placeholder for Products -->
+            <ul class="space-y-4" id="productList"></ul>
+        </div>
+    </div>
+
+    <script>
+        // Extract product data and configure charts
+        const products = <%- JSON.stringify(pass.products) %>;
+        const topProducts = products.sort((a, b) => b.quantity - a.quantity).slice(0, 5);
+        const topProductNames = topProducts.map(product => product.name);
+        const topStockQuantities = topProducts.map(product => product.quantity);
+        const productNames = products.map(product => product.name);
+        const inventoryValues = products.map(product => product.quantity * product.buyprice);
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Top Products Chart
+            const topProductsChart = new ApexCharts(document.querySelector("#topProductsChart"), {
+                chart: { type: 'bar', height: 350 },
+                series: [{ name: 'Stock Quantity', data: topStockQuantities }],
+                xaxis: { categories: topProductNames },
+                plotOptions: { bar: { columnWidth: '55%', endingShape: 'rounded' } },
+                dataLabels: { enabled: true }
+            });
+            topProductsChart.render();
+
+            // Inventory Value Chart
+            const inventoryValueChart = new ApexCharts(document.querySelector("#inventoryValueChart"), {
+                chart: { type: 'pie', height: 350 },
+                series: inventoryValues,
+                labels: productNames,
+                dataLabels: { enabled: true }
+            });
+            inventoryValueChart.render();
+        });
+
+        // Lazy load product list with IntersectionObserver and add search functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const productListContainer = document.querySelector('#productListContainer');
+            const productList = document.querySelector('#productList');
+            const loadingSpinner = document.querySelector('#loadingSpinner');
+            const searchInput = document.querySelector('#searchInput');
+
+            // IntersectionObserver for lazy loading
+            const observer = new IntersectionObserver((entries) => {
+                if (entries[0].isIntersecting) {
+                    renderProductList(); // Render the product list when scrolled into view
+                    observer.unobserve(productListContainer); // Stop observing
+                }
+            }, { threshold: 0.1 });
+
+            observer.observe(productListContainer);
+
+            // Render all products function
+            function renderProductList() {
+                loadingSpinner.style.display = 'none';
+                productList.innerHTML = ''; // Clear list to avoid duplicates
+                products.forEach(product => {
+                    const productItem = document.createElement('li');
+                    productItem.classList.add('flex', 'justify-between', 'items-center', 'p-4', 'bg-gray-50', 'rounded-md', 'shadow-sm');
+                    productItem.dataset.name = product.name.toLowerCase(); // Data attribute for search
+                    productItem.innerHTML = `
+                        <div>
+                            <h3 class="font-semibold">${product.name}</h3>
+                            <p class="text-gray-600">Quantity: ${product.quantity}</p>
+                            <p class="text-gray-600">Buy Price: ₹${product.buyprice}</p>
+                            <p class="text-gray-600">Sell Price: ₹${product.price}</p>
+                        </div>
+                    `;
+                    productList.appendChild(productItem);
+                });
+            }
+
+            // Filter products as user types in search box
+            searchInput.addEventListener('input', function() {
+                const searchTerm = searchInput.value.toLowerCase();
+                const productItems = productList.querySelectorAll('li');
+
+                productItems.forEach(item => {
+                    const productName = item.dataset.name;
+                    if (productName.includes(searchTerm)) {
+                        item.style.display = 'flex'; // Show matching items
+                    } else {
+                        item.style.display = 'none'; // Hide non-matching items
+                    }
+                });
+            });
+        });
+    </script>
+
+    <style>
+        /* Loader animation style */
+        .loader {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            border-top-color: #3498db;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+
+</body>
+
+</html>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medicine Party Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 font-sans antialiased">
+    <!-- Navbar -->
+    <nav class="bg-green-600 p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-white text-2xl font-bold">Medicine Party Management</h1>
+            <div class="flex space-x-4">
+                <a href="/profile" class="text-white hover:text-green-200 font-medium">Home</a>
+                <a href="/inventory" class="text-white hover:text-green-200 font-medium">Go to Inventory</a>
+                <button id="register-party-btn" class="bg-white text-green-600 font-medium px-4 py-2 rounded hover:bg-green-200">
+                    Register a Party
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container mx-auto p-6">
+        <div class="text-center mb-8">
+            <h2 class="text-3xl font-semibold text-gray-800">Dashboard</h2>
+            <p class="text-gray-600">Manage your registered parties and inventory efficiently</p>
+        </div>
+
+        <!-- Dashboard Stats and Party List -->
+        <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            <!-- Total Parties Box -->
+            <div class="bg-white p-6 rounded-lg shadow-md text-center">
+                <h3 class="text-lg font-semibold text-gray-700">Total Parties</h3>
+                <p id="total-parties" class="text-3xl font-bold text-green-600 mt-2">0</p>
+            </div>
+
+            <!-- Registered Parties List -->
+            <div class="bg-white p-6 rounded-lg shadow-md col-span-2 lg:col-span-1">
+                <h3 class="text-lg font-semibold text-gray-700 mb-4">Registered Parties</h3>
+                <ul id="party-list" class="space-y-3 text-gray-600">
+                    <!-- Parties will be loaded here -->
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Register Party Modal -->
+    <div id="register-party-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+        <div class="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-semibold text-gray-800">Register a New Party</h3>
+                <span class="text-gray-400 text-2xl cursor-pointer" id="close-modal">&times;</span>
+            </div>
+            <form id="register-party-form" class="space-y-4">
+                <input type="text" id="party-name" class="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-green-600" placeholder="Party Name" required>
+                <input type="text" id="party-pan-vat" class="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-green-600" placeholder="PAN/VAT No" required>
+                <input type="text" id="party-registration" class="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-green-600" placeholder="Registration No" required>
+                <button type="submit" class="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700">Register</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const registerPartyBtn = document.getElementById("register-party-btn");
+            const registerPartyModal = document.getElementById("register-party-modal");
+            const closeModal = document.getElementById("close-modal");
+            const registerPartyForm = document.getElementById("register-party-form");
+            const partyList = document.getElementById("party-list");
+            const totalParties = document.getElementById("total-parties");
+
+            const fetchParties = async () => {
+                const res = await fetch('/api/parties');
+                const parties = await res.json();
+                totalParties.textContent = parties.length;
+                partyList.innerHTML = parties.map(party => `
+                    <li class="flex justify-between items-center p-2 border-b border-gray-200">
+                        <span>${party.name}</span>
+                        <a href="/viewparty/${party.name}"><button class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600">Go to Party</button></a>
+                    </li>
+                `).join('');
+            };
+
+            registerPartyBtn.addEventListener("click", () => registerPartyModal.classList.remove("hidden"));
+            closeModal.addEventListener("click", () => registerPartyModal.classList.add("hidden"));
+
+            registerPartyForm.addEventListener("submit", async (e) => {
+                e.preventDefault();
+                const name = document.getElementById("party-name").value;
+                const panVatNo = document.getElementById("party-pan-vat").value;
+                const registrationNo = document.getElementById("party-registration").value;
+
+                await fetch('/api/parties', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, panVatNo, registrationNo })
+                });
+                registerPartyModal.classList.add("hidden");
+                fetchParties();
+            });
+
+            fetchParties();
+        });
+    </script>
+</body>
+</html>

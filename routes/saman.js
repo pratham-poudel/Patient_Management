@@ -27,11 +27,11 @@ const itemSchema = new mongoose.Schema({
 const invoiceSchema = new mongoose.Schema({
   type: {
     type: String,
-    enum: ['Invoice', 'Expenditure'],
+    enum: ['Invoice', 'Expenditure', 'Lab', 'Xray', 'Pharmacy','Deposite', 'Ecg', 'Usg'],
     required: true,
   },
   billNo: {
-    type: Number,  // Bill number will be auto-incremented
+    type: Number, // Bill number will be auto-incremented
     unique: true,
   },
   customer: {
@@ -44,14 +44,22 @@ const invoiceSchema = new mongoose.Schema({
       required: true,
     },
     age: {
-      type: Number,
-      required: true,
-      min: 1,
+      value: {
+        type: Number,
+        min: 0, // Age can't be negative
+      },
+      unit: {
+        type: String,
+        enum: ['Years', 'Months', 'Days'],
+      },
+    },
+    gender: {
+      type: String,
+      enum: ['Male', 'Female', 'Other'],
     },
     phone: {
       type: String,
-      required: true,
-      match: /^[0-9]{10}$/,
+      match: /^[0-9]{10}$/, // Validates a 10-digit phone number
     },
   },
   items: [itemSchema],
@@ -72,3 +80,5 @@ invoiceSchema.plugin(AutoIncrement, { inc_field: 'billNo' });
 const Invoice = mongoose.model('Invoice', invoiceSchema);
 
 module.exports = Invoice;
+
+

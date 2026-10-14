@@ -1,4 +1,4 @@
-var express = require("express");
+const express = require("express");
 const jwt = require("jsonwebtoken");
 
 var router = express.Router();
@@ -12,6 +12,10 @@ const patient = require("./patient");
 const Appointment = require("./appointment")
 const nodemailer = require('nodemailer');
 const Invoice = require("./saman");
+const ProductSchema=require("./product");
+const Party = require('./Party');
+const axios = require('axios');
+const NewPatient = require("./newpatient");
 
 
 const membership = require("./membership");
@@ -19,6 +23,12 @@ require('dotenv').config();
 
 
 passport.use(new localStrategy(userModel.authenticate()));
+const OpenAI = require("openai");
+
+const openai = new OpenAI({
+    baseURL: "https://api.deepseek.com",
+    apiKey: 'DEEPSEEK_API_KEY_REMOVED', // Use environment variable for security
+});
 
 
 
@@ -28,8 +38,8 @@ const transporter = nodemailer.createTransport({
   port: 465, // SMTP port for SSL
   secure: true, // Use SSL for port 465
   auth: {
-    user: 'prakashmedical@hamromanager.xyz', // Your cPanel email
-    pass: 'Deepa123@#$', // Your cPanel email password (use environment variable for security)
+    user: process.env.EMAIL_USER, // Your cPanel email
+    pass: process.env.EMAIL_PASSWORD, // Your cPanel email password (use environment variable for security)
   },
 });
 
@@ -51,57 +61,47 @@ async function sendEmail(to, subject, html) {
     console.error('Error sending email:', error);
   }
 }
+async function sendSMS(to, body) {
+  try {
+    const token = '39226005c5bb3423a398cd00571445d1b37a07eb2d8a8e1a1b0ed78b32f20002'; 
+    const url = `https://sms.aakashsms.com/sms/v3/send/?auth_token=${encodeURIComponent(token)}&to=${encodeURIComponent(to)}&text=${encodeURIComponent(body)}`;
 
+    const response = await axios.get(url); // Send GET request
 
-const { GoogleGenerativeAI } = require('@google/generative-ai');
-const apiKey = process.env.GOOGLE_API_KEY;
-const genAI = new GoogleGenerativeAI(apiKey);
-
-async function run(prompt) {
-  const model = genAI.getGenerativeModel({ model: "gemini-pro" });
-  const result = await model.generateContent(prompt);
-  const response = await result.response;
-  const text = response.text();
-  return text;
+    console.log('SMS sent successfully:', response.data);
+  } catch (error) {
+    console.error('Error sending SMS:', error.response ? error.response.data : error.message);
+  }
 }
 
 
 
+async function run(prompt) {
+  try {
+    console.log("Prompt:", prompt);
+    const response = await openai.chat.completions.create({
+      model: "deepseek-chat",
+      messages: [
+        { 
+          role: "system", 
+          content: `You will be like a Lab technician who will give overall report interpretation. 
+          This is the pathology report of a patient. Please analyze the report based only on the non-null data provided. 
+          Do not assume or infer results for any missing or null data. Provide an overall interpretation of the available results in one concise paragraph ` 
+        },
+        { role: "user", content: String(prompt) } // Ensure content is a string
+      ],
+    });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    if (response.choices && response.choices.length > 0) {
+      return response.choices[0].message.content.trim();
+    } else {
+      return "No valid response received.";
+    }
+  } catch (error) {
+    console.error("Intent analysis error:", error.response?.data || error.message);
+    return "Error processing the report. Please try again.";
+  }
+}
 
 
 
@@ -272,7 +272,7 @@ async function isadminLoggedIn(req, res, next) {
 
 router.get("/profile", isLoggedIn, async function (req, res, next) {
   const user = await userModel.findOne({ username: req.username }).populate("patient patientlab appointment");
-  const patientlab = await LabReport.find();
+  const patientlab = await LabReport.find().sort({ _id: -1 }).limit(10).exec();
   if (user.type == "doctor") {
     res.render("doctorprofile", { user, patientlab });
   } else if (user.type == "account") {
@@ -333,6 +333,7 @@ router.post("/submitLabReport", isLoggedIn, async function (req, res) {
       patientName: req.body.patient_name,
       age: req.body.age,
       email: req.body.email,
+      phone: req.body.phone,
       sex: req.body.sex,
       doctorName: req.body.doctor_name,
       medicalName: doctor.medicalname,
@@ -436,7 +437,6 @@ router.post("/submitLabReport", isLoggedIn, async function (req, res) {
       othersofstool: req.body.othersofstool,
       noteofstool: req.body.noteofstool,
       noteofwidaltest: req.body.noteofwidaltest,
-
       labAssistant: req.body.lab_assistant,
     },);
 
@@ -445,35 +445,46 @@ router.post("/submitLabReport", isLoggedIn, async function (req, res) {
     await doctor.save();
     await labReport.save();
 
-    const qrCodeData = `https://hamromanager.xyz/submitreport/${labReport._id}`;
+    const qrCodeData = `https://hamromanager.xyz/profiles/${labReport._id}`;
+    if(req.body.email){
+      await sendEmail(
+        labReport.email,
+        'Lab Report',
+        `
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Medical Report Notification</title>
+          </head>
+          <body style="font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: #f4f4f4; text-align: center;">
+            <div style="background-color: #ffffff; max-width: 600px; margin: 0 auto; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+              <h1 style="color: #333333;">Dear ${labReport.patientName},</h1>
+              <p style="color: #666666;">हामी आशा गर्दछौं कि यो इमेलले तपाईंलाई राम्रो स्वास्थ्यमा भेट्टाउँछ। हामी तपाईंलाई सूचित गर्न पाउँदा खुसी छौं कि तपाईंको व्यापक प्रयोगशाला रिपोर्ट सफलतापूर्वक उत्पन्न भएको छ।</p>
+              <p style="color: #333333;">तपाईंको रिपोर्ट पहुँच गर्न र समीक्षा गर्न, कृपया निम्न बिरामी आईडी प्रयोग गर्नुहोस्:</p>
+              <p style="color: #333333; font-weight: bold;">तपाईंको बिरामी ID: ${labReport._id}</p>
+              <a href="${qrCodeData}" style="display: inline-block; background-color: #007BFF; color: #ffffff; text-decoration: none; padding: 10px 20px; border-radius: 5px; margin-top: 20px;">रिपोर्ट हेर्न क्लिक गर्नुहोस्</a>
+              <p style="color: #666666; margin-top: 20px;">
+              तपाईंको गोप्य चिकित्सा जानकारी सुरक्षित रूपमा पहुँच गर्नको लागि यो अद्वितीय पहिचानकर्ता महत्त्वपूर्ण छ। कृपया यसलाई गोप्य राख्नुहोस् र अरू कसैसँग साझा नगर्नुहोस्। तपाईंको गोपनीयता र सुरक्षा हाम्रो लागि अत्यन्तै महत्त्वपूर्ण छ।</p>
+              <p style="color: #333333; font-weight: bold; margin-top: 20px;">Best Regards,<br>Prakash Medical Team<br>गुणस्तरीय स्वस्थ्य सेवा हाम्रो प्रतिबद्धता !!</p>
+            </div>
+          </body>
+          </html>
+        `
+      );
+    }
+    if(req.body.phone){
+      const recipientPhoneNumber = `${labReport.phone}`;
+      const firstname = labReport.patientName.split(' ')[0];
+      const smsBody = `Namaste ${firstname}, Welcome to Prakash Medical. View your lab report here: ${qrCodeData}. Call us at 076540531.
 
-    // Send email notification
-    await sendEmail(
-      labReport.email,
-      'Lab Report',
-      `
-        <!DOCTYPE html>
-        <html lang="en">
-        <head>
-          <meta charset="UTF-8">
-          <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <title>Medical Report Notification</title>
-        </head>
-        <body style="font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: #f4f4f4; text-align: center;">
-          <div style="background-color: #ffffff; max-width: 600px; margin: 0 auto; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
-            <h1 style="color: #333333;">Dear ${labReport.patientName},</h1>
-            <p style="color: #666666;">हामी आशा गर्दछौं कि यो इमेलले तपाईंलाई राम्रो स्वास्थ्यमा भेट्टाउँछ। हामी तपाईंलाई सूचित गर्न पाउँदा खुसी छौं कि तपाईंको व्यापक प्रयोगशाला रिपोर्ट सफलतापूर्वक उत्पन्न भएको छ।</p>
-            <p style="color: #333333;">तपाईंको रिपोर्ट पहुँच गर्न र समीक्षा गर्न, कृपया निम्न बिरामी आईडी प्रयोग गर्नुहोस्:</p>
-            <p style="color: #333333; font-weight: bold;">तपाईंको बिरामी ID: ${labReport._id}</p>
-            <a href="${qrCodeData}" style="display: inline-block; background-color: #007BFF; color: #ffffff; text-decoration: none; padding: 10px 20px; border-radius: 5px; margin-top: 20px;">रिपोर्ट हेर्न क्लिक गर्नुहोस्</a>
-            <p style="color: #666666; margin-top: 20px;">
-            तपाईंको गोप्य चिकित्सा जानकारी सुरक्षित रूपमा पहुँच गर्नको लागि यो अद्वितीय पहिचानकर्ता महत्त्वपूर्ण छ। कृपया यसलाई गोप्य राख्नुहोस् र अरू कसैसँग साझा नगर्नुहोस्। तपाईंको गोपनीयता र सुरक्षा हाम्रो लागि अत्यन्तै महत्त्वपूर्ण छ।</p>
-            <p style="color: #333333; font-weight: bold; margin-top: 20px;">Best Regards,<br>Prakash Medical Team<br>गुणस्तरीय स्वस्थ्य सेवा हाम्रो प्रतिबद्धता !!</p>
-          </div>
-        </body>
-        </html>
-      `
-    );
+`;
+      await sendSMS(recipientPhoneNumber, smsBody);
+    }
+
+    
+    
 
     req.flash("success", "Patient Data Recorded successfully");
     res.redirect("/lreport"); // Redirect to the desired page
@@ -820,27 +831,49 @@ router.get("/toremove/:datass", isLoggedIn, async function (req, res, next) {
 
 
 
-
-router.get("/profiles/:id", isLoggedIn, async function (req, res, next) {
+router.get("/profiles/:id", async function (req, res, next) {
   try {
-    
-  const regex = req.params.id;
-  const users = await LabReport.findOne({ _id: regex });
+    const reportId = req.params.id;
+    let users = await LabReport.findOne({ _id: reportId });
 
-  if (!users.interpretation) {
-    const review = await run(`${users} This is the pathology report of a patient. Please analyze the report based only on the non-null data provided. Do not assume or infer results for any missing or null data. Provide an overall interpretation of the available results in one concise paragraph.
-`);
-    users.interpretation = review;
-    await users.save();
-  }
+    if (!users) {
+      return res.status(404).send("Report not found.");
+    }
 
+    // If interpretation already exists, return the report directly
+    if (users.interpretation) {
+      return res.render("report", { users });
+    }
 
-  res.render("report", { users });
+    // Convert Mongoose document to a plain object
+    const usersData = users.toObject(); 
+
+    // Extract non-empty lab test results
+    const reportData = Object.entries(usersData)
+      .filter(([key, value]) => key !== "_id" && value !== "" && value !== null) // Remove empty values
+      .map(([key, value]) => `${key}: ${value}`) // Convert to readable format
+      .join("\n");
+
+    console.log("📝 Final prompt to AI:", reportData); // Debugging log
+
+    if (reportData.trim().length > 0) { // Ensure we don't send an empty string
+      const review = await run(reportData);
+
+      if (review && review !== "No valid response received." && review !== "Error processing the report. Please try again.") {
+        users.interpretation = review;
+        await users.save();
+      }
+    }
+
+    res.render("report", { users });
   } catch (error) {
-    res.send(error.message)
+    console.error("❌ Error:", error);
+    res.send(error.message);
   }
-
 });
+
+
+
 
 router.get("/appointment", async function (req, res, next) {
   try {
@@ -916,7 +949,7 @@ router.post("/appointments", async function (req, res, next) {
             margin: 20px auto;
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
           }
       
           h1 {
@@ -1017,6 +1050,7 @@ router.get("/submitpatient/:userId", async function (req, res, next) {
 router.post("/submitreport", async function (req, res, next) {
   const regex = req.body.userId;
   try {
+    
     if (regex.length < 24 || regex.length > 24) {
       res.send("Invalid ID")
     } else {
@@ -1039,15 +1073,13 @@ router.post("/submitreport", async function (req, res, next) {
 
 });
 router.get("/submitreport/:userId", async function (req, res, next) {
-  const userId = req.params.userId;
+  
   try {
+    const userId = req.params.userId;
     // Fetch the user data or perform any other necessary operations
     const users = await LabReport.findOne({ _id: userId });
     if (!users.interpretation) {
-      const review = await run(`${users} This is the pathology report of a patient. Please analyze the report based only on the non-null data provided. Do not assume or infer results for any missing or null data. Provide an overall interpretation of the available results in one concise paragraph.
-`)
-      // Render the patientpr template with the user data
-      // res.send(review);
+      const review = await run(users)
       users.interpretation = review;
       await users.save();
     }
@@ -1291,6 +1323,7 @@ router.get("/member/:memberId", async function (req, res, next) {
     }
 
   } catch (error) {
+
     res.send(error.message)
 
   }
@@ -1301,22 +1334,38 @@ router.get("/createInvoice", isLoggedIn,function (req, res, next) {
 });
 router.post('/submit-invoice', async (req, res) => {
   try {
-    const { customer, items, totalPrice } = req.body;
+    const { customer, items, totalPrice, type } = req.body;
 
-    // Create a new invoice instance
+    // Update product quantities in parallel using Promise.all
+    await Promise.all(
+      items.map(async (item) => {
+        const product = await ProductSchema.findOne({ name: item.name });
+        if (product) {
+          product.quantity -= item.quantity;
+          await product.save();
+        }
+      })
+    );
+
+    // Create a new invoice
     const newInvoice = new Invoice({
-      type: 'Invoice',
+      type: type,
       customer: {
         name: customer.name,
         address: customer.address,
-        age: customer.age,
-        phone: customer.phone,
+        age: customer.age ? {
+          value: customer.age.value,
+          unit: customer.age.unit,
+        } : null,
+        gender: customer.gender || null, // Handle gender field
+        phone: customer.phone || null,
       },
       items: items.map(item => ({
         name: item.name,
         quantity: item.quantity,
         price: item.price,
         total: item.quantity * item.price,
+        barcode: item.barcode || '', // Always send barcode as string (empty if not present)
       })),
       totalPrice: totalPrice,
     });
@@ -1326,9 +1375,13 @@ router.post('/submit-invoice', async (req, res) => {
 
     res.status(201).json({ message: 'Invoice submitted successfully', invoice: newInvoice._id });
   } catch (error) {
+    console.error(error.message);
     res.status(500).json({ message: 'Failed to submit the invoice', details: error.message });
   }
 });
+
+
+
 router.get("/printinvoice/:id", isLoggedIn, async function (req, res, next) {
   try {
     const regex = req.params.id;
@@ -1356,76 +1409,197 @@ router.get("/createExpenditure",isLoggedIn, function (req, res, next) {
 });
 router.post('/submit-expenditure', async (req, res) => {
   try {
-    const { customer, items, totalPrice } = req.body;
+    const { customer, items, totalPrice, billType } = req.body;
 
-    // Create a new invoice instance
-    const newInvoice = new Invoice({
-      type: 'Expenditure',
-      customer: {
-        name: customer.name,
-        address: customer.address,
-        age: customer.age,
-        phone: customer.phone,
-      },
-      items: items.map(item => ({
+    // Validate required fields
+    if (!customer || !customer.name || !customer.address) {
+      return res.status(400).json({ message: 'Customer details are incomplete.' });
+    }
+    if (!Array.isArray(items) || items.length === 0) {
+      return res.status(400).json({ message: 'No items provided for the expenditure.' });
+    }
+    if (!totalPrice || totalPrice <= 0) {
+      return res.status(400).json({ message: 'Total price must be greater than zero.' });
+    }
+
+    // Determine bill type based on billType from frontend
+    let type = 'Expenditure';
+    if (billType === 'Deposite') {
+      type = 'Deposite';
+    }
+
+    // Handle the age (it's already just a number in customer.age from the frontend)
+    let age = null;
+    if (customer.age !== undefined) {
+      age = customer.age; // The age sent from the frontend is now just a number
+    }
+
+    // Process items and ensure each has valid fields
+    const processedItems = items.map(item => {
+      if (!item.name || item.quantity <= 0 || item.price < 0) {
+        throw new Error(`Invalid item data: ${JSON.stringify(item)}`);
+      }
+      return {
         name: item.name,
         quantity: item.quantity,
         price: item.price,
         total: item.quantity * item.price,
-      })),
-      totalPrice: totalPrice,
+      };
+    });
+
+    // Create a new invoice instance
+    const newInvoice = new Invoice({
+      type: type, // Dynamic type
+      customer: {
+        name: customer.name,
+        address: customer.address,
+        age: age, // Store the age value directly
+        phone: customer.phone || null, // Optional field
+        gender: customer.gender || null, // Optional field
+      },
+      items: processedItems,
+      totalPrice,
     });
 
     // Save the invoice to the database
     await newInvoice.save();
 
-    res.status(201).json({ message: 'Invoice submitted successfully', invoice: newInvoice._id });
+    // Return success response with more details
+    res.status(201).json({
+      message: `${type} slip submitted successfully`,
+      invoiceId: newInvoice._id,  // Return the invoice ID
+      customer: newInvoice.customer,
+      totalPrice: newInvoice.totalPrice,
+    });
   } catch (error) {
-    res.status(500).json({ message: 'Failed to submit the invoice', details: error.message });
+    console.error('Error submitting expenditure:', error.message);
+    res.status(500).json({ message: 'Failed to submit the slip', details: error.message });
   }
 });
+
+
+
 router.get("/printexpenditure/:id", isLoggedIn, async function (req, res, next) {
   try {
     const regex = req.params.id;
     const invoice = await Invoice.findOne({ _id: regex });
-    const merchnat = await userModel.findOne({ username: req.username });
+    const merchant = await userModel.findOne({ username: req.username });
 
     console.log(invoice);
-    res.render("printinvoice", { invoice, merchnat: merchnat.medicalname });
+    res.render("printinvoice", { invoice, merchant: merchant.medicalname });
   } catch (error) {
     res.send(error.message)
   }
 });
-router.get("/checkdaysheet", function (req, res, next) {
+router.get("/checkdaysheet",isLoggedIn, function (req, res, next) {
   res.render("checkdaysheet");
 });
-router.get('/api/day-sheet', async (req, res) => {
-  const { startDate, endDate } = req.query;
+router.get('/api/day-sheet',isLoggedIn, async (req, res) => {
+  const { startDateTime, endDateTime } = req.query;
 
   try {
-    const start = new Date(startDate);
-    const end = new Date(endDate);
-    end.setHours(23, 59, 59, 999); // End of day
+    // Parse received UTC dates directly
+    const start = new Date(startDateTime);
+    const end = new Date(endDateTime);
 
-    // Fetch invoices and expenditures within the date range
+    // Set end to include end of the selected day
+    end.setUTCHours(23, 59, 59, 999);
+
     const invoices = await Invoice.find({
       createdAt: {
         $gte: start,
         $lte: end,
       }
     });
+    let totalRevenue = 0;
+    let totalExpenditure = 0;
+    let typeCollections = { Xray: 0, Ecg: 0, Lab: 0, Pharmacy: 0, Invoice: 0, Usg: 0 };
 
-    // Calculate the total collection (only from invoices, not expenditures)
-    const totalCollection = invoices
-      .filter(invoice => invoice.type === 'Invoice')
-      .reduce((sum, invoice) => sum + invoice.totalPrice, 0);
+    invoices.forEach(invoice => {
+      if (invoice.type === 'Expenditure' || invoice.type === 'Deposite') {
+        totalExpenditure += invoice.totalPrice;
+      } else {
+        totalRevenue += invoice.totalPrice;
+        if (typeCollections[invoice.type] !== undefined) {
+          typeCollections[invoice.type] += invoice.totalPrice;
+        }
+      }
+    });
 
-    res.json({ success: true, invoices, totalCollection });
+    const netCollection = totalRevenue - totalExpenditure;
+
+    res.json({
+      success: true,
+      invoices,
+      totalRevenue,
+      totalExpenditure,
+      netCollection,
+      typeCollections,
+    });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ success: false, message: 'Error fetching day sheet.' });
+    res.json({ success: false, message: "Error fetching day sheet data" });
   }
 });
+router.get('/api/day-sheet-from-last-deposite', isLoggedIn, async (req, res) => {
+  const { endDateTime } = req.query;
+  try {
+    const end = new Date(endDateTime);
+    end.setUTCHours(23, 59, 59, 999);
+
+    // Find the last Deposite before or at the end time
+    const lastDeposite = await Invoice.findOne({
+      type: 'Deposite',
+      createdAt: { $lte: end }
+    }).sort({ createdAt: -1 });
+
+    let fromDate = null;
+    let start = new Date(0); // default: epoch
+    if (lastDeposite) {
+      start = new Date(lastDeposite.createdAt.getTime() + 1); // strictly after last Deposite
+      fromDate = lastDeposite.createdAt;
+    }
+
+    const invoices = await Invoice.find({
+      createdAt: {
+        $gt: start,
+        $lte: end,
+      }
+    });
+    let totalRevenue = 0;
+    let totalExpenditure = 0;
+    let typeCollections = { Xray: 0, Ecg: 0, Lab: 0, Pharmacy: 0, Invoice: 0, Usg: 0 };
+
+    invoices.forEach(invoice => {
+      if (invoice.type === 'Expenditure' || invoice.type === 'Deposite') {
+        totalExpenditure += invoice.totalPrice;
+      } else {
+        totalRevenue += invoice.totalPrice;
+        if (typeCollections[invoice.type] !== undefined) {
+          typeCollections[invoice.type] += invoice.totalPrice;
+        }
+      }
+    });
+
+    const netCollection = totalRevenue - totalExpenditure;
+
+    res.json({
+      success: true,
+      invoices,
+      totalRevenue,
+      totalExpenditure,
+      netCollection,
+      typeCollections,
+      fromDate,
+    });
+  } catch (error) {
+    console.error(error);
+    res.json({ success: false, message: "Error fetching day sheet from last deposite" });
+  }
+});
+
+
+
 router.get("/search-bill", function (req, res, next) {
   res.render("search-bill");
 });
@@ -1444,6 +1618,271 @@ router.get('/api/search', async (req, res) => {
     res.status(500).json({ error: 'Server error, please try again later' });
   }
 });
+router.get('/createproduct', function (req, res) {
+  res.render('createproduct', { successMessage: null, errorMessage: null });
+});
+
+router.post('/createproducts', async function (req, res) {
+  try {
+    console.log(req.body);
+    let successMessage = null;
+    let errorMessage = null;
+
+    // Check if the product already exists by barcode
+    const existingProduct = await ProductSchema.findOne({ barcode: req.body.barcode });
+
+    if (existingProduct) {
+      // Update stock quantity
+      existingProduct.quantity += Number(req.body.stock);
+
+      // Update other fields if they are provided
+      existingProduct.name = req.body.name || existingProduct.name;
+      existingProduct.price = req.body.price || existingProduct.price;
+      existingProduct.buyprice = req.body.buyprice || existingProduct.buyprice;
+      existingProduct.seller = req.body.seller || existingProduct.seller;
+
+      await existingProduct.save();
+      successMessage = 'Product updated successfully!';
+    } else {
+      // Create a new product if barcode is not found
+      await ProductSchema.create({
+        barcode: req.body.barcode,
+        name: req.body.name,
+        quantity: Number(req.body.stock),
+        price: req.body.price,
+        buyprice: req.body.buyprice || null,
+        seller: req.body.seller || null
+      });
+
+      successMessage = 'Product created successfully!';
+    }
+
+    res.render('createproduct', { successMessage, errorMessage });
+
+  } catch (err) {
+    res.render('createproduct', { successMessage: null, errorMessage: err.message });
+  }
+});
 
 
+
+
+
+
+router.get('/inventory',async function(req,res){
+  res.render('inventory');
+})
+router.get('/api/products', async (req, res) => {
+    try {
+        const products = await ProductSchema.find();
+        res.status(200).json(products);
+    } catch (error) {
+        res.status(500).json({ error: "Failed to fetch products" });
+    }
+});
+
+// GET products by search query
+router.get('/api/products/search', async (req, res) => {
+  try {
+      const barcode = req.query.barcode;
+      if (!barcode) {
+          return res.status(400).json({ error: "Barcode is required" });
+      }
+
+      const product = await ProductSchema.findOne({ barcode: barcode });
+
+      if (!product) {
+          return res.status(404).json({ error: "Product not found" });
+      }
+
+      res.status(200).json(product);
+  } catch (error) {
+      console.error("Search error:", error);
+      res.status(500).json({ error: "Search failed" });
+  }
+});
+
+
+// PUT update a product
+router.put('/api/products/:id', async (req, res) => {
+    try {
+        const { name, quantity, price,buyprice,seller,barcode } = req.body;
+        const updatedProduct = await ProductSchema.findByIdAndUpdate(
+            req.params.id,
+            { name, quantity, price,buyprice,seller,barcode },
+            { new: true }
+        );
+        if (updatedProduct) {
+            res.status(200).json(updatedProduct);
+        } else {
+            res.status(404).json({ error: "Product not found" });
+        }
+    } catch (error) {
+        res.status(500).json({ error: "Failed to update product" });
+    }
+});
+router.get("/product-by-barcode", async (req, res) => {
+  try {
+      const { barcode } = req.query;
+
+      if (!barcode) {
+          return res.status(400).json({ error: "Barcode is required" });
+      }
+
+      // Find product by barcode in the database
+      const product = await ProductSchema.findOne({ barcode });
+
+      if (!product) {
+          return res.status(404).json({ error: "Product not found" });
+      }
+
+      res.json(product);
+  } catch (error) {
+      console.error("Error fetching product:", error);
+      res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+// DELETE a product
+router.delete('/api/products/:id', async (req, res) => {
+    try {
+        const deletedProduct = await ProductSchema.findByIdAndDelete(req.params.id);
+        if (deletedProduct) {
+            res.status(200).json({ message: "Product deleted successfully" });
+        } else {
+            res.status(404).json({ error: "Product not found" });
+        }
+    } catch (error) {
+        res.status(500).json({ error: "Failed to delete product" });
+    }
+});
+router.get('/product-suggestions', async (req, res) => {
+  try {
+    const searchText = req.query.q;
+    const suggestions = await ProductSchema.find({ name: { $regex: searchText, $options: 'i' } })
+      .select('name price')
+      .limit(5); // Limit results to 5 suggestions
+    res.json(suggestions);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching suggestions' });
+  }
+});
+router.get('/partymanagement',function(req,res){
+  res.render('partymanagement');
+}); 
+router.post('/api/parties', async (req, res) => {
+  try {
+      const { name, panVatNo, registrationNo } = req.body;
+      const party = new Party({ name, panVatNo, registrationNo });
+      await party.save();
+      res.status(201).json(party);
+  } catch (error) {
+      res.status(400).json({ message: error.message });
+  }
+});
+
+// Route to get all parties
+router.get('/api/parties', async (req, res) => {
+  try {
+      const parties = await Party.find();
+      res.json(parties);
+  } catch (error) {
+      res.status(500).json({ message: error.message });
+  }
+});
+router.get('/viewparty/:id', isLoggedIn, async function(req, res) {
+  try {
+      const products = await ProductSchema.find({ seller: req.params.id });
+      
+      // Initialize totals
+      let totalBuyPrice = 0;
+      let totalSellPrice = 0;
+      let totalQuantity = 0;
+
+      // Calculate totals
+      products.forEach(product => {
+          totalBuyPrice += (product.buyprice || 0) * (product.quantity || 0);
+          totalSellPrice += (product.price || 0) * (product.quantity || 0);
+          totalQuantity ++;
+      });
+
+      // Prepare data to be passed to the view
+      const partyDetails = {
+          sellerId: req.params.id, // Assuming seller ID is useful
+          totalBuyPrice,
+          totalSellPrice,
+          totalQuantity,
+          products // You might want to send the product details too
+      };
+
+      // Render the party detail view with calculated totals
+      res.render('partydetail', { pass: partyDetails });
+  } catch (error) {
+      res.send(error.message);
+  }
+});
+
+router.get('/newpatient',function(req,res){
+  res.render('newpatient');
+});
+router.post('/newpatient', async (req, res) => {
+  try {
+    // Create a new patient instance
+    const newPatient = new NewPatient({
+      patientName: req.body.patientName,
+      age: req.body.age,
+      address: req.body.address,
+      consultant: req.body.consultant,
+      remarks: req.body.remarks,
+    });
+
+    // Save the patient to the database
+    const savedPatient = await newPatient.save();
+    res.status(201).send({
+      message: 'Patient registered successfully!',
+      patient: savedPatient,
+    });
+  } catch (error) {
+    res.status(500).send({
+      error: error.message,
+    });
+  }
+});
+router.get('/showRegisteredpatients', async (req, res) => {
+  try {
+    res.render('showRegisteredpatients');
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch patients' });
+  }
+});
+
+
+router.get('/showRegisteredpatientsss', async (req, res) => {
+  try {
+    const { start, end } = req.query;
+
+    // Validate that both dates are provided
+    if (!start || !end) {
+      return res.status(400).json({ error: 'Start and end dates are required.' });
+    }
+
+     // Parse received UTC dates directly
+     const sstart = new Date(start);
+     const eend = new Date(end);
+ 
+     // Set end to include end of the selected day
+     eend.setUTCHours(23, 59, 59, 999);
+ 
+     const patients = await NewPatient.find({
+       createdAt: {
+         $gte: sstart,
+         $lte: eend,
+       }});
+
+    console.log(patients);
+    res.status(200).json(patients);
+  } catch (error) {
+    res.send(error.message);
+  }
+});
 module.exports = router;

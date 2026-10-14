@@ -7,6 +7,9 @@
     
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://unpkg.com/nprogress/nprogress.css">
+<script src="https://unpkg.com/nprogress/nprogress.js"></script>
+
     <style>
       :root {
           --primary-color: #4a90e2;
@@ -52,6 +55,11 @@
           justify-content: center;
           margin-bottom: 20px;
       }
+      #nprogress .bar {
+    height: 5px; /* Adjust this for width */
+    background: #4a90e2; /* Change to match your primary color */
+}
+
 
       .profile-pic {
           width: 150px;
@@ -243,7 +251,7 @@
         <section class="lab-reports">
             <h2>Lab Reports</h2>
             <div id="labReportsList">
-              <% patientlab.reverse().forEach(function(elem){ 
+              <% patientlab.forEach(function(elem){ 
                 %>
 
                 
@@ -262,13 +270,35 @@
     </div>
     
     <script >
+         document.addEventListener('DOMContentLoaded', function() {
+            let userActionTriggered = false;
+        // Start NProgress on form submission
+        const form = document.querySelector('form');
+        if (form) {
+            form.addEventListener('submit', function() {
+                NProgress.start();
+                 userActionTriggered = true;
+            });
+        }
+
+        // Start NProgress on link and button clicks
+        const clickableElements = document.querySelectorAll('a, button');
+        clickableElements.forEach(element => {
+            element.addEventListener('click', function() {
+                NProgress.start();
+                 userActionTriggered = true;
+            });
+        });
+
+        // Stop NProgress when the page fully loads (on backend response)
+        window.addEventListener('load', function() {
+            NProgress.done();
+                userActionTriggered = false;
+        });
+    });
       // Simulated lab reports data (replace this with actual data fetching logic)
 const labReports = [
-    { id: 1, patientName: "John Doe", date: "2023-05-15", type: "Blood Test" },
-    { id: 2, patientName: "Jane Smith", date: "2023-05-16", type: "X-Ray" },
-    { id: 3, patientName: "Alice Johnson", date: "2023-05-17", type: "MRI" },
-    { id: 4, patientName: "Bob Williams", date: "2023-05-18", type: "CT Scan" },
-    { id: 5, patientName: "Emma Brown", date: "2023-05-19", type: "Ultrasound" }
+   
 ];
 
 // Function to populate lab reports

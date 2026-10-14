@@ -5,82 +5,68 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Invoice</title>
   <style>
+    /* Styling retained as in the original */
     body {
       font-family: Arial, sans-serif;
-      width: 76mm; /* Adjusted to 3-inch paper */
+      width: 70mm; /* Set to fit 80mm paper */
       margin: 0;
       padding: 0;
     }
-    
     .invoice-container {
       padding: 5px;
       border: 1px solid #000;
+      margin: 0;
     }
-
     h2, h3, p {
       margin: 3px 0;
       text-align: center;
     }
-
     .header {
       border-bottom: 1px solid #000;
       padding-bottom: 5px;
     }
-
     .header h2 {
       font-size: 18px;
       font-weight: bold;
     }
-
     .header p {
       font-size: 11px;
     }
-
     .customer-info {
       margin-top: 5px;
       border-bottom: 1px solid #000;
       padding-bottom: 5px;
     }
-
     .customer-info p {
       font-size: 11px;
       text-align: left;
     }
-
-    /* Items Table */
     .items-table {
       width: 100%;
       border-collapse: collapse;
       margin-top: 5px;
     }
-
     .items-table th, .items-table td {
       border-bottom: 1px solid #000;
       padding: 3px 2px;
       font-size: 11px;
     }
-
-    /* Explicit widths for each column to ensure proper alignment */
     .items-table th:nth-child(1), .items-table td:nth-child(1) {
-      width: 40%; /* Adjust as needed */
+      width: 40%;
       text-align: left;
     }
-
     .items-table th:nth-child(2), .items-table td:nth-child(2) {
-      width: 15%; /* Adjust as needed */
+      width: 15%;
       text-align: center;
     }
-
     .items-table th:nth-child(3), .items-table td:nth-child(3) {
-      width: 20%; /* Adjust as needed */
+      width: 20%;
       text-align: right;
     }
-
     .items-table th:nth-child(4), .items-table td:nth-child(4) {
-      width: 25%; /* Adjust as needed */
+      width: 25%;
       text-align: right;
     }
-
     .total-section {
       margin-top: 5px;
       text-align: right;
@@ -89,24 +75,19 @@
       font-size: 12px;
       font-weight: bold;
     }
-
     .footer {
       margin-top: 5px;
       text-align: center;
       font-size: 10px;
     }
-
     .qr-code {
       margin-top: 5px;
       text-align: center;
     }
-
     .qr-code img {
       width: 50px;
       height: 50px;
     }
-
-    /* Button styling */
     .print-btn {
       display: block;
       margin: 10px auto;
@@ -119,21 +100,21 @@
       text-align: center;
       width: 100%;
     }
-
     .print-btn:hover {
       background-color: #0056b3;
     }
-
     .logo {
       width: 60px;
       height: auto;
       display: block;
       margin: 0 auto -10px;
     }
+    @page {
+      margin: 0;
+    }
   </style>
 </head>
 <body>
-  
   <div class="invoice-container">
     <!-- Merchant Info -->
     <div class="header">
@@ -146,19 +127,21 @@
       <p>Reg No: 3800125133310 | PAN No: 610480441</p>
       <p>शिवराज-५  चन्द्रौटा कपिलवस्तु</p>
     </div>
-    <% if (invoice.type == "Invoice") { %>
-        <h3>INVOICE</h3>
-    <% } else { %>
-        <h3>EXPENDITURE</h3>
-    <% } %>
+    
+    <!-- Expenditure/Invoice Type -->
+    <h3><%= invoice.type === 'Expenditure' ? 'EXPENDITURE' : 'INVOICE' %></h3>
     
     <!-- Customer Info -->
     <div class="customer-info">
       <p><strong>Bill No:</strong> <%= invoice.billNo %></p>
       <p><strong>Customer Name:</strong> <%= invoice.customer.name %></p>
-      <p><strong>Age:<%=invoice.customer.age%></strong></p>
+      <% if (invoice.customer.age.value) { %>
+        <p><strong>Age:</strong> <%= invoice.customer.age.value %> <%= invoice.customer.age.unit %> <%=invoice.customer.gender%></p>
+      <% } %>
       <p><strong>Address:</strong> <%= invoice.customer.address %></p>
-      <p><strong>Phone:</strong> <%= invoice.customer.phone %></p>
+      <% if (invoice.customer.phone) { %>
+        <p><strong>Phone:</strong> <%= invoice.customer.phone %></p>
+      <% } %>
       <p><strong>Date:</strong> <%= new Date(invoice.createdAt).toLocaleDateString() %></p>
     </div>
 
@@ -189,8 +172,9 @@
       <p>Total: NPR <%= invoice.totalPrice %></p>
     </div>
     
+    <!-- QR Code -->
     <div class="qr-code">
-      <img src="https://api.qrserver.com/v1/create-qr-code/?size=50x50&data=https://prathampoudel.me/printinvoicefromuser/<%=invoice._id%>" alt="QR Code">
+      <img src="https://api.qrserver.com/v1/create-qr-code/?size=50x50&data=https://hamromanager.xyz/printinvoicefromuser/<%=invoice._id%>" alt="QR Code">
     </div>
 
     <!-- Footer -->

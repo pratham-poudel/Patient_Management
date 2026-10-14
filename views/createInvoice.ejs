@@ -1,15 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Create Invoice</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- In your layout.ejs or main EJS template -->
+  <link rel="stylesheet" href="https://unpkg.com/nprogress/nprogress.css">
+  <script src="https://unpkg.com/nprogress/nprogress.js"></script>
+
   <style>
     body {
       background-color: #f1f5f9;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
+
     .container {
       background-color: #ffffff;
       border-radius: 8px;
@@ -17,27 +23,32 @@
       padding: 2rem;
       max-width: 800px;
     }
+
     .header-title {
       color: #2c3e50;
       text-transform: uppercase;
       letter-spacing: 0.05em;
       font-weight: 700;
     }
+
     .custom-input {
       border: 1px solid #d1d5db;
       padding: 0.75rem;
       border-radius: 6px;
       transition: border-color 0.2s ease;
     }
+
     .custom-input:focus {
       border-color: #1e40af;
       outline: none;
     }
+
     .custom-table {
       width: 100%;
       border-collapse: collapse;
       margin-top: 1.5rem;
     }
+
     .custom-table th {
       background-color: #1e293b;
       color: white;
@@ -46,18 +57,22 @@
       text-transform: uppercase;
       font-size: 0.875rem;
     }
+
     .custom-table td {
       padding: 0.75rem;
       border-bottom: 1px solid #e2e8f0;
     }
+
     .custom-table tr:last-child td {
       border-bottom: none;
     }
+
     .total-price {
       font-size: 1.25rem;
       font-weight: 600;
       color: #1f2937;
     }
+
     .submit-btn {
       background-color: #2563eb;
       color: white;
@@ -65,9 +80,11 @@
       border-radius: 6px;
       transition: background-color 0.2s ease;
     }
+
     .submit-btn:hover {
       background-color: #1d4ed8;
     }
+
     .delete-btn {
       background-color: #ef4444;
       color: white;
@@ -76,25 +93,135 @@
       cursor: pointer;
       transition: background-color 0.2s ease;
     }
+
     .delete-btn:hover {
       background-color: #dc2626;
     }
+
+    .barcode-scanner {
+      position: relative;
+    }
+
+    .barcode-loading {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: none;
+    }
+
+    .suggestions-container {
+      position: absolute;
+      top: 100%;
+      /* Positions it right below the input field */
+      left: 0;
+      background-color: #f9fafb;
+      border: 1px solid #d1d5db;
+      border-radius: 4px;
+      width: 100%;
+      z-index: 1000;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      padding: 1rem;
+      max-height: 300px;
+      /* Sets a maximum height with scrolling */
+      overflow-y: auto;
+    }
+
+
+
+    .suggestion {
+      padding: 0.5rem;
+      cursor: pointer;
+    }
+
+    .suggestion:hover {
+      background-color: #f1f5f9;
+    }
+
+    /* Modal styling */
+
+    .decrease-btn,
+    .increase-btn {
+      padding: 5px 10px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .decrease-btn:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+
+    .delete-btn {
+      padding: 5px 10px;
+      background-color: #f44336;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
   </style>
 </head>
+
 <body>
+  <div id="confirm-modal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
+    <div class="bg-white rounded-lg shadow-lg p-8 max-w-sm w-full">
+      <h2 class="text-lg font-semibold mb-4">Confirm Submission</h2>
+      <p class="mb-6">Are you sure you want to submit the invoice?</p>
+      <div class="flex justify-end space-x-4">
+        <button id="confirm-yes" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Yes</button>
+        <button id="confirm-no" class="bg-gray-300 px-4 py-2 rounded hover:bg-gray-400">No</button>
+      </div>
+    </div>
+  </div>
+
   <div class="container mx-auto my-10 p-10">
     <h1 class="text-2xl header-title text-center mb-8">Create Invoice Slip</h1>
 
     <!-- Customer Details Form -->
     <div class="mb-10">
+      <div class="mb-6">
+        <label for="billtype" class="block text-sm font-medium text-gray-700">Bill Type</label>
+        <select id="billtype" class="custom-input w-full mt-1">
+          <option value="Pharmacy">Pharmacy and Nursing</option>
+          <option value="Lab">Lab</option>
+          <option value="Xray">X-ray</option>
+          <option value="Ecg">ECG</option>
+          <option value="Usg">USG</option>
+          <option value="Invoice">Invoice</option>
+        </select>
+      </div>
       <h2 class="text-xl font-semibold mb-4">Customer Details</h2>
       <form id="customer-form" class="space-y-6">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <input type="text" id="customer-name" class="custom-input w-full" placeholder="Customer Name" required />
           <input type="text" id="customer-address" class="custom-input w-full" placeholder="Address" required />
-          <input type="number" id="customer-age" class="custom-input w-full" placeholder="Age" min="1" required />
-          <input type="tel" id="customer-phone" class="custom-input w-full" placeholder="Phone Number" pattern="[0-9]{10}" required />
+
+          <!-- Age Section -->
+          <div class="flex items-center gap-2">
+            <input type="number" id="customer-age" class="custom-input w-full" placeholder="Age" min="0" />
+            <select id="age-unit" class="custom-input w-auto">
+              <option value="Years">Years</option>
+              <option value="Months">Months</option>
+              <option value="Days">Days</option>
+            </select>
+          </div>
+
+          <!-- Gender Section -->
+          <select id="customer-gender" class="custom-input w-full">
+            <option value="" disabled selected>Select Gender</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+          </select>
+
+          <input type="tel" id="customer-phone" class="custom-input w-full" placeholder="Phone Number"
+            pattern="[0-9]{10}" />
         </div>
+
       </form>
     </div>
 
@@ -102,10 +229,26 @@
     <div>
       <h2 class="text-xl font-semibold mb-4">Invoice Items</h2>
       <form id="invoice-form" class="space-y-4">
+        <!-- Barcode Scanner Input -->
+        <div class="barcode-scanner">
+          <input type="text" id="barcode" class="custom-input w-full" placeholder="Scan Barcode (or enter manually)"
+            autocomplete="off" />
+          <div class="barcode-loading" id="barcode-loading">⌛</div>
+        </div>
+
+        <!-- Existing Item Inputs -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <input type="text" id="item-name" class="custom-input w-full" placeholder="Item Name" required />
+          <div class="relative">
+            <input type="text" id="item-name" class="custom-input w-full" placeholder="Item Name" required
+              autocomplete="off" />
+            <div id="suggestions-container" class="suggestions-container hidden"></div>
+          </div>
           <input type="number" id="quantity" class="custom-input w-full" placeholder="Quantity" min="1" required />
-          <input type="number" id="price" class="custom-input w-full" placeholder="Price" step="0.01" min="0" required />
+          <input type="number" id="price" class="custom-input w-full" placeholder="Price" step="0.01" min="0"
+            required />
+        </div>
+        <div class="flex justify-end mt-4">
+          <button type="button" id="add-item-btn" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Add Item</button>
         </div>
       </form>
     </div>
@@ -138,26 +281,103 @@
   </div>
 
   <script>
+    let isFormSubmission = false;
+    let processingBarcode = false;
     const invoiceItems = [];
     const invoiceItemsTable = document.getElementById('invoice-items');
     const totalPriceEl = document.getElementById('total-price');
     const itemNameInput = document.getElementById('item-name');
     const quantityInput = document.getElementById('quantity');
     const priceInput = document.getElementById('price');
+    const barcodeInput = document.getElementById('barcode');
+    const barcodeLoading = document.getElementById('barcode-loading');
+    const addItemBtn = document.getElementById('add-item-btn');
+
+    document.addEventListener('DOMContentLoaded', function () {
+      document.getElementById("barcode").focus();
+      const confirmYesButton = document.getElementById('confirm-yes');
+
+      // Start NProgress only for form submission
+      confirmYesButton.addEventListener('click', function () {
+        isFormSubmission = true;
+        NProgress.start();
+      });
+
+      // Stop NProgress when the page fully reloads
+      window.addEventListener('load', function () {
+        if (isFormSubmission) {
+          NProgress.done();
+          isFormSubmission = false; // Reset flag after form submission is complete
+        }
+      });
+
+      // Prevent NProgress from running on history navigation
+      window.addEventListener('popstate', function () {
+        NProgress.done(); // Stop any loading bar that might show up on history navigation
+      });
+
+      // Add item button click handler
+      addItemBtn.addEventListener('click', function() {
+        addItem();
+      });
+      
+      // Add barcode scanning functionality
+      barcodeInput.addEventListener('keydown', async function (event) {
+        if (event.key === 'Enter') {
+          event.preventDefault();
+          const barcode = barcodeInput.value.trim();
+          
+          if (!barcode || processingBarcode) return;
+          
+          processingBarcode = true;
+          barcodeLoading.style.display = 'block';
+          
+          try {
+            console.log('Fetching product for barcode:', barcode);
+            const response = await fetch(`/product-by-barcode?barcode=${encodeURIComponent(barcode)}`);
+            
+            if (!response.ok) {
+              throw new Error(`Server returned ${response.status}: ${response.statusText}`);
+            }
+            
+            const product = await response.json();
+            console.log('Product data received:', product);
+            
+            if (product && product.name) {
+              itemNameInput.value = product.name;
+              priceInput.value = product.price;
+              quantityInput.value = 1; // Default quantity
+              quantityInput.focus();
+              quantityInput.select();
+            } else {
+              console.log('Product not found in response');
+              alert('Product not found! Please add manually.');
+              itemNameInput.focus();
+            }
+          } catch (error) {
+            console.error('Error fetching product:', error);
+            alert(`Error fetching product details: ${error.message}`);
+            itemNameInput.focus();
+          } finally {
+            barcodeInput.value = '';
+            barcodeLoading.style.display = 'none';
+            processingBarcode = false;
+          }
+        }
+      });
+    });
 
     // Check if all customer details are filled
     function isCustomerDetailsFilled() {
       const customerName = document.getElementById('customer-name').value;
       const customerAddress = document.getElementById('customer-address').value;
-      const customerAge = document.getElementById('customer-age').value;
-      const customerPhone = document.getElementById('customer-phone').value;
 
-      return customerName && customerAddress && customerAge && customerPhone;
+      return customerName && customerAddress;
     }
 
-    // Add item using Enter key
+    // Add item using Enter key (only for non-barcode fields)
     document.getElementById('invoice-form').addEventListener('keydown', function (event) {
-      if (event.key === 'Enter') {
+      if (event.key === 'Enter' && event.target.id !== 'barcode') {
         event.preventDefault();
         addItem();
       }
@@ -171,54 +391,71 @@
 
     // Function to render the invoice items in the table
     function renderInvoiceItems() {
-      invoiceItemsTable.innerHTML = '';
+      invoiceItemsTable.innerHTML = ''; // Clear the existing table rows
       invoiceItems.forEach((item, index) => {
         const row = document.createElement('tr');
-        row.classList.add('border-b');
+        row.classList.add('border-b'); // Add table styling
         row.innerHTML = `
-          <td class="py-2 px-4">${item.name}</td>
-          <td class="py-2 px-4">${item.quantity}</td>
-          <td class="py-2 px-4">₹${item.price.toFixed(2)}</td>
-          <td class="py-2 px-4">₹${(item.quantity * item.price).toFixed(2)}</td>
-          <td class="py-2 px-4">
-            <button class="delete-btn" onclick="deleteItem(${index})">Delete</button>
-          </td>
-        `;
+      <td class="py-2 px-4">${item.name}</td>
+      <td class="py-2 px-4 flex items-center gap-2">
+        <button class="decrease-btn" onclick="decreaseQuantity(${index})">-</button>
+        <span>${item.quantity}</span>
+        <button class="increase-btn" onclick="increaseQuantity(${index})">+</button>
+      </td>
+      <td class="py-2 px-4">₹${item.price.toFixed(2)}</td>
+      <td class="py-2 px-4">₹${(item.quantity * item.price).toFixed(2)}</td>
+      <td class="py-2 px-4">
+        <button class="delete-btn" onclick="deleteItem(${index})">Delete</button>
+      </td>
+    `;
         invoiceItemsTable.appendChild(row);
       });
-      calculateTotalPrice(); // Update the total price whenever items are added
+
+      calculateTotalPrice(); // Update total price
     }
 
-    // Add item to invoice
+
     function addItem() {
       if (!isCustomerDetailsFilled()) {
         alert('Please fill in customer details before adding items.');
         return;
       }
 
-      const itemName = itemNameInput.value;
-      const quantity = parseInt(quantityInput.value);
+      const itemName = itemNameInput.value.trim();
+      const quantity = parseInt(quantityInput.value) || 1; // Default to 1 if empty
       const price = parseFloat(priceInput.value);
+      let barcode = barcodeInput.value.trim();
+      if (!barcode) barcode = '';
 
       if (itemName && quantity > 0 && price >= 0) {
-        const newItem = {
-          name: itemName,
-          quantity: quantity,
-          price: price,
-        };
-        invoiceItems.push(newItem);
+        const existingItem = invoiceItems.find(item => item.name === itemName);
+
+        if (existingItem) {
+          if (confirm('Item already exists. Update quantity?')) {
+            existingItem.quantity += quantity;
+          }
+        } else {
+          invoiceItems.push({
+            name: itemName,
+            quantity: quantity,
+            price: price,
+            barcode: barcode, // Always include barcode as a string (never null)
+          });
+        }
+
         renderInvoiceItems();
-
-        // Clear input fields after adding
-        itemNameInput.value = '';
-        quantityInput.value = '';
-        priceInput.value = '';
-
-        // Focus back to item name input for adding new items
-        itemNameInput.focus();
+        clearItemFields();
       } else {
         alert('Please enter valid item details.');
       }
+    }
+    
+    function clearItemFields() {
+      itemNameInput.value = '';
+      barcodeInput.value = '';
+      quantityInput.value = '';
+      priceInput.value = '';
+      barcodeInput.focus(); // Focus back on barcode for next scan
     }
 
     // Delete item from invoice
@@ -226,6 +463,18 @@
       invoiceItems.splice(index, 1);
       renderInvoiceItems();
     }
+    function increaseQuantity(index) {
+      invoiceItems[index].quantity++; // Increment the quantity
+      renderInvoiceItems(); // Re-render the updated items
+    }
+
+    function decreaseQuantity(index) {
+      if (invoiceItems[index].quantity > 1) {
+        invoiceItems[index].quantity--; // Decrement the quantity (if > 1)
+        renderInvoiceItems(); // Re-render the updated items
+      }
+    }
+
 
     // Handle arrow keys to navigate through inputs
     document.addEventListener('keydown', function (event) {
@@ -246,17 +495,30 @@
           itemNameInput.focus();
         }
       }
-    });
+    }); 
 
-    // Handle invoice submission
     document.getElementById('submit-invoice').addEventListener('click', () => {
-      const customerName = document.getElementById('customer-name').value;
-      const customerAddress = document.getElementById('customer-address').value;
-      const customerAge = document.getElementById('customer-age').value;
-      const customerPhone = document.getElementById('customer-phone').value;
-
       if (!isCustomerDetailsFilled() || invoiceItems.length === 0) {
         alert('Please fill in all the customer details and add at least one item.');
+        return;
+      }
+
+      // Show the confirmation modal
+      document.getElementById('confirm-modal').classList.remove('hidden');
+    });
+
+    document.getElementById('confirm-yes').addEventListener('click', () => {
+      const customerName = document.getElementById('customer-name').value;
+      const customerAddress = document.getElementById('customer-address').value;
+      const customerAgeValue = document.getElementById('customer-age').value;
+      const customerAgeUnit = document.getElementById('age-unit').value;
+      const customerGender = document.getElementById('customer-gender').value;
+      const customerPhone = document.getElementById('customer-phone').value;
+      const billType = document.getElementById('billtype').value;
+
+      // Validate fields (optional)
+      if (!customerName || !customerAddress) {
+        alert('Please fill in all required fields.');
         return;
       }
 
@@ -264,45 +526,153 @@
         customer: {
           name: customerName,
           address: customerAddress,
-          age: customerAge,
+          age: {
+            value: parseInt(customerAgeValue, 10), // Convert age to a number
+            unit: customerAgeUnit, // Unit from dropdown
+          },
+          gender: customerGender, // Gender selection
           phone: customerPhone,
         },
         items: invoiceItems,
         totalPrice: parseFloat(totalPriceEl.textContent),
+        type: billType,
       };
 
-      // Send the data to the backend (replace '/submit-invoice' with your backend route)
+      // Proceed with submission if user confirms
       fetch('/submit-invoice', {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-  },
-  body: JSON.stringify(invoiceData),
-})
-  .then((response) => {
-    if (response.ok) {
-      return response.json(); // If successful, parse the JSON response
-    } else {
-      throw new Error('Failed to submit the invoice'); // Trigger the error block for failure
-    }
-  })
-  .then((data) => {
-    alert(`${data.message}`);
-    
-    // Redirect to the print invoice page with the invoice ID
-    window.location.href = `/printinvoice/${data.invoice}`;
-    
-    // Clear form after submission
-    document.getElementById('customer-form').reset();
-    invoiceItems.length = 0;
-    renderInvoiceItems();
-  })
-  .catch((error) => {
-    // Display error message if submission fails
-    alert(`Error: ${error.message}`);
-  });
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(invoiceData),
+      })
+        .then((response) => {
+          if (response.ok) {
+            return response.json();
+          } else {
+            throw new Error('Failed to submit the invoice');
+          }
+        })
+        .then((data) => {
+          alert(`${data.message}`);
+          window.location.href = `/printinvoice/${data.invoice}`;
+          document.getElementById('customer-form').reset();
+          invoiceItems.length = 0;
+          renderInvoiceItems();
+        })
+        .catch((error) => {
+          alert(`Error: ${error.message}`);
+        });
 
+      // Hide the confirmation modal
+      document.getElementById('confirm-modal').classList.add('hidden');
     });
- </script>
+
+
+    document.getElementById('confirm-no').addEventListener('click', () => {
+      // Hide the confirmation modal if the user clicks "No"
+      document.getElementById('confirm-modal').classList.add('hidden');
+    });
+
+    const itemNameInputs = document.getElementById('item-name');
+    const suggestionsContainer = document.getElementById('suggestions-container');
+
+    // Fetch and display suggestions
+    itemNameInputs.addEventListener('input', async function () {
+      const query = itemNameInputs.value;
+      if (query.length > 0) {
+        try {
+          const response = await fetch(`/product-suggestions?q=${encodeURIComponent(query)}`);
+          if(!response.ok) {
+            throw new Error(`Server returned ${response.status}`);
+          }
+          const products = await response.json();
+          suggestionsContainer.classList.remove('hidden'); // Show suggestions container
+
+          // Display suggestions
+          suggestionsContainer.innerHTML = '';
+          if (products && products.length > 0) {
+            products.forEach((product, index) => {
+              const suggestion = document.createElement('div');
+              suggestion.classList.add('suggestion');
+              suggestion.textContent = product.name;
+              suggestion.dataset.price = product.price; // store the price as a data attribute
+              suggestion.tabIndex = 0; // make suggestion focusable
+              suggestionsContainer.appendChild(suggestion);
+            });
+
+            // Handle suggestion click
+            suggestionsContainer.querySelectorAll('.suggestion').forEach(suggestion => {
+              suggestion.addEventListener('click', function() {
+                itemNameInput.value = this.textContent;
+                priceInput.value = this.dataset.price;
+                quantityInput.value = 1;
+                suggestionsContainer.classList.add('hidden');
+                quantityInput.focus();
+              });
+            });
+          } else {
+            suggestionsContainer.innerHTML = '<div class="p-2 text-gray-500">No products found</div>';
+          }
+        } catch (error) {
+          console.error('Error fetching suggestions:', error);
+          suggestionsContainer.innerHTML = '<div class="p-2 text-red-500">Error loading suggestions</div>';
+        }
+      } else {
+        suggestionsContainer.classList.add('hidden');
+        suggestionsContainer.innerHTML = ''; // clear suggestions when input is cleared
+      }
+    });
+
+    // Hide suggestions when clicking outside
+    document.addEventListener('click', function(event) {
+      if (!suggestionsContainer.contains(event.target) && event.target !== itemNameInput) {
+        suggestionsContainer.classList.add('hidden');
+      }
+    });
+
+    // Handle keyboard navigation in suggestions
+    itemNameInput.addEventListener('keydown', function(event) {
+      const suggestions = suggestionsContainer.querySelectorAll('.suggestion');
+      if (suggestions.length === 0) return;
+      
+      if (event.key === 'ArrowDown' && !suggestionsContainer.classList.contains('hidden')) {
+        event.preventDefault();
+        suggestions[0].focus();
+      }
+    });
+
+    suggestionsContainer.addEventListener('keydown', function(event) {
+      const suggestions = Array.from(suggestionsContainer.querySelectorAll('.suggestion'));
+      const currentIndex = suggestions.indexOf(document.activeElement);
+      
+      if (event.key === 'ArrowDown') {
+        event.preventDefault();
+        if (currentIndex < suggestions.length - 1) {
+          suggestions[currentIndex + 1].focus();
+        }
+      } else if (event.key === 'ArrowUp') {
+        event.preventDefault();
+        if (currentIndex > 0) {
+          suggestions[currentIndex - 1].focus();
+        } else {
+          itemNameInput.focus();
+        }
+      } else if (event.key === 'Enter' && currentIndex !== -1) {
+        event.preventDefault();
+        const selected = suggestions[currentIndex];
+        itemNameInput.value = selected.textContent;
+        priceInput.value = selected.dataset.price;
+        quantityInput.value = 1;
+        suggestionsContainer.classList.add('hidden');
+        quantityInput.focus();
+      } else if (event.key === 'Escape') {
+        event.preventDefault();
+        suggestionsContainer.classList.add('hidden');
+        itemNameInput.focus();
+      }
+    });
+  </script>
 </body>
+
 </html>
