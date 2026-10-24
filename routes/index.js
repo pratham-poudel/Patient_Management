@@ -35,7 +35,7 @@ const { interpretReport } = require("./labInterpreter");
 
 // Update the transporter to use your cPanel email settings
 const transporter = nodemailer.createTransport({
-  host: 'mail.hamromanager.xyz', // Your cPanel outgoing server
+  host: 'mail.prakashmedical.dallytech.com', // Your cPanel outgoing server
   port: 465, // SMTP port for SSL
   secure: true, // Use SSL for port 465
   auth: {
@@ -49,7 +49,7 @@ async function sendEmail(to, subject, html) {
   try {
     // Compose the email
     const mailOptions = {
-      from: 'prakashmedical@hamromanager.xyz', // Use your cPanel email
+      from: 'prakashmedical@prakashmedical.dallytech.com', // Use your cPanel email
       to: to,
       subject: subject,
       html: html,
@@ -142,7 +142,7 @@ router.post("/register", async function (req, res) {
 
     <p style="color: #666666;">Please keep your login credentials secure. You can log in by visiting our website:</p>
 
-    <a href="https://hamromanager.xyz/login" style="display: inline-block; background-color: #007BFF; color: #ffffff; text-decoration: none; padding: 10px 20px; border-radius: 5px; margin-top: 20px;">Log In Now</a>
+    <a href="https://prakashmedical.dallytech.com/login" style="display: inline-block; background-color: #007BFF; color: #ffffff; text-decoration: none; padding: 10px 20px; border-radius: 5px; margin-top: 20px;">Log In Now</a>
 
     <p style="color: #666666; margin-top: 20px;">Thank you for choosing our hospital. We look forward to providing you with excellent service.</p>
 
@@ -430,7 +430,7 @@ router.post("/submitLabReport", isLoggedIn, async function (req, res) {
     await doctor.save();
     await labReport.save();
 
-    const qrCodeData = `https://hamromanager.xyz/profiles/${labReport._id}`;
+    const qrCodeData = `https://prakashmedical.dallytech.com/profiles/${labReport._id}`;
     if(req.body.email){
       await sendEmail(
         labReport.email,
@@ -534,7 +534,7 @@ router.post("/patient", async function (req, res) {
     await userdata.save();
 
     // Generate QR code
-    const qrCodeData = `https://hamromanager.xyz/submitpatient/${userdata._id}`;
+    const qrCodeData = `https://prakashmedical.dallytech.com/submitpatient/${userdata._id}`;
 
 
     // Send email with QR code
