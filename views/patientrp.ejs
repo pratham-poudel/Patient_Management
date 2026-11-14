@@ -277,7 +277,7 @@ h2 {
             
             
             <% } %>
-            <% if (users.crp||users.raFactor||users.hPylori||users.hiv||users.hbsAgTest||users.hcv||users.vdrl||users.dengue||users.scrub||users.mp||users.troponin) { %>
+            <% if (users.crp||users.raFactor||users.hPylori||users.hiv||users.hbsAgTest||users.hcv||users.vdrl||users.dengue||users.scrub||users.typhoidIgGIgM||users.mp||users.troponin) { %>
                 
                 
                 
@@ -340,6 +340,12 @@ h2 {
                             <tr>
                                 <td>Scrub Typhus</td>
                                 <td><%= users.scrub %></td>
+                            </tr>
+                        <% } %>
+                        <% if (users.typhoidIgGIgM) { %>
+                            <tr>
+                                <td>Typhoid (IgG/IgM)</td>
+                                <td><%= users.typhoidIgGIgM %></td>
                             </tr>
                         <% } %>
                         <% if (users.mp) { %>

@@ -51,6 +51,7 @@ const SECTIONS = [
     ['vdrl', 'VDRL', ''],
     ['dengue', 'Dengue IgM/NS1', ''],
     ['scrub', 'Scrub Typhus', ''],
+    ['typhoidIgGIgM', 'Typhoid IgG/IgM', ''],
     ['mp', 'Malaria Parasite', ''],
     ['troponin', 'Troponin I', ''],
   ]],

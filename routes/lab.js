@@ -42,6 +42,7 @@ const labReportSchema = new mongoose.Schema({
     vdrl: String,
     dengue: String,
     scrub:String,
+    typhoidIgGIgM: String,
     mp: String,
     troponin: String,
     sTyphiO: String,
